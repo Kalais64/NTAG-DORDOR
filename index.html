@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#072230" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>GOOD GIRL — Matcha Nitro &amp; Botanical Pastry</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@400;500;600;700&family=Oxanium:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="show-statusbar">
+  <!-- Shared SVG definitions: precision concentric concave-notched card clipPath -->
+  <svg class="svg-defs" aria-hidden="true" width="0" height="0" focusable="false">
+    <defs>
+      <!-- Normalized objectBoundingBox clipPath (166x166 geometry, concentric 8px gap around 50x50 r=18 + button) -->
+      <clipPath id="notchedCardClip" clipPathUnits="objectBoundingBox">
+        <path d="M 0.1687 0
+                 L 0.8313 0
+                 A 0.1687 0.1687 0 0 1 1 0.1687
+                 L 1 0.5422
+                 A 0.1084 0.1084 0 0 1 0.8916 0.6506
+                 L 0.8072 0.6506
+                 A 0.1566 0.1566 0 0 0 0.6506 0.8072
+                 L 0.6506 0.8916
+                 A 0.1084 0.1084 0 0 1 0.5422 1
+                 L 0.1687 1
+                 A 0.1687 0.1687 0 0 1 0 0.8313
+                 L 0 0.1687
+                 A 0.1687 0.1687 0 0 1 0.1687 0 Z" />
+      </clipPath>
+
+      <!-- Linear gradients for glossy glass strokes & icons -->
+      <linearGradient id="notchGlassBorder" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="rgba(225, 248, 255, 0.34)" />
+        <stop offset="45%" stop-color="rgba(165, 215, 238, 0.14)" />
+        <stop offset="100%" stop-color="rgba(210, 245, 255, 0.24)" />
+      </linearGradient>
+
+      <linearGradient id="neonLimeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#e3ff52" />
+        <stop offset="55%" stop-color="#a5f04e" />
+        <stop offset="100%" stop-color="#6ae27a" />
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <!-- Ambient desktop backdrop (only visible on wide screens around the mobile glass frame) -->
+  <div class="desktop-backdrop" aria-hidden="true">
+    <div class="ambient-orb orb-1"></div>
+    <div class="ambient-orb orb-2"></div>
+    <div class="ambient-orb orb-3"></div>
+  </div>
+
+  <!-- Desktop-only floating preview controls (hidden on mobile screens) -->
+  <aside class="desktop-toolbar" aria-label="Preview controls">
+    <div class="toolbar-brand">
+      <span class="toolbar-dot"></span>
+      <span>GOOD GIRL UI</span>
+    </div>
+    <div class="toolbar-segmented" role="tablist" aria-label="Switch screen">
+      <button type="button" class="toolbar-tab" data-nav-target="catalog" role="tab" aria-selected="false">Menu</button>
+      <button type="button" class="toolbar-tab is-active" data-nav-target="product" role="tab" aria-selected="true">Detail</button>
+      <button type="button" class="toolbar-tab" data-nav-target="tracker" role="tab" aria-selected="false">Tracker</button>
+    </div>
+    <button type="button" class="toolbar-toggle is-active" id="statusBarToggle" aria-pressed="true" title="Toggle iOS Status Bar">
+      <span class="toggle-indicator"></span>
+      <span>iOS Bar</span>
+    </button>
+  </aside>
+
+  <!-- Main Mobile App Shell -->
+  <main class="mobile-stage">
+    <div class="phone-shell" id="phoneShell" data-screen="product">
+
+      <!-- Optional iOS Status Bar (auto-hidden on real phones, toggleable on desktop preview) -->
+      <header class="ios-statusbar" id="iosStatusBar" aria-hidden="true">
+        <span class="status-time">9:41</span>
+        <div class="dynamic-island">
+          <span class="island-camera"></span>
+        </div>
+        <div class="status-icons">
+          <!-- Cellular signal bars -->
+          <svg width="17" height="12" viewBox="0 0 17 12" fill="currentColor">
+            <rect x="0" y="7.5" width="3" height="4.5" rx="1" />
+            <rect x="4.5" y="5.2" width="3" height="6.8" rx="1" />
+            <rect x="9" y="2.8" width="3" height="9.2" rx="1" />
+            <rect x="13.5" y="0.5" width="3" height="11.5" rx="1" />
+          </svg>
+          <!-- Wi-Fi icon -->
+          <svg width="16" height="12" viewBox="0 0 16 12" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round">
+            <path d="M1.2 4.2C4.8 0.9 11.2 0.9 14.8 4.2" />
+            <path d="M3.7 6.9C6.1 4.7 9.9 4.7 12.3 6.9" />
+            <circle cx="8" cy="10.2" r="1.2" fill="currentColor" stroke="none" />
+          </svg>
+          <!-- Battery icon -->
+          <svg width="25" height="12" viewBox="0 0 25 12" fill="none">
+            <rect x="0.75" y="1" width="20.5" height="10" rx="3" stroke="currentColor" stroke-opacity="0.45" stroke-width="1.2" />
+            <rect x="2.5" y="2.75" width="17" height="6.5" rx="1.6" fill="currentColor" />
+            <path d="M22.8 4.2C23.6 4.5 24 5.2 24 6C24 6.8 23.6 7.5 22.8 7.8V4.2Z" fill="currentColor" fill-opacity="0.55" />
+          </svg>
+        </div>
+      </header>
+
+      <!-- =========================================================
+           SCREEN 0: LIGHTWEIGHT MENU CATALOG (Back ← destination)
+           ========================================================= -->
+      <section class="screen screen-catalog" id="screenCatalog" aria-label="Menu Catalog" aria-hidden="true">
+        <div class="screen-ambient catalog-ambient" aria-hidden="true">
+          <div class="blob blob-lime"></div>
+          <div class="blob blob-ocean"></div>
+        </div>
+
+        <div class="catalog-scroll">
+          <div class="catalog-header">
+            <div class="brand-lockup">
+              <div class="brand-badge brand-badge-sm" aria-label="GOOD GIRL Logo">
+                <svg viewBox="0 0 56 56" class="goodgirl-svg" aria-hidden="true">
+                  <text x="28" y="25" text-anchor="middle" class="gg-text">GOOD</text>
+                  <text x="28" y="42" text-anchor="middle" class="gg-text">GIRL</text>
+                </svg>
+              </div>
+              <div>
+                <p class="catalog-kicker">BOTANICAL LAB</p>
+                <h1 class="catalog-title">SIGNATURE MENU</h1>
+              </div>
+            </div>
+
+            <button type="button" class="glass-icon-btn cart-trigger-btn" id="catalogCartBtn" aria-label="Open order summary">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M6 8h12l-1 12H7L6 8Z" />
+                <path d="M9 8V6a3 3 0 0 1 6 0v2" />
+              </svg>
+              <span class="cart-badge-dot" id="catalogCartCount">1</span>
+            </button>
+          </div>
+
+          <!-- Active order pill shortcut -->
+          <button type="button" class="live-order-pill" id="catalogLiveOrderPill">
+            <span class="live-pulse"></span>
+            <span class="live-pill-copy">
+              <strong>Preparing your order</strong>
+              <small id="catalogLiveEta">5 min left • Tap to track</small>
+            </span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 6l6 6-6 6" />
+            </svg>
+          </button>
+
+          <div class="catalog-section-head">
+            <h2>NITRO &amp; LAYERED DRINKS</h2>
+            <span>Tap to customize</span>
+          </div>
+
+          <div class="catalog-drinks-list" id="catalogDrinksList">
+            <!-- Populated dynamically from app.js -->
+          </div>
+
+          <div class="catalog-section-head">
+            <h2>ARTISANAL PAIRING</h2>
+            <span>Quick add</span>
+          </div>
+
+          <div class="catalog-desserts-grid" id="catalogDessertsGrid">
+            <!-- Populated dynamically from app.js -->
+          </div>
+        </div>
+      </section>
+
+      <!-- =========================================================
+           SCREEN 1: PRODUCT DETAIL (Matcha Nitro — Reference Image 1)
+           ========================================================= -->
+      <section class="screen screen-product is-active" id="screenProduct" aria-label="Matcha Nitro Product Detail">
+        <!-- Bright Matcha-Lime ambient backdrop peeking at top (iOS modal parent view) -->
+        <div class="product-top-backdrop" id="productTopBackdrop" aria-hidden="true"></div>
+
+        <!-- Stacked ghost card behind the main sheet (exact iOS layered modal depth) -->
+        <div class="stacked-sheet-ghost" aria-hidden="true"></div>
+
+        <!-- Main Deep Liquid-Glass Product Sheet -->
+        <div class="product-glass-sheet" id="productGlassSheet">
+          <!-- Refracted interior ambient light orbs behind glass content -->
+          <div class="product-inner-glow" id="productInnerGlow" aria-hidden="true">
+            <div class="inner-orb inner-orb-top"></div>
+            <div class="inner-orb inner-orb-bottom"></div>
+            <div class="inner-grid-lines"></div>
+          </div>
+
+          <div class="sheet-handle-bar" id="productHandleBar" role="button" tabindex="0" aria-label="Drag handle">
+            <span class="sheet-handle-pill"></span>
+          </div>
+
+          <!-- Top Navigation Row: Neon Lime Back Arrow & Heart -->
+          <div class="product-topbar">
+            <button type="button" class="neon-action-btn" id="productBackBtn" aria-label="Back to menu">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 12H5" />
+                <path d="M11 6l-6 6 6 6" />
+              </svg>
+            </button>
+
+            <button type="button" class="neon-action-btn heart-btn" id="productFavBtn" aria-label="Save to favorites" aria-pressed="false">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.95" stroke-linecap="round" stroke-linejoin="round">
+                <path class="heart-path" d="M12 20.4c-.3 0-.6-.1-.8-.3C7.2 16.9 3.5 13.7 3.5 9.2 3.5 6.4 5.7 4.2 8.4 4.2c1.6 0 3 .8 3.6 2 .6-1.2 2-2 3.6-2 2.7 0 4.9 2.2 4.9 5 0 4.5-3.7 7.7-7.7 10.9-.2.2-.5.3-.8.3Z" />
+              </svg>
+            </button>
+          </div>
+
+          <!-- Scrollable/Flexible Content Body -->
+          <div class="product-content">
+            <!-- Title + Volume -->
+            <div class="product-heading-row">
+              <h1 class="product-title" id="productTitle">MATCHA NITRO</h1>
+              <span class="product-volume" id="productVolume">250 ML</span>
+            </div>
+
+            <!-- Description with interactive Read more -->
+            <p class="product-description" id="productDescription">
+              <span id="productDescText">A smooth, layered drink that combines ceremonial matcha with nitrogen-infused botanical base. Velvety texture,...</span>
+              <button type="button" class="read-more-btn" id="readMoreBtn" aria-expanded="false">Read more</button>
+            </p>
+
+            <!-- Interactive Translucent Flavor Chips -->
+            <div class="flavor-chips-row" id="flavorChipsRow" role="list" aria-label="Tasting notes">
+              <!-- Populated from app.js -->
+            </div>
+
+            <!-- Subtle glass tasting note popover when tapping a chip -->
+            <div class="flavor-note-toast" id="flavorNoteToast" aria-live="polite"></div>
+
+            <!-- Hero Transparent PNG Drink Showcase -->
+            <div class="hero-drink-stage" id="heroDrinkStage">
+              <div class="drink-halo" id="drinkHalo" aria-hidden="true"></div>
+              <div class="drink-caustic-shadow" aria-hidden="true"></div>
+              <img
+                src="assets/matcha-nitro.png"
+                alt="Matcha Nitro layered ceremonial matcha over iced cobalt botanical base"
+                class="hero-drink-img"
+                id="heroDrinkImg"
+                draggable="false"
+              />
+            </div>
+          </div>
+
+          <!-- Sticky Bottom Controls: Glass Segmented Size Picker + Add to Order CTA -->
+          <div class="product-footer">
+            <div class="size-selector-glass" id="sizeSelector" role="radiogroup" aria-label="Select drink size">
+              <div class="size-thumb" id="sizeThumb" aria-hidden="true"></div>
+              <button type="button" class="size-option" data-size="small" role="radio" aria-checked="false">Small</button>
+              <button type="button" class="size-option is-active" data-size="medium" role="radio" aria-checked="true">Medium</button>
+              <button type="button" class="size-option" data-size="large" role="radio" aria-checked="false">Large</button>
+            </div>
+
+            <button type="button" class="add-to-order-btn" id="addToOrderBtn">
+              <span class="cta-label">Add to Order</span>
+              <span class="cta-shine" aria-hidden="true"></span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- =========================================================
+           SCREEN 2: ORDER TRACKER & DESSERT PAIRING (Reference Image 2)
+           ========================================================= -->
+      <section class="screen screen-tracker" id="screenTracker" aria-label="Order Status and Dessert Pairing" aria-hidden="true">
+        <!-- Deep Ocean Liquid-Glass Ambient Backdrop -->
+        <div class="tracker-ambient" aria-hidden="true">
+          <div class="tracker-orb tracker-orb-1"></div>
+          <div class="tracker-orb tracker-orb-2"></div>
+          <div class="tracker-orb tracker-orb-3"></div>
+        </div>
+
+        <div class="tracker-layout">
+          <!-- Top Frosted Liquid Glass Order Status Card -->
+          <article class="order-glass-card" aria-label="Order preparation status">
+            <div class="order-card-upper">
+              <button type="button" class="order-thumb-glass" id="trackerDrinkThumbBtn" title="View drink details" aria-label="Return to drink details">
+                <img src="assets/matcha-nitro.png" alt="Ordered drink" id="trackerDrinkImg" />
+              </button>
+
+              <div class="order-status-meta">
+                <div class="order-status-title-row">
+                  <h2 class="order-status-heading" id="orderStatusHeading">Preparing your order</h2>
+                </div>
+                <p class="order-status-eta" id="orderStatusEta">5 min left</p>
+              </div>
+            </div>
+
+            <!-- Interactive Colored Gradient Progress Bar -->
+            <div class="progress-row">
+              <span class="progress-label" id="progressLabelStart">Preparing</span>
+
+              <div
+                class="progress-track-wrap"
+                id="progressTrackWrap"
+                role="slider"
+                tabindex="0"
+                aria-label="Order delivery progress"
+                aria-valuemin="0"
+                aria-valuemax="100"
+                aria-valuenow="64"
+              >
+                <div class="progress-track">
+                  <div class="progress-fill" id="progressFill" style="width: 64%;"></div>
+                </div>
+                <div class="progress-knob" id="progressKnob" style="left: 64%;"></div>
+              </div>
+
+              <span class="progress-label progress-label-end" id="progressLabelEnd">Delivered</span>
+            </div>
+
+            <div class="order-card-divider" aria-hidden="true"></div>
+
+            <!-- Restaurant Support & Call Row -->
+            <div class="order-card-lower">
+              <button type="button" class="brand-badge" id="trackerBrandBtn" aria-label="Open GOOD GIRL menu">
+                <svg viewBox="0 0 56 56" class="goodgirl-svg" aria-hidden="true">
+                  <text x="28" y="25" text-anchor="middle" class="gg-text">GOOD</text>
+                  <text x="28" y="42" text-anchor="middle" class="gg-text">GIRL</text>
+                </svg>
+              </button>
+
+              <div class="support-copy">
+                <p class="support-title">Something wrong?</p>
+                <p class="support-sub">Call restaurant</p>
+              </div>
+
+              <button type="button" class="call-neon-btn" id="callRestaurantBtn" aria-label="Call restaurant">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.61 21 3 13.39 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.46.57 3.58a1 1 0 0 1-.25 1.01l-2.2 2.2Z" />
+                </svg>
+              </button>
+            </div>
+          </article>
+
+          <!-- Bottom Pairing Liquid-Glass Sheet (Draggable) -->
+          <section class="pairing-glass-sheet" id="pairingSheet" aria-label="Match for your matcha desserts">
+            <div class="sheet-handle-bar" id="pairingHandleBar" role="button" tabindex="0" aria-label="Drag to expand dessert menu">
+              <span class="sheet-handle-pill"></span>
+            </div>
+
+            <div class="pairing-header">
+              <div>
+                <h2 class="pairing-title">MATCH FOR YOUR MATCHA?</h2>
+                <p class="pairing-subtitle">Here’s our finest desserts and pastry.</p>
+              </div>
+            </div>
+
+            <!-- Horizontal Scroll Carousel of Concave-Notched Glass Cards -->
+            <div class="pairing-carousel" id="pairingCarousel" role="list" aria-label="Desserts and pastries">
+              <!-- Populated from app.js with exact concave-notched SVG glass cards -->
+            </div>
+
+            <!-- Floating Mini-Cart Summary Bar (appears seamlessly inside bottom of pairing sheet) -->
+            <div class="floating-order-bar" id="floatingOrderBar">
+              <button type="button" class="floating-order-pill" id="floatingOrderPill">
+                <span class="floating-pill-left">
+                  <span class="floating-pill-badge" id="floatingOrderCount">1</span>
+                  <span class="floating-pill-text" id="floatingOrderLabel">View Order Summary</span>
+                </span>
+                <span class="floating-pill-total" id="floatingOrderTotal">$7.50</span>
+              </button>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <!-- =========================================================
+           OVERLAY 1: MINI CART / ORDER SUMMARY LIQUID-GLASS DRAWER
+           ========================================================= -->
+      <div class="glass-modal-backdrop" id="cartDrawerBackdrop" aria-hidden="true">
+        <div class="glass-drawer" id="cartDrawer" role="dialog" aria-modal="true" aria-labelledby="cartDrawerTitle">
+          <div class="sheet-handle-bar" data-close-modal="cart">
+            <span class="sheet-handle-pill"></span>
+          </div>
+
+          <div class="drawer-header">
+            <div>
+              <p class="drawer-kicker">GOOD GIRL • LIVE ORDER</p>
+              <h3 class="drawer-title" id="cartDrawerTitle">YOUR ORDER</h3>
+            </div>
+            <button type="button" class="glass-close-btn" data-close-modal="cart" aria-label="Close order summary">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+                <path d="M6 6l12 12M18 6L6 18" />
+              </svg>
+            </button>
+          </div>
+
+          <div class="cart-items-list" id="cartItemsList">
+            <!-- Populated dynamically -->
+          </div>
+
+          <div class="cart-summary-box">
+            <div class="summary-row">
+              <span>Subtotal</span>
+              <span id="cartSubtotal">$7.50</span>
+            </div>
+            <div class="summary-row">
+              <span>Botanical Packaging</span>
+              <span class="summary-free">Included</span>
+            </div>
+            <div class="summary-row summary-total">
+              <span>Total</span>
+              <span id="cartTotal">$7.50</span>
+            </div>
+          </div>
+
+          <div class="drawer-actions">
+            <button type="button" class="add-to-order-btn drawer-cta" id="cartConfirmBtn">
+              <span class="cta-label">Confirm &amp; Track Order</span>
+              <span class="cta-shine" aria-hidden="true"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- =========================================================
+           OVERLAY 2: iOS LIQUID-GLASS CALL RESTAURANT SHEET
+           ========================================================= -->
+      <div class="glass-modal-backdrop" id="callSheetBackdrop" aria-hidden="true">
+        <div class="glass-drawer call-sheet" id="callSheet" role="dialog" aria-modal="true" aria-labelledby="callSheetTitle">
+          <div class="sheet-handle-bar" data-close-modal="call">
+            <span class="sheet-handle-pill"></span>
+          </div>
+
+          <div class="call-sheet-hero">
+            <div class="brand-badge brand-badge-lg">
+              <svg viewBox="0 0 56 56" class="goodgirl-svg" aria-hidden="true">
+                <text x="28" y="25" text-anchor="middle" class="gg-text">GOOD</text>
+                <text x="28" y="42" text-anchor="middle" class="gg-text">GIRL</text>
+              </svg>
+            </div>
+            <h3 class="call-sheet-title" id="callSheetTitle">GOOD GIRL Matcha Lab</h3>
+            <p class="call-sheet-meta">Flagship Bar • Open until 22:00</p>
+            <p class="call-sheet-phone">+1 (415) 890-4210</p>
+          </div>
+
+          <div class="call-sheet-actions">
+            <button type="button" class="call-action-primary" id="dialNowBtn">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.61 21 3 13.39 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.46.57 3.58a1 1 0 0 1-.25 1.01l-2.2 2.2Z" />
+              </svg>
+              <span>Call Barista Now</span>
+            </button>
+
+            <button type="button" class="call-action-secondary" id="pingBaristaBtn">
+              <span>Report Issue with Current Order</span>
+            </button>
+
+            <button type="button" class="call-action-cancel" data-close-modal="call">
+              <span>Cancel</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Liquid Glass Toast Notification -->
+      <div class="glass-toast" id="glassToast" role="status" aria-live="polite"></div>
+
+      <!-- Subtle iOS Home Indicator -->
+      <div class="home-indicator-wrap" aria-hidden="true">
+        <div class="home-indicator"></div>
+      </div>
+    </div>
+  </main>
+
+  <script src="app.js" defer></script>
+</body>
+</html>
