@@ -241,6 +241,9 @@
     root.style.setProperty('--item-accent', t.accent);
   }
 
+  const SUN_SVG = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>`;
+  const MOON_SVG = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>`;
+
   function syncThemeUI() {
     const theme = POS.getTheme();
     document.documentElement.dataset.theme = theme;
@@ -249,7 +252,7 @@
     el.themeToggleBtns.forEach((btn) => {
       const icon = btn.querySelector('.theme-pill-icon');
       const label = btn.querySelector('.theme-pill-label');
-      if (icon) icon.innerHTML = isLight ? '&#9728;' : '&#9790;';
+      if (icon) icon.innerHTML = isLight ? SUN_SVG : MOON_SVG;
       if (label) label.textContent = isLight ? 'Fresh' : 'Dark';
     });
 
@@ -389,6 +392,8 @@
     }
 
     renderDetailView();
+    const detailScroller = document.querySelector('.detail-scroll');
+    if (detailScroller) detailScroller.scrollTop = 0;
     switchView('detail');
   }
 

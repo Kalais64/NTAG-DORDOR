@@ -40,7 +40,7 @@
       heading: 'Ready to serve!',
       shortLabel: 'Ready',
       eta: 'Pick up at Bar / On the way',
-      posAction: 'Complete & Served',
+      posAction: 'Serve ✓',
       nextStatus: 'complete',
     },
     complete: {

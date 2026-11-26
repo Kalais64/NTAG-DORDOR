@@ -136,10 +136,13 @@ input:focus-visible {
 
 .desktop-toolbar {
   position: fixed;
-  top: 18px;
+  top: 14px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 60;
+  max-width: calc(100vw - 24px);
+  overflow-x: auto;
+  scrollbar-width: none;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -151,6 +154,10 @@ input:focus-visible {
   border: 1px solid rgba(215, 244, 255, 0.17);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 14px 36px rgba(0, 0, 0, 0.46);
   white-space: nowrap;
+}
+
+.desktop-toolbar::-webkit-scrollbar {
+  display: none;
 }
 
 .toolbar-brand {
@@ -229,6 +236,9 @@ input:focus-visible {
 }
 
 .toolbar-pos-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   padding: 6px 11px;
   border-radius: var(--radius-pill);
   font-family: var(--font-display);
@@ -237,6 +247,12 @@ input:focus-visible {
   color: #071708;
   background: linear-gradient(135deg, #ddff44 0%, #7ee968 100%);
   box-shadow: 0 4px 14px rgba(176, 245, 76, 0.34);
+}
+
+.theme-pill-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* ==========================================================================
@@ -251,14 +267,14 @@ input:focus-visible {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 68px 16px 16px;
+  padding: 76px 16px 18px;
 }
 
 .phone-shell {
   position: relative;
   width: min(404px, 100%);
-  height: min(862px, calc(100dvh - 84px));
-  max-height: 874px;
+  height: min(846px, calc(100dvh - 102px));
+  max-height: 856px;
   border-radius: var(--radius-phone);
   overflow: clip;
   background: #04131c;
@@ -408,7 +424,7 @@ body.show-statusbar .ios-statusbar {
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
-  padding: 60px 18px 110px;
+  padding: 60px 18px 118px;
   transition: padding-top 0.28s var(--ease-ios);
 }
 
@@ -657,15 +673,23 @@ body:not(.show-statusbar) .scroll-body {
 .home-brand-left {
   display: flex;
   align-items: center;
-  gap: 11px;
+  gap: 10px;
+  min-width: 0;
+  flex: 1;
+}
+
+.home-greeting {
   min-width: 0;
 }
 
 .home-greeting h1 {
-  font-size: 16.5px;
+  font-size: clamp(14.5px, 4vw, 16.5px);
   font-weight: 700;
   color: #ffffff;
-  line-height: 1.2;
+  line-height: 1.22;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .home-greeting h1 span {
@@ -673,14 +697,18 @@ body:not(.show-statusbar) .scroll-body {
 }
 
 .home-greeting p {
-  font-size: 12px;
+  font-size: 11.5px;
   color: var(--text-secondary);
   margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .points-chip {
   flex-shrink: 0;
-  padding: 7px 11px;
+  height: 34px;
+  padding: 0 11px;
   border-radius: var(--radius-pill);
   display: inline-flex;
   align-items: center;
@@ -694,7 +722,11 @@ body:not(.show-statusbar) .scroll-body {
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.24);
 }
 
-.pts-star { color: var(--lime-neon); }
+.pts-star,
+.pts-star-svg {
+  color: var(--lime-neon);
+  flex-shrink: 0;
+}
 
 /* Mode Strip (Dine-In / Pick Up + Table Pill) */
 .mode-strip {
@@ -845,8 +877,8 @@ body:not(.show-statusbar) .scroll-body {
 .promo-banner-card {
   position: relative;
   flex: 0 0 88%;
-  min-height: 122px;
-  padding: 15px 16px;
+  min-height: 126px;
+  padding: 15px 14px 15px 16px;
   border-radius: 28px;
   scroll-snap-align: start;
   display: flex;
@@ -905,8 +937,8 @@ body:not(.show-statusbar) .scroll-body {
 .promo-banner-img {
   position: relative;
   z-index: 2;
-  width: 96px;
-  height: 96px;
+  width: 90px;
+  height: 90px;
   object-fit: contain;
   flex-shrink: 0;
   filter: drop-shadow(0 10px 14px rgba(0, 6, 12, 0.52));
@@ -987,7 +1019,7 @@ body:not(.show-statusbar) .scroll-body {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 14px 18px 20px 14px;
+  padding: 28px 18px 18px 14px;
   transition: background 0.28s var(--ease-ios);
 }
 
@@ -1005,11 +1037,15 @@ body:not(.show-statusbar) .scroll-body {
   z-index: 3;
 }
 
+.notched-border-svg path {
+  vector-effect: non-scaling-stroke;
+}
+
 .card-badge-chip {
   position: absolute;
-  top: 9px;
-  left: 9px;
-  z-index: 4;
+  top: 10px;
+  left: 10px;
+  z-index: 5;
   padding: 3px 8px;
   border-radius: var(--radius-pill);
   font-family: var(--font-display);
@@ -1025,10 +1061,10 @@ body:not(.show-statusbar) .scroll-body {
 .card-item-img {
   position: relative;
   z-index: 2;
-  width: 82%;
-  height: 82%;
+  width: 76%;
+  height: 76%;
   object-fit: contain;
-  transform: translate(-4px, -4px);
+  transform: translate(-4px, 2px);
   filter: drop-shadow(0 12px 16px rgba(0, 6, 14, 0.56));
   transition: transform 0.34s var(--ease-spring);
   pointer-events: none;
@@ -1036,7 +1072,7 @@ body:not(.show-statusbar) .scroll-body {
 
 .menu-card:hover .card-item-img,
 .pairing-card:hover .card-item-img {
-  transform: translate(-4px, -8px) scale(1.05);
+  transform: translate(-4px, -2px) scale(1.045);
 }
 
 .notched-add-btn {
@@ -1046,7 +1082,7 @@ body:not(.show-statusbar) .scroll-body {
   z-index: 6;
   width: 30.2%;
   height: 30.2%;
-  border-radius: 17px;
+  border-radius: 34%;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1342,7 +1378,7 @@ body:not(.show-statusbar) .product-glass-sheet { top: 32px; }
 /* Hero Transparent PNG Showcase */
 .hero-drink-stage {
   position: relative;
-  height: 244px;
+  height: clamp(184px, 26dvh, 244px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1351,8 +1387,8 @@ body:not(.show-statusbar) .product-glass-sheet { top: 32px; }
 
 .drink-halo {
   position: absolute;
-  width: 220px;
-  height: 220px;
+  width: clamp(176px, 24dvh, 220px);
+  height: clamp(176px, 24dvh, 220px);
   border-radius: 50%;
   background:
     radial-gradient(circle at 50% 34%, var(--item-glow-top) 0%, transparent 56%),
@@ -1375,8 +1411,8 @@ body:not(.show-statusbar) .product-glass-sheet { top: 32px; }
 .hero-drink-img {
   position: relative;
   z-index: 2;
-  width: 238px;
-  height: 238px;
+  width: clamp(176px, 25dvh, 236px);
+  height: clamp(176px, 25dvh, 236px);
   object-fit: contain;
   filter: drop-shadow(0 20px 26px rgba(0, 6, 14, 0.56));
   transition: transform 0.44s var(--ease-spring), opacity 0.24s;
@@ -2226,8 +2262,11 @@ body:not(.show-statusbar) .orders-scroll { padding-top: 20px; }
 .stage-pill {
   padding: 6px 4px;
   border-radius: 13px;
-  font-size: 10px;
+  font-size: 10.5px;
   font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   color: var(--text-muted);
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -2944,6 +2983,9 @@ body:not(.show-statusbar) .glass-toast { top: 18px; }
 }
 
 .appearance-opt {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
   padding: 6px 11px;
   border-radius: var(--radius-pill);
   font-size: 11.5px;

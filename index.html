@@ -66,11 +66,14 @@
       <span>iOS Bar</span>
     </button>
     <button type="button" class="toolbar-theme-btn" id="toolbarThemeBtn" data-theme-toggle aria-label="Switch theme">
-      <span class="theme-pill-icon" aria-hidden="true">&#9728;</span>
+      <span class="theme-pill-icon" aria-hidden="true">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </span>
       <span class="theme-pill-label">Fresh</span>
     </button>
     <a href="pos.html" target="_blank" rel="noopener" class="toolbar-pos-link" title="Open Live Barista POS Terminal">
-      POS &nearr;
+      <span>POS</span>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg>
     </a>
   </aside>
 
@@ -132,10 +135,12 @@
 
             <div class="home-header-actions">
               <button type="button" class="theme-mini-btn" id="homeThemeBtn" data-theme-toggle aria-label="Switch light or dark theme" title="Switch Fresh White / Dark Glass theme">
-                <span class="theme-pill-icon" aria-hidden="true">&#9728;</span>
+                <span class="theme-pill-icon" aria-hidden="true">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+                </span>
               </button>
               <button type="button" class="points-chip" id="homePointsChip" aria-label="View membership points">
-                <span class="pts-star">&#10022;</span>
+                <svg class="pts-star-svg" width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.6 6.8L21.5 12l-6.9 3.2L12 22l-2.6-6.8L2.5 12l6.9-3.2L12 2Z"/></svg>
                 <span id="homePointsVal">840</span>
               </button>
             </div>
@@ -397,10 +402,10 @@
 
             <!-- Interactive 4-Stage Stepper Pills (Synced with POS + tappable for testing!) -->
             <div class="stage-pills-row" id="stagePillsRow" role="group" aria-label="Order tracking stages">
-              <button type="button" class="stage-pill" data-stage="received">1. Received</button>
-              <button type="button" class="stage-pill is-active" data-stage="preparing">2. Preparing</button>
-              <button type="button" class="stage-pill" data-stage="ready">3. Ready</button>
-              <button type="button" class="stage-pill" data-stage="complete">4. Complete</button>
+              <button type="button" class="stage-pill" data-stage="received">Received</button>
+              <button type="button" class="stage-pill is-active" data-stage="preparing">Preparing</button>
+              <button type="button" class="stage-pill" data-stage="ready">Ready</button>
+              <button type="button" class="stage-pill" data-stage="complete">Complete</button>
             </div>
 
             <!-- Receipt & Live POS Actions -->
@@ -542,8 +547,14 @@
               <small id="meThemeDesc">Fresh White &amp; Matcha Green Glass</small>
             </div>
             <div class="appearance-segmented" role="radiogroup" aria-label="Theme preference">
-              <button type="button" class="appearance-opt is-active" data-set-theme="light" role="radio" aria-checked="true">&#9728; Fresh</button>
-              <button type="button" class="appearance-opt" data-set-theme="dark" role="radio" aria-checked="false">&#9790; Dark</button>
+              <button type="button" class="appearance-opt is-active" data-set-theme="light" role="radio" aria-checked="true">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+                <span>Fresh</span>
+              </button>
+              <button type="button" class="appearance-opt" data-set-theme="dark" role="radio" aria-checked="false">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+                <span>Dark</span>
+              </button>
             </div>
           </div>
 

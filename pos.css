@@ -475,14 +475,20 @@ button {
 }
 
 .btn-advance {
-  padding: 8px 14px;
+  padding: 8px 13px;
   border-radius: 999px;
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 700;
+  white-space: nowrap;
   color: #071608;
   background: linear-gradient(135deg, #ddff44 0%, #7ee968 100%);
   box-shadow: 0 6px 18px rgba(176, 246, 76, 0.34);
   transition: transform 0.2s var(--ease);
+}
+
+#posThemeIcon {
+  display: inline-flex;
+  align-items: center;
 }
 
 .btn-advance.is-ready-btn {
