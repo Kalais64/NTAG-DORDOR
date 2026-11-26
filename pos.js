@@ -24,6 +24,9 @@
   const kpiRevenue = document.getElementById('kpiRevenue');
 
   const simOrderBtn = document.getElementById('simOrderBtn');
+  const posThemeToggle = document.getElementById('posThemeToggle');
+  const posThemeIcon = document.getElementById('posThemeIcon');
+  const posThemeLabel = document.getElementById('posThemeLabel');
   const jsonModalBackdrop = document.getElementById('jsonModalBackdrop');
   const jsonModalTitle = document.getElementById('jsonModalTitle');
   const jsonModalContent = document.getElementById('jsonModalContent');
@@ -250,6 +253,23 @@
     renderBoard();
   }
 
+  function syncPosThemeUI() {
+    const theme = POS.getTheme();
+    document.documentElement.dataset.theme = theme;
+    const isLight = theme === 'light';
+    if (posThemeIcon) posThemeIcon.innerHTML = isLight ? '&#9728;' : '&#9790;';
+    if (posThemeLabel) posThemeLabel.textContent = isLight ? 'Fresh White' : 'Dark Glass';
+  }
+
+  if (posThemeToggle) {
+    posThemeToggle.addEventListener('click', () => {
+      const next = POS.getTheme() === 'light' ? 'dark' : 'light';
+      POS.setTheme(next);
+      syncPosThemeUI();
+      showToast(next === 'light' ? 'Theme: Fresh White & Matcha Green' : 'Theme: Dark Liquid Glass');
+    });
+  }
+
   simOrderBtn.addEventListener('click', simulateWebOrder);
   closeJsonModal.addEventListener('click', closeJson);
   jsonModalBackdrop.addEventListener('click', (e) => {
@@ -264,6 +284,9 @@
   });
 
   POS.subscribe((evt) => {
+    if (evt.type === 'THEME_CHANGED' || evt.type === 'STORAGE_SYNC') {
+      syncPosThemeUI();
+    }
     renderBoard();
     if (evt.type === 'ORDER_CREATED') {
       showToast(`Incoming customer order #${evt.order.orderId}!`);
@@ -272,6 +295,7 @@
     }
   });
 
+  syncPosThemeUI();
   renderBoard();
   setInterval(renderBoard, 15000);
 })();

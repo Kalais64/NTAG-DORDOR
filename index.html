@@ -34,9 +34,9 @@
       </clipPath>
 
       <linearGradient id="notchGlassBorder" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stop-color="rgba(228, 248, 255, 0.34)" />
-        <stop offset="48%" stop-color="rgba(165, 216, 240, 0.14)" />
-        <stop offset="100%" stop-color="rgba(215, 246, 255, 0.25)" />
+        <stop offset="0%" stop-color="var(--notch-stroke-1)" />
+        <stop offset="48%" stop-color="var(--notch-stroke-2)" />
+        <stop offset="100%" stop-color="var(--notch-stroke-3)" />
       </linearGradient>
     </defs>
   </svg>
@@ -64,6 +64,10 @@
     <button type="button" class="toolbar-toggle is-active" id="statusBarToggle" aria-pressed="true" title="Toggle iOS Status Bar">
       <span class="toggle-indicator"></span>
       <span>iOS Bar</span>
+    </button>
+    <button type="button" class="toolbar-theme-btn" id="toolbarThemeBtn" data-theme-toggle aria-label="Switch theme">
+      <span class="theme-pill-icon" aria-hidden="true">&#9728;</span>
+      <span class="theme-pill-label">Fresh</span>
     </button>
     <a href="pos.html" target="_blank" rel="noopener" class="toolbar-pos-link" title="Open Live Barista POS Terminal">
       POS &nearr;
@@ -126,10 +130,15 @@
               </div>
             </div>
 
-            <button type="button" class="points-chip" id="homePointsChip" aria-label="View membership points">
-              <span class="pts-star">&#10022;</span>
-              <span id="homePointsVal">840</span>
-            </button>
+            <div class="home-header-actions">
+              <button type="button" class="theme-mini-btn" id="homeThemeBtn" data-theme-toggle aria-label="Switch light or dark theme" title="Switch Fresh White / Dark Glass theme">
+                <span class="theme-pill-icon" aria-hidden="true">&#9728;</span>
+              </button>
+              <button type="button" class="points-chip" id="homePointsChip" aria-label="View membership points">
+                <span class="pts-star">&#10022;</span>
+                <span id="homePointsVal">840</span>
+              </button>
+            </div>
           </div>
 
           <!-- Dine-In / Pick-Up + Table Selector Strip -->
@@ -524,6 +533,18 @@
           </div>
           <div class="favorites-row" id="meFavoritesRow">
             <!-- Populated dynamically -->
+          </div>
+
+          <!-- Theme Appearance Option Card -->
+          <div class="appearance-glass-card">
+            <div class="appearance-copy">
+              <strong>App Theme Style</strong>
+              <small id="meThemeDesc">Fresh White &amp; Matcha Green Glass</small>
+            </div>
+            <div class="appearance-segmented" role="radiogroup" aria-label="Theme preference">
+              <button type="button" class="appearance-opt is-active" data-set-theme="light" role="radio" aria-checked="true">&#9728; Fresh</button>
+              <button type="button" class="appearance-opt" data-set-theme="dark" role="radio" aria-checked="false">&#9790; Dark</button>
+            </div>
           </div>
 
           <!-- Quick POS Owner / Staff Portal Card -->

@@ -584,3 +584,177 @@ button {
   opacity: 1;
   transform: translate(-50%, 0);
 }
+
+/* ==========================================================================
+   FRESH WHITE + MATCHA GREEN LIQUID-GLASS POS THEME (html[data-theme="light"])
+   ========================================================================== */
+
+html[data-theme="light"] {
+  --lime: #1f7a31;
+  --cyan: #1a7c6e;
+  --text: #102418;
+  --text-dim: #446450;
+  --text-muted: #6e8c79;
+}
+
+html[data-theme="light"] body {
+  background: #f3f9f2;
+  color: #102418;
+}
+
+html[data-theme="light"] .pos-bg {
+  background:
+    radial-gradient(circle at 14% 12%, rgba(164, 234, 88, 0.34) 0%, transparent 46%),
+    radial-gradient(circle at 86% 24%, rgba(108, 212, 154, 0.28) 0%, transparent 48%),
+    linear-gradient(160deg, #f7fcf6 0%, #eaf4e8 55%, #f3faf5 100%);
+}
+
+html[data-theme="light"] .pos-orb-1 { background: rgba(152, 228, 76, 0.32); }
+html[data-theme="light"] .pos-orb-2 { background: rgba(98, 208, 152, 0.26); }
+html[data-theme="light"] .pos-orb-3 { background: rgba(186, 240, 128, 0.22); }
+
+html[data-theme="light"] .pos-header {
+  background: rgba(255, 255, 255, 0.8);
+  border-color: rgba(42, 126, 58, 0.16);
+  box-shadow: inset 0 1.5px 0 #ffffff, 0 16px 38px rgba(20, 66, 32, 0.1);
+}
+
+html[data-theme="light"] .pos-brand-badge {
+  background: linear-gradient(145deg, #1a5828 0%, #2d843b 100%);
+  border-color: rgba(255, 255, 255, 0.65);
+  box-shadow: 0 8px 18px rgba(24, 86, 38, 0.2);
+}
+
+html[data-theme="light"] .gg-text {
+  fill: #ebffd4;
+  stroke: #9be858;
+}
+
+html[data-theme="light"] .pos-kicker { color: #248034; }
+html[data-theme="light"] .live-dot { background: #36b244; box-shadow: 0 0 10px rgba(54, 178, 68, 0.65); }
+
+html[data-theme="light"] .kpi-pill {
+  background: rgba(255, 255, 255, 0.84);
+  border-color: rgba(42, 126, 58, 0.15);
+  box-shadow: inset 0 1px 0 #ffffff, 0 4px 12px rgba(20, 66, 32, 0.06);
+}
+
+html[data-theme="light"] .pos-btn-glass {
+  background: rgba(255, 255, 255, 0.84);
+  border-color: rgba(42, 126, 58, 0.2);
+  color: #164c22;
+}
+
+html[data-theme="light"] .pos-btn-glass:hover {
+  background: #ffffff;
+}
+
+html[data-theme="light"] .pos-btn-lime {
+  background: linear-gradient(135deg, #1f6d2e 0%, #44aa40 100%);
+  color: #ffffff;
+  box-shadow: 0 8px 20px rgba(34, 124, 48, 0.28);
+}
+
+html[data-theme="light"] .pos-lane {
+  background: rgba(255, 255, 255, 0.62);
+  border-color: rgba(42, 126, 58, 0.15);
+  box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 0.92), 0 12px 30px rgba(20, 66, 32, 0.06);
+}
+
+html[data-theme="light"] .lane-head {
+  border-bottom-color: rgba(42, 126, 58, 0.12);
+}
+
+html[data-theme="light"] .lane-count {
+  background: rgba(34, 114, 48, 0.1);
+  color: #195e28;
+}
+
+html[data-theme="light"] .lane-empty {
+  border-color: rgba(42, 126, 58, 0.2);
+  color: #6f8d7a;
+}
+
+html[data-theme="light"] .ticket-card {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: rgba(42, 126, 58, 0.16);
+  box-shadow: inset 0 1.5px 0 #ffffff, 0 10px 26px rgba(20, 66, 32, 0.09);
+}
+
+html[data-theme="light"] .ticket-id,
+html[data-theme="light"] .ticket-item-name {
+  color: #102418;
+}
+
+html[data-theme="light"] .t-mode {
+  background: rgba(26, 126, 112, 0.12);
+  color: #146458;
+  border-color: rgba(26, 126, 112, 0.26);
+}
+
+html[data-theme="light"] .t-paid {
+  background: rgba(46, 158, 62, 0.13);
+  color: #196e28;
+  border-color: rgba(46, 158, 62, 0.28);
+}
+
+html[data-theme="light"] .t-merged {
+  background: rgba(226, 146, 36, 0.15);
+  color: #8f4e06;
+  border-color: rgba(226, 146, 36, 0.32);
+}
+
+html[data-theme="light"] .ticket-items {
+  border-top-color: rgba(42, 126, 58, 0.11);
+  border-bottom-color: rgba(42, 126, 58, 0.11);
+}
+
+html[data-theme="light"] .ticket-thumb {
+  background: #f3faf2;
+  border-color: rgba(42, 126, 58, 0.14);
+}
+
+html[data-theme="light"] .ticket-item-note {
+  background: rgba(236, 156, 38, 0.14);
+  border-color: rgba(236, 156, 38, 0.28);
+  color: #8a4b06;
+}
+
+html[data-theme="light"] .btn-json {
+  background: rgba(34, 110, 48, 0.08);
+  border-color: rgba(34, 110, 48, 0.18);
+  color: #185424;
+}
+
+html[data-theme="light"] .btn-advance {
+  background: linear-gradient(135deg, #21712f 0%, #44aa40 100%);
+  color: #ffffff;
+  box-shadow: 0 6px 16px rgba(34, 124, 48, 0.26);
+}
+
+html[data-theme="light"] .btn-advance.is-ready-btn {
+  background: linear-gradient(135deg, #1b788e 0%, #2b9ae0 100%);
+  color: #ffffff;
+  box-shadow: 0 6px 16px rgba(34, 134, 198, 0.26);
+}
+
+html[data-theme="light"] .pos-modal-backdrop {
+  background: rgba(14, 38, 22, 0.36);
+}
+
+html[data-theme="light"] .pos-modal {
+  background: rgba(255, 255, 255, 0.96);
+  border-color: rgba(42, 126, 58, 0.2);
+}
+
+html[data-theme="light"] .pos-close-btn {
+  background: rgba(34, 110, 48, 0.09);
+  border-color: rgba(34, 110, 48, 0.16);
+  color: #184a24;
+}
+
+html[data-theme="light"] .pos-toast {
+  background: rgba(18, 60, 28, 0.92);
+  border-color: rgba(154, 232, 92, 0.45);
+  color: #f4ffec;
+}

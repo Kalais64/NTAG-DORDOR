@@ -147,6 +147,9 @@
     topUpWalletBtn: document.getElementById('topUpWalletBtn'),
     meFavCount: document.getElementById('meFavCount'),
     meFavoritesRow: document.getElementById('meFavoritesRow'),
+    meThemeDesc: document.getElementById('meThemeDesc'),
+    themeToggleBtns: Array.from(document.querySelectorAll('[data-theme-toggle]')),
+    themeSetBtns: Array.from(document.querySelectorAll('[data-set-theme]')),
 
     // Adaptive Product Detail Sheet
     productGlassSheet: document.getElementById('productGlassSheet'),
@@ -236,6 +239,31 @@
     root.style.setProperty('--item-glow-top', t.glowTop);
     root.style.setProperty('--item-glow-bot', t.glowBot);
     root.style.setProperty('--item-accent', t.accent);
+  }
+
+  function syncThemeUI() {
+    const theme = POS.getTheme();
+    document.documentElement.dataset.theme = theme;
+    const isLight = theme === 'light';
+
+    el.themeToggleBtns.forEach((btn) => {
+      const icon = btn.querySelector('.theme-pill-icon');
+      const label = btn.querySelector('.theme-pill-label');
+      if (icon) icon.innerHTML = isLight ? '&#9728;' : '&#9790;';
+      if (label) label.textContent = isLight ? 'Fresh' : 'Dark';
+    });
+
+    el.themeSetBtns.forEach((btn) => {
+      const active = btn.dataset.setTheme === theme;
+      btn.classList.toggle('is-active', active);
+      btn.setAttribute('aria-checked', String(active));
+    });
+
+    if (el.meThemeDesc) {
+      el.meThemeDesc.textContent = isLight
+        ? 'Fresh White & Matcha Green Glass'
+        : 'Obsidian Dark Liquid Glass';
+    }
   }
 
   function getStyleIconSvg(icon) {
@@ -1457,6 +1485,26 @@
       el.statusBarToggle.setAttribute('aria-pressed', String(on));
     });
 
+    // Synced Fresh White-Matcha <-> Dark Glass theme controls
+    el.themeToggleBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const next = POS.getTheme() === 'light' ? 'dark' : 'light';
+        POS.setTheme(next);
+        syncThemeUI();
+        showToast(next === 'light' ? 'Switched to Fresh White & Matcha' : 'Switched to Dark Liquid Glass');
+      });
+    });
+
+    el.themeSetBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const next = btn.dataset.setTheme;
+        if (next === POS.getTheme()) return;
+        POS.setTheme(next);
+        syncThemeUI();
+        showToast(next === 'light' ? 'Fresh White & Matcha active' : 'Dark Liquid Glass active');
+      });
+    });
+
     // Menu Home interactions
     el.homePointsChip.addEventListener('click', () => switchView('me'));
     el.homeActiveOrderBanner.addEventListener('click', () => switchView('orders'));
@@ -1674,6 +1722,9 @@
 
     // Real-time subscription from Live POS Terminal (pos.html)!
     POS.subscribe((evt) => {
+      if (evt.type === 'THEME_CHANGED' || evt.type === 'STORAGE_SYNC') {
+        syncThemeUI();
+      }
       syncGlobalBadges();
       if (state.currentView === 'orders') renderOrdersView();
       if (state.currentView === 'me') renderMeView();
@@ -1685,6 +1736,7 @@
   }
 
   function init() {
+    syncThemeUI();
     renderPromoBanners();
     renderCategoryPills();
     renderMenuGrid();

@@ -10,6 +10,7 @@
   const STORAGE_ORDERS_KEY = 'gg_pos_orders_v1';
   const STORAGE_MEMBER_KEY = 'gg_member_profile_v1';
   const STORAGE_COUNTER_KEY = 'gg_pos_seq_v1';
+  const STORAGE_THEME_KEY = 'gg_theme_v1';
   const CHANNEL_NAME = 'good_girl_pos_v1';
 
   const STATUS_FLOW = ['received', 'preparing', 'ready', 'complete'];
@@ -92,10 +93,35 @@
   }
 
   global.addEventListener('storage', (e) => {
-    if (e.key === STORAGE_ORDERS_KEY || e.key === STORAGE_MEMBER_KEY) {
+    if (
+      e.key === STORAGE_ORDERS_KEY ||
+      e.key === STORAGE_MEMBER_KEY ||
+      e.key === STORAGE_THEME_KEY
+    ) {
       notifyLocal({ type: 'STORAGE_SYNC', key: e.key, at: Date.now() });
     }
   });
+
+  function getTheme() {
+    try {
+      const saved = global.localStorage.getItem(STORAGE_THEME_KEY);
+      if (saved === 'dark' || saved === 'light') return saved;
+    } catch (_) {}
+    return 'light'; // Default to Fresh White + Matcha Green theme
+  }
+
+  function setTheme(theme) {
+    const next = theme === 'dark' ? 'dark' : 'light';
+    try {
+      global.localStorage.setItem(STORAGE_THEME_KEY, next);
+    } catch (_) {}
+    document.documentElement.dataset.theme = next;
+    broadcast({ type: 'THEME_CHANGED', theme: next, at: Date.now() });
+    return next;
+  }
+
+  // Apply persisted theme immediately on load to avoid flash
+  document.documentElement.dataset.theme = getTheme();
 
   function readJSON(key, fallback) {
     try {
@@ -330,6 +356,8 @@
   global.GOOD_GIRL_POS = {
     STATUS_FLOW,
     STATUS_META,
+    getTheme,
+    setTheme,
     getMember,
     saveMember,
     getOrders,
