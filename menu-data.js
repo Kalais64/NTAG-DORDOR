@@ -1,0 +1,828 @@
+/* ==========================================================================
+   GOOD GIRL — Unified Café Menu Catalog, Dynamic Adaptive Themes & Vouchers
+   Shared by Customer Mobile Web (index.html) and Live POS Terminal (pos.html)
+   ========================================================================== */
+
+(function (global) {
+  'use strict';
+
+  function formatRp(amount) {
+    const n = Math.round(Number(amount) || 0);
+    return 'Rp' + n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  }
+
+  const CATEGORIES = [
+    { id: 'all', label: 'All' },
+    { id: 'signature', label: 'Signature Blends' },
+    { id: 'coffee', label: 'Coffee' },
+    { id: 'non-coffee', label: 'Non-Coffee' },
+    { id: 'pastry', label: 'Pastry & Dessert' },
+    { id: 'merch', label: 'Merch' },
+  ];
+
+  const MENU_ITEMS = [
+    /* ===================== SIGNATURE BLENDS ===================== */
+    {
+      id: 'matcha-nitro',
+      skuPrefix: 'SIG-MNT',
+      name: 'MATCHA NITRO',
+      shortName: 'Matcha Nitro',
+      category: 'signature',
+      categoryLabel: 'Signature Blends',
+      badge: 'Best Seller',
+      itemType: 'drink',
+      hasLevels: true,
+      image: 'assets/matcha-nitro.png',
+      shortDesc:
+        'A smooth, layered drink that combines ceremonial matcha with nitrogen-infused botanical base. Velvety texture,...',
+      fullDesc:
+        'A smooth, layered drink that combines first-harvest Kyoto ceremonial Uji matcha with a chilled nitrogen-infused butterfly-pea botanical base. Velvety micro-foam texture, zero refined sugar, and a crisp floral mineral finish.',
+      tags: [
+        { label: 'CREAMY', note: 'Nitrogen-whipped ceremonial Uji matcha micro-foam.' },
+        { label: 'FLORAL', note: 'Subtle butterfly-pea blossom & botanical essence.' },
+        { label: 'SILKY', note: 'Cold-infused velvety body with zero bitterness.' },
+        { label: 'EARTHY', note: 'First-harvest stone-ground Kyoto shade-grown leaves.' },
+      ],
+      styles: [
+        { id: 'ice', label: 'Nitro Ice', icon: 'ice' },
+        { id: 'hot', label: 'Hot Whisked', icon: 'hot' },
+      ],
+      sizes: {
+        small: { label: 'Small', volume: '200 ML', price: 36000 },
+        medium: { label: 'Medium', volume: '250 ML', price: 42000 },
+        large: { label: 'Large', volume: '350 ML', price: 49000 },
+      },
+      theme: {
+        topBg: '#a9db4c',
+        topBg2: '#73ab2a',
+        sheetTop: 'rgba(15, 23, 12, 0.78)',
+        sheetMid: 'rgba(9, 34, 34, 0.64)',
+        sheetBot: 'rgba(4, 30, 48, 0.84)',
+        glowTop: 'rgba(164, 236, 56, 0.34)',
+        glowBot: 'rgba(18, 128, 214, 0.48)',
+        accent: '#c3fb52',
+        statusDark: true,
+        cardTint: 'rgba(148, 224, 62, 0.14)',
+      },
+    },
+    {
+      id: 'blue-cloud-latte',
+      skuPrefix: 'SIG-BCL',
+      name: 'BLUE CLOUD LATTE',
+      shortName: 'Blue Cloud Latte',
+      category: 'signature',
+      categoryLabel: 'Signature Blends',
+      badge: 'Signature',
+      itemType: 'drink',
+      hasLevels: true,
+      image: 'assets/blue-cloud-latte.png',
+      shortDesc:
+        'Velvety sky-blue spirulina cold foam suspended above chilled barista oat milk with botanical sapphire swirls,...',
+      fullDesc:
+        'Velvety sky-blue spirulina cold foam suspended above chilled organic barista oat milk with delicate botanical sapphire swirls and cold-steeped Madagascar vanilla bean.',
+      tags: [
+        { label: 'CLOUDY', note: 'Whipped blue spirulina cold cloud foam.' },
+        { label: 'OAT', note: 'Silky micro-filtered Scandinavian oat base.' },
+        { label: 'VANILLA', note: 'Cold-steeped Madagascar vanilla pod infusion.' },
+        { label: 'SMOOTH', note: 'Naturally caffeine-free restorative sip.' },
+      ],
+      styles: [
+        { id: 'ice', label: 'Ice', icon: 'ice' },
+        { id: 'hot', label: 'Hot', icon: 'hot' },
+      ],
+      sizes: {
+        small: { label: 'Small', volume: '200 ML', price: 34000 },
+        medium: { label: 'Medium', volume: '250 ML', price: 40000 },
+        large: { label: 'Large', volume: '350 ML', price: 47000 },
+      },
+      theme: {
+        topBg: '#9ed4fa',
+        topBg2: '#569ad4',
+        sheetTop: 'rgba(12, 26, 42, 0.76)',
+        sheetMid: 'rgba(20, 40, 58, 0.62)',
+        sheetBot: 'rgba(42, 54, 68, 0.78)',
+        glowTop: 'rgba(124, 204, 255, 0.38)',
+        glowBot: 'rgba(232, 242, 252, 0.26)',
+        accent: '#8ee6ff',
+        statusDark: true,
+        cardTint: 'rgba(124, 204, 255, 0.16)',
+      },
+    },
+    {
+      id: 'yuzu-matcha-fizz',
+      skuPrefix: 'SIG-YMF',
+      name: 'YUZU MATCHA FIZZ',
+      shortName: 'Yuzu Matcha Fizz',
+      category: 'signature',
+      categoryLabel: 'Signature Blends',
+      badge: 'Refreshing',
+      itemType: 'drink',
+      hasLevels: true,
+      image: 'assets/yuzu-matcha-fizz.png',
+      shortDesc:
+        'Bright emerald ceremonial matcha layered cleanly over sparkling Japanese yuzu citrus botanical tonic,...',
+      fullDesc:
+        'Bright emerald ceremonial matcha layered cleanly over sparkling Kochi yuzu citrus botanical tonic with crisp micro-effervescent bubbles and an uplifting aromatic finish.',
+      tags: [
+        { label: 'BRIGHT', note: 'Fresh-pressed aromatic Kochi yuzu peel.' },
+        { label: 'SPARKLING', note: 'High-carbonation chilled botanical tonic.' },
+        { label: 'CRISP', note: 'Clean, refreshing citrus palate cleanser.' },
+        { label: 'MATCHA', note: 'Hand-whisked ceremonial emerald top layer.' },
+      ],
+      styles: [
+        { id: 'ice', label: 'Sparkling Ice', icon: 'ice' },
+        { id: 'hot', label: 'Warm Citrus', icon: 'hot' },
+      ],
+      sizes: {
+        small: { label: 'Small', volume: '200 ML', price: 33000 },
+        medium: { label: 'Medium', volume: '250 ML', price: 38000 },
+        large: { label: 'Large', volume: '350 ML', price: 45000 },
+      },
+      theme: {
+        topBg: '#bae654',
+        topBg2: '#89b328',
+        sheetTop: 'rgba(15, 28, 14, 0.78)',
+        sheetMid: 'rgba(28, 36, 16, 0.65)',
+        sheetBot: 'rgba(48, 36, 10, 0.84)',
+        glowTop: 'rgba(140, 224, 62, 0.34)',
+        glowBot: 'rgba(242, 186, 40, 0.44)',
+        accent: '#daf95c',
+        statusDark: true,
+        cardTint: 'rgba(220, 206, 62, 0.14)',
+      },
+    },
+
+    /* ===================== COFFEE ===================== */
+    {
+      id: 'iced-americano',
+      skuPrefix: 'COF-AMR',
+      name: 'ICED AMERICANO',
+      shortName: 'Iced Americano',
+      category: 'coffee',
+      categoryLabel: 'Coffee',
+      badge: 'Classic',
+      itemType: 'drink',
+      hasLevels: true,
+      image: 'assets/iced-americano.png',
+      shortDesc:
+        'Double-shot single-origin Flores & Ethiopia espresso poured over crystal ice with velvety golden crema,...',
+      fullDesc:
+        'Double-shot single-origin Flores & Ethiopia washed espresso pulled at 9 bars and poured gently over crystal-clear ice for a clean roasted-cocoa aroma, bright stone-fruit clarity, and silky golden crema.',
+      tags: [
+        { label: 'ROASTED', note: 'Medium-dark specialty Arabica double espresso.' },
+        { label: 'CRISP', note: 'Zero bitterness, chilled mineral water balance.' },
+        { label: 'COCOA', note: 'Dark nib chocolate undertones on the finish.' },
+        { label: 'BOLD', note: 'High-clarity caffeine kick for focus.' },
+      ],
+      styles: [
+        { id: 'ice', label: 'Ice', icon: 'ice' },
+        { id: 'hot', label: 'Hot', icon: 'hot' },
+      ],
+      sizes: {
+        small: { label: 'Small', volume: '200 ML', price: 24000 },
+        medium: { label: 'Medium', volume: '250 ML', price: 28000 },
+        large: { label: 'Large', volume: '350 ML', price: 33000 },
+      },
+      theme: {
+        topBg: '#dfd0c0',
+        topBg2: '#9a7758',
+        sheetTop: 'rgba(32, 20, 14, 0.82)',
+        sheetMid: 'rgba(46, 33, 24, 0.68)',
+        sheetBot: 'rgba(62, 54, 48, 0.78)',
+        glowTop: 'rgba(176, 114, 68, 0.36)',
+        glowBot: 'rgba(246, 238, 230, 0.28)',
+        accent: '#f4d6b0',
+        statusDark: true,
+        cardTint: 'rgba(196, 148, 108, 0.16)',
+      },
+    },
+    {
+      id: 'biscoff-choco-frappe',
+      skuPrefix: 'COF-BCF',
+      name: 'BISCOFF CHOCO FRAPPE',
+      shortName: 'Biscoff Choco Frappe',
+      category: 'coffee',
+      categoryLabel: 'Coffee',
+      badge: 'New',
+      itemType: 'drink',
+      hasLevels: true,
+      image: 'assets/biscoff-choco-frappe.png',
+      shortDesc:
+        'Velvety Belgian dark chocolate and house espresso blended smooth with salted caramel & Lotus Biscoff,...',
+      fullDesc:
+        'Velvety Belgian dark chocolate and double house espresso blended silky smooth with salted caramel ribbons, whipped cream crown, dark cocoa crumble, and a crisp caramelized Lotus Biscoff biscuit.',
+      tags: [
+        { label: 'CHOCO', note: '70% Belgian dark cocoa ganache swirl.' },
+        { label: 'BISCOFF', note: 'Spiced caramelized speculoos biscuit crunch.' },
+        { label: 'CARAMEL', note: 'House-torched sea salt caramel drizzle.' },
+        { label: 'INDULGENT', note: 'Rich dessert-grade blended espresso.' },
+      ],
+      styles: [
+        { id: 'ice', label: 'Ice Frappe', icon: 'ice' },
+        { id: 'hot', label: 'Hot Mocha', icon: 'hot' },
+      ],
+      sizes: {
+        small: { label: 'Small', volume: '240 ML', price: 34000 },
+        medium: { label: 'Medium', volume: '300 ML', price: 39000 },
+        large: { label: 'Large', volume: '400 ML', price: 46000 },
+      },
+      theme: {
+        topBg: '#e4b278',
+        topBg2: '#a66832',
+        sheetTop: 'rgba(38, 20, 12, 0.82)',
+        sheetMid: 'rgba(56, 32, 18, 0.68)',
+        sheetBot: 'rgba(30, 17, 11, 0.86)',
+        glowTop: 'rgba(232, 162, 78, 0.40)',
+        glowBot: 'rgba(148, 80, 40, 0.44)',
+        accent: '#ffc980',
+        statusDark: true,
+        cardTint: 'rgba(222, 152, 82, 0.16)',
+      },
+    },
+    {
+      id: 'vanilla-cinnamon-latte',
+      skuPrefix: 'COF-VCL',
+      name: 'VANILLA CINNAMON LATTE',
+      shortName: 'Vanilla Cinnamon Latte',
+      category: 'coffee',
+      categoryLabel: 'Coffee',
+      badge: 'Favorite',
+      itemType: 'drink',
+      hasLevels: true,
+      image: 'assets/vanilla-cinnamon-latte.png',
+      shortDesc:
+        'Silky house espresso cascaded over chilled Madagascar vanilla milk with warm Ceylon cinnamon dusting,...',
+      fullDesc:
+        'Silky house espresso cascaded gently over chilled Madagascar vanilla bean oat-dairy blend, finished with micro-foam and aromatic warm Ceylon cinnamon dusting.',
+      tags: [
+        { label: 'VANILLA', note: 'Real Madagascar vanilla bean pod syrup.' },
+        { label: 'SPICED', note: 'Warm sweet Ceylon cinnamon aroma.' },
+        { label: 'CREAMY', note: 'Micro-textured velvety milk body.' },
+        { label: 'COZY', note: 'Balanced low-acid specialty espresso.' },
+      ],
+      styles: [
+        { id: 'ice', label: 'Ice', icon: 'ice' },
+        { id: 'hot', label: 'Hot', icon: 'hot' },
+      ],
+      sizes: {
+        small: { label: 'Small', volume: '200 ML', price: 30000 },
+        medium: { label: 'Medium', volume: '250 ML', price: 35000 },
+        large: { label: 'Large', volume: '350 ML', price: 42000 },
+      },
+      theme: {
+        topBg: '#eddcc4',
+        topBg2: '#be9568',
+        sheetTop: 'rgba(38, 28, 20, 0.78)',
+        sheetMid: 'rgba(54, 42, 30, 0.64)',
+        sheetBot: 'rgba(46, 40, 35, 0.80)',
+        glowTop: 'rgba(236, 198, 146, 0.36)',
+        glowBot: 'rgba(252, 244, 232, 0.26)',
+        accent: '#ffe2b8',
+        statusDark: true,
+        cardTint: 'rgba(232, 198, 152, 0.16)',
+      },
+    },
+
+    /* ===================== NON-COFFEE ===================== */
+    {
+      id: 'strawberry-matcha-cloud',
+      skuPrefix: 'NCF-SMC',
+      name: 'STRAWBERRY MATCHA CLOUD',
+      shortName: 'Strawberry Matcha',
+      category: 'non-coffee',
+      categoryLabel: 'Non-Coffee',
+      badge: 'Trending',
+      itemType: 'drink',
+      hasLevels: true,
+      image: 'assets/strawberry-matcha-cloud.png',
+      shortDesc:
+        'Triple-layered ruby strawberry compote, chilled silky milk, and ceremonial emerald matcha foam cloud,...',
+      fullDesc:
+        'Triple-layered house-macerated ruby strawberry compote, chilled creamy milk over crystal ice, crowned with lush stone-ground emerald Uji matcha micro-foam.',
+      tags: [
+        { label: 'BERRY', note: 'Fresh-macerated Bandung ruby strawberries.' },
+        { label: 'MATCHA', note: 'Ceremonial Kyoto emerald top cloud.' },
+        { label: 'LAYERED', note: 'Stir slowly for marbled pink-green harmony.' },
+        { label: 'FRESH', note: 'Light natural fruit sweetness.' },
+      ],
+      styles: [
+        { id: 'ice', label: 'Ice', icon: 'ice' },
+        { id: 'hot', label: 'Warm', icon: 'hot' },
+      ],
+      sizes: {
+        small: { label: 'Small', volume: '200 ML', price: 34000 },
+        medium: { label: 'Medium', volume: '250 ML', price: 39000 },
+        large: { label: 'Large', volume: '350 ML', price: 45000 },
+      },
+      theme: {
+        topBg: '#a8dc58',
+        topBg2: '#6da830',
+        sheetTop: 'rgba(16, 30, 15, 0.78)',
+        sheetMid: 'rgba(38, 22, 28, 0.66)',
+        sheetBot: 'rgba(60, 14, 28, 0.84)',
+        glowTop: 'rgba(144, 224, 68, 0.34)',
+        glowBot: 'rgba(238, 70, 112, 0.48)',
+        accent: '#ff96b6',
+        statusDark: true,
+        cardTint: 'rgba(232, 92, 128, 0.16)',
+      },
+    },
+    {
+      id: 'thai-milk-tea',
+      skuPrefix: 'NCF-TMT',
+      name: 'THAI MILK TEA',
+      shortName: 'Thai Milk Tea',
+      category: 'non-coffee',
+      categoryLabel: 'Non-Coffee',
+      badge: 'House Brew',
+      itemType: 'drink',
+      hasLevels: true,
+      image: 'assets/thai-milk-tea.png',
+      shortDesc:
+        'Slow-steeped Chiang Mai spiced black tea layered with velvety condensed cream over crisp crystal ice,...',
+      fullDesc:
+        'Slow-steeped Chiang Mai spiced black tea with star anise, toasted vanilla, and crushed cardamom, layered smoothly with chilled evaporated & condensed cream over crystal ice.',
+      tags: [
+        { label: 'AROMATIC', note: 'Star anise, vanilla bean & Assam black tea.' },
+        { label: 'SILKY', note: 'Swirled sweet cream richness.' },
+        { label: 'AMBER', note: 'Deep golden-terracotta slow brew.' },
+        { label: 'CLASSIC', note: 'Beloved iced street-café comfort elevated.' },
+      ],
+      styles: [
+        { id: 'ice', label: 'Ice', icon: 'ice' },
+        { id: 'hot', label: 'Hot', icon: 'hot' },
+      ],
+      sizes: {
+        small: { label: 'Small', volume: '200 ML', price: 25000 },
+        medium: { label: 'Medium', volume: '250 ML', price: 29000 },
+        large: { label: 'Large', volume: '350 ML', price: 35000 },
+      },
+      theme: {
+        topBg: '#f4ab64',
+        topBg2: '#cc6d2b',
+        sheetTop: 'rgba(46, 22, 10, 0.80)',
+        sheetMid: 'rgba(64, 34, 16, 0.66)',
+        sheetBot: 'rgba(54, 40, 28, 0.82)',
+        glowTop: 'rgba(248, 148, 62, 0.42)',
+        glowBot: 'rgba(252, 230, 198, 0.28)',
+        accent: '#ffbc75',
+        statusDark: true,
+        cardTint: 'rgba(244, 152, 68, 0.16)',
+      },
+    },
+
+    /* ===================== PASTRY & DESSERT ===================== */
+    {
+      id: 'spirulina-cake',
+      skuPrefix: 'PST-SPC',
+      name: 'SPIRULINA CAKE',
+      shortName: 'Spirulina Cake',
+      category: 'pastry',
+      categoryLabel: 'Pastry & Dessert',
+      badge: 'Pairing Pick',
+      itemType: 'pastry',
+      hasLevels: false,
+      image: 'assets/spirulina-cake.png',
+      shortDesc:
+        'Chilled marbled sky-blue spirulina mousse & coconut-vanilla cream atop golden toasted oat biscuit crust,...',
+      fullDesc:
+        'Chilled artisanal cheesecake featuring marbled sky-blue blue-spirulina mousse, silky coconut-vanilla cream center, and a crisp golden toasted oat-almond biscuit base. Crafted to pair with Matcha Nitro.',
+      tags: [
+        { label: 'SPIRULINA', note: 'Natural ocean-blue superfood marbling.' },
+        { label: 'CHILLED', note: 'Light mousse-like no-bake texture.' },
+        { label: 'COCONUT', note: 'Delicate creamy vanilla middle layer.' },
+        { label: 'CRUNCH', note: 'Toasted honey oat & almond crust.' },
+      ],
+      styles: [
+        { id: 'chilled', label: 'Chilled', icon: 'ice' },
+        { id: 'gift', label: 'Gift Box', icon: 'box' },
+      ],
+      sizes: {
+        small: { label: '1 Slice', volume: '250 g', price: 38000 },
+        medium: { label: 'Duo (2)', volume: '500 g', price: 72000 },
+        large: { label: 'Box (4)', volume: '1 kg', price: 138000 },
+      },
+      theme: {
+        topBg: '#a0d4fa',
+        topBg2: '#6aa4d6',
+        sheetTop: 'rgba(12, 26, 42, 0.78)',
+        sheetMid: 'rgba(18, 36, 54, 0.64)',
+        sheetBot: 'rgba(42, 36, 26, 0.80)',
+        glowTop: 'rgba(132, 200, 255, 0.38)',
+        glowBot: 'rgba(222, 186, 132, 0.30)',
+        accent: '#98deff',
+        statusDark: true,
+        cardTint: 'rgba(134, 202, 255, 0.16)',
+      },
+    },
+    {
+      id: 'matcha-mochi',
+      skuPrefix: 'PST-MMC',
+      name: 'MATCHA MOCHI',
+      shortName: 'Matcha Mochi',
+      category: 'pastry',
+      categoryLabel: 'Pastry & Dessert',
+      badge: 'Best Seller',
+      itemType: 'pastry',
+      hasLevels: false,
+      image: 'assets/matcha-mochi.png',
+      shortDesc:
+        'Pillow-soft pastel matcha daifuku stuffed with whipped cream, molten Uji matcha ganache & berry bits,...',
+      fullDesc:
+        'Pillow-soft hand-pounded pastel matcha daifuku mochi filled with airy vanilla cream, a glossy molten Uji ceremonial matcha ganache center, pistachio crumble base, and freeze-dried ruby raspberry garnish.',
+      tags: [
+        { label: 'MOLTEN', note: 'Oozing dark ceremonial Uji matcha core.' },
+        { label: 'CHEWY', note: 'Freshly steamed silky Japanese mochi skin.' },
+        { label: 'CREAMY', note: 'Light Hokkaido-style whipped chantilly.' },
+        { label: 'BERRY', note: 'Tangy freeze-dried raspberry crown.' },
+      ],
+      styles: [
+        { id: 'chilled', label: 'Chilled', icon: 'ice' },
+        { id: 'gift', label: 'Gift Box', icon: 'box' },
+      ],
+      sizes: {
+        small: { label: 'Single', volume: '150 g', price: 28000 },
+        medium: { label: 'Box (3)', volume: '450 g', price: 78000 },
+        large: { label: 'Box (6)', volume: '900 g', price: 148000 },
+      },
+      theme: {
+        topBg: '#c5e69e',
+        topBg2: '#87b85e',
+        sheetTop: 'rgba(18, 30, 18, 0.78)',
+        sheetMid: 'rgba(24, 42, 24, 0.64)',
+        sheetBot: 'rgba(16, 32, 22, 0.82)',
+        glowTop: 'rgba(176, 228, 118, 0.34)',
+        glowBot: 'rgba(222, 86, 114, 0.28)',
+        accent: '#c8f587',
+        statusDark: true,
+        cardTint: 'rgba(168, 228, 114, 0.16)',
+      },
+    },
+    {
+      id: 'blueberry-tart',
+      skuPrefix: 'PST-BBT',
+      name: 'BLUEBERRY TART',
+      shortName: 'Blueberry Tart',
+      category: 'pastry',
+      categoryLabel: 'Pastry & Dessert',
+      badge: 'Artisanal',
+      itemType: 'pastry',
+      hasLevels: false,
+      image: 'assets/blueberry-tart.png',
+      shortDesc:
+        'Velvety indigo blueberry cheesecake tart on roasted cocoa crust finished with lavender marble glaze,...',
+      fullDesc:
+        'Velvety wild indigo-blueberry cheesecake tart resting on a dark roasted cocoa biscuit crust, crowned with glossy marbled lavender glaze and fresh glazed blueberries.',
+      tags: [
+        { label: 'INDIGO', note: 'Wild mountain blueberry compote mousse.' },
+        { label: 'COCOA', note: 'Crisp dark chocolate-butter crust.' },
+        { label: 'GLAZED', note: 'Mirror lavender-cream swirl topping.' },
+        { label: 'TANGY', note: 'Bright sweet-tart berry finish.' },
+      ],
+      styles: [
+        { id: 'chilled', label: 'Chilled', icon: 'ice' },
+        { id: 'gift', label: 'Gift Box', icon: 'box' },
+      ],
+      sizes: {
+        small: { label: '1 Slice', volume: '250 g', price: 36000 },
+        medium: { label: 'Duo (2)', volume: '500 g', price: 68000 },
+        large: { label: 'Box (4)', volume: '1 kg', price: 130000 },
+      },
+      theme: {
+        topBg: '#b8a4f2',
+        topBg2: '#6d58b5',
+        sheetTop: 'rgba(24, 16, 44, 0.80)',
+        sheetMid: 'rgba(34, 22, 58, 0.68)',
+        sheetBot: 'rgba(38, 24, 26, 0.84)',
+        glowTop: 'rgba(166, 138, 248, 0.38)',
+        glowBot: 'rgba(110, 84, 218, 0.42)',
+        accent: '#cbb8ff',
+        statusDark: true,
+        cardTint: 'rgba(162, 132, 246, 0.16)',
+      },
+    },
+    {
+      id: 'yuzu-matcha-roll',
+      skuPrefix: 'PST-YMR',
+      name: 'YUZU MATCHA ROLL',
+      shortName: 'Yuzu Matcha Roll',
+      category: 'pastry',
+      categoryLabel: 'Pastry & Dessert',
+      badge: 'Chef Pick',
+      itemType: 'pastry',
+      hasLevels: false,
+      image: 'assets/yuzu-matcha-roll.png',
+      shortDesc:
+        'Fluffy Japanese ceremonial matcha sponge rolled around silky cream and bright golden yuzu citrus curd,...',
+      fullDesc:
+        'Cloud-light Japanese ceremonial matcha chiffon sponge rolled tightly around velvety fresh cream and a vibrant golden Kochi yuzu citrus curd center, dusted with matcha sugar.',
+      tags: [
+        { label: 'FLUFFY', note: 'Cloud-soft Japanese chiffon sponge.' },
+        { label: 'YUZU', note: 'Zesty golden yuzu curd heart.' },
+        { label: 'MATCHA', note: 'Fragrant Kyoto ceremonial green tea.' },
+        { label: 'LIGHT', note: 'Delicate sweetness ideal with coffee.' },
+      ],
+      styles: [
+        { id: 'chilled', label: 'Chilled', icon: 'ice' },
+        { id: 'gift', label: 'Gift Box', icon: 'box' },
+      ],
+      sizes: {
+        small: { label: '1 Slice', volume: '180 g', price: 32000 },
+        medium: { label: 'Half Roll', volume: '360 g', price: 60000 },
+        large: { label: 'Whole Roll', volume: '720 g', price: 115000 },
+      },
+      theme: {
+        topBg: '#b8df68',
+        topBg2: '#7faa36',
+        sheetTop: 'rgba(18, 30, 14, 0.78)',
+        sheetMid: 'rgba(32, 40, 18, 0.64)',
+        sheetBot: 'rgba(48, 38, 14, 0.82)',
+        glowTop: 'rgba(146, 216, 74, 0.34)',
+        glowBot: 'rgba(252, 202, 52, 0.40)',
+        accent: '#f8e16c',
+        statusDark: true,
+        cardTint: 'rgba(202, 224, 74, 0.16)',
+      },
+    },
+
+    /* ===================== MERCH ===================== */
+    {
+      id: 'glass-tumbler',
+      skuPrefix: 'MRC-TMB',
+      name: 'GOOD GIRL TUMBLER',
+      shortName: 'Glass Tumbler',
+      category: 'merch',
+      categoryLabel: 'Merch',
+      badge: 'Limited Merch',
+      itemType: 'merch',
+      hasLevels: false,
+      image: 'assets/glass-tumbler.png',
+      shortDesc:
+        'Double-walled emerald-tinted borosilicate glass tumbler with obsidian grip & reusable glass straw,...',
+      fullDesc:
+        'Signature GOOD GIRL Botanical Lab double-walled frosted emerald borosilicate glass tumbler with matte-obsidian silicone grip sleeve, spill-resistant lid, and reusable borosilicate straw. Bring it in-store for Rp5.000 off every drink.',
+      tags: [
+        { label: 'BOROSILICATE', note: 'Thermal-shock resistant insulated double wall.' },
+        { label: 'REUSABLE', note: 'Includes borosilicate straw & cleaning brush.' },
+        { label: 'ECO PERK', note: 'Save Rp5.000 every time you bring it in.' },
+        { label: 'LIMITED', note: 'Botanical Lab Season 02 edition.' },
+      ],
+      styles: [
+        { id: 'standard', label: 'Standard', icon: 'box' },
+        { id: 'gift', label: 'Gift Wrap', icon: 'gift' },
+      ],
+      sizes: {
+        small: { label: '350 ML', volume: '350 ML', price: 185000 },
+        medium: { label: '480 ML', volume: '480 ML', price: 225000 },
+        large: { label: 'Duo Set', volume: '2×480 ML', price: 410000 },
+      },
+      theme: {
+        topBg: '#7fdcc9',
+        topBg2: '#2d8b82',
+        sheetTop: 'rgba(10, 28, 30, 0.80)',
+        sheetMid: 'rgba(12, 38, 42, 0.66)',
+        sheetBot: 'rgba(6, 20, 24, 0.86)',
+        glowTop: 'rgba(104, 228, 206, 0.36)',
+        glowBot: 'rgba(42, 158, 178, 0.36)',
+        accent: '#7ef5de',
+        statusDark: true,
+        cardTint: 'rgba(102, 224, 202, 0.16)',
+      },
+    },
+    {
+      id: 'uji-matcha-tin',
+      skuPrefix: 'MRC-UJI',
+      name: 'UJI CEREMONIAL TIN',
+      shortName: 'Uji Matcha Tin',
+      category: 'merch',
+      categoryLabel: 'Merch',
+      badge: 'First Harvest',
+      itemType: 'merch',
+      hasLevels: false,
+      image: 'assets/uji-matcha-tin.png',
+      shortDesc:
+        'Stone-ground first-harvest Kyoto Uji ceremonial matcha sealed in a matte-obsidian airtight caddy tin,...',
+      fullDesc:
+        'Single-cultivar Samidori first-harvest Kyoto Uji ceremonial matcha stone-milled to 5 microns and nitrogen-sealed inside our signature matte-obsidian airtight aluminum caddy with neon-lime accent seal.',
+      tags: [
+        { label: 'UJI KYOTO', note: 'Shade-grown 28 days before spring harvest.' },
+        { label: 'AIRTIGHT', note: 'UV-blocking matte-obsidian aluminum tin.' },
+        { label: 'UMAMI', note: 'Zero bitterness, vibrant jade foam.' },
+        { label: '25 SERVES', note: 'Yields 25 café-grade bowls or lattes.' },
+      ],
+      styles: [
+        { id: 'standard', label: 'Tin Only', icon: 'box' },
+        { id: 'gift', label: '+ Bamboo Whisk', icon: 'gift' },
+      ],
+      sizes: {
+        small: { label: '30 g', volume: '30 g', price: 165000 },
+        medium: { label: '50 g', volume: '50 g', price: 245000 },
+        large: { label: '100 g', volume: '100 g', price: 440000 },
+      },
+      theme: {
+        topBg: '#bfe95a',
+        topBg2: '#638822',
+        sheetTop: 'rgba(16, 18, 16, 0.84)',
+        sheetMid: 'rgba(22, 28, 18, 0.72)',
+        sheetBot: 'rgba(10, 14, 12, 0.88)',
+        glowTop: 'rgba(188, 248, 68, 0.30)',
+        glowBot: 'rgba(120, 182, 82, 0.24)',
+        accent: '#c9fb46',
+        statusDark: true,
+        cardTint: 'rgba(186, 244, 72, 0.14)',
+      },
+    },
+  ];
+
+  const VOUCHERS = [
+    {
+      code: 'MATCHA20',
+      title: '20% Off Botanical Brew',
+      desc: 'Up to Rp25.000 off • Min. order Rp40.000',
+      type: 'percent',
+      value: 20,
+      maxDiscount: 25000,
+      minSpend: 40000,
+      badge: 'POPULAR',
+      accent: '#c9fb46',
+    },
+    {
+      code: 'FIRSTBREW',
+      title: 'Rp15.000 Off Any Order',
+      desc: 'Instant discount for online mobile ordering • Min. Rp35.000',
+      type: 'flat',
+      value: 15000,
+      maxDiscount: 15000,
+      minSpend: 35000,
+      badge: 'NEW USER',
+      accent: '#7ce8ff',
+    },
+    {
+      code: 'FREEPASTRY',
+      title: 'Rp20.000 Pastry Pairing',
+      desc: 'Valid when your bag includes any Pastry & Dessert item',
+      type: 'pastry_flat',
+      value: 20000,
+      maxDiscount: 20000,
+      minSpend: 30000,
+      badge: 'PAIRING',
+      accent: '#ff9ec0',
+    },
+    {
+      code: 'GGVIP10',
+      title: 'Emerald Member 10% Off',
+      desc: 'Exclusive member reward • No minimum purchase',
+      type: 'percent',
+      value: 10,
+      maxDiscount: 35000,
+      minSpend: 0,
+      badge: 'MEMBER',
+      accent: '#ffe08a',
+    },
+  ];
+
+  const PROMO_BANNERS = [
+    {
+      id: 'banner-biscoff',
+      kicker: "What's New?",
+      title: 'Discover Choco-Coffee & Biscoff',
+      cta: 'Try it Today',
+      itemId: 'biscoff-choco-frappe',
+      image: 'assets/biscoff-choco-frappe.png',
+      gradient:
+        'linear-gradient(135deg, rgba(168, 108, 54, 0.56) 0%, rgba(44, 24, 15, 0.78) 65%, rgba(28, 16, 10, 0.88) 100%)',
+      accent: '#ffc980',
+    },
+    {
+      id: 'banner-nitro',
+      kicker: 'Signature Lab',
+      title: 'Matcha Nitro + Spirulina Pairing',
+      cta: 'Use MATCHA20',
+      itemId: 'matcha-nitro',
+      voucherCode: 'MATCHA20',
+      image: 'assets/matcha-nitro.png',
+      gradient:
+        'linear-gradient(135deg, rgba(132, 206, 46, 0.44) 0%, rgba(12, 68, 98, 0.72) 65%, rgba(6, 26, 42, 0.88) 100%)',
+      accent: '#c9fb46',
+    },
+    {
+      id: 'banner-merch',
+      kicker: 'Limited Merch',
+      title: 'Emerald Glass Tumbler • Save Rp5k/Brew',
+      cta: 'Explore Merch',
+      itemId: 'glass-tumbler',
+      image: 'assets/glass-tumbler.png',
+      gradient:
+        'linear-gradient(135deg, rgba(64, 198, 178, 0.44) 0%, rgba(12, 48, 56, 0.76) 65%, rgba(6, 22, 28, 0.90) 100%)',
+      accent: '#7ef5de',
+    },
+  ];
+
+  const PAYMENT_METHODS = [
+    {
+      id: 'qris',
+      group: 'Instant QR',
+      name: 'QRIS',
+      subtitle: 'Scan with any Indonesian bank or e-wallet',
+      badge: 'FASTEST',
+      iconType: 'qris',
+    },
+    {
+      id: 'gopay',
+      group: 'E-Wallet / Handpay',
+      name: 'GoPay / OVO / DANA',
+      subtitle: 'One-tap digital wallet & Handpay checkout',
+      badge: '0% FEE',
+      iconType: 'wallet',
+      providers: ['GoPay', 'OVO', 'DANA', 'ShopeePay', 'Apple Pay'],
+    },
+    {
+      id: 'va',
+      group: 'Bank Transfer',
+      name: 'Virtual Account',
+      subtitle: 'Auto-verified BCA, Mandiri, or BNI VA',
+      badge: 'AUTO',
+      iconType: 'bank',
+      providers: ['BCA VA', 'Mandiri VA', 'BNI VA'],
+    },
+    {
+      id: 'ggpay',
+      group: 'Membership',
+      name: 'GG Member Pay',
+      subtitle: 'Pay using member balance + 2× Points',
+      badge: '2× PTS',
+      iconType: 'member',
+    },
+  ];
+
+  function getItemById(id) {
+    return MENU_ITEMS.find((item) => item.id === id) || MENU_ITEMS[0];
+  }
+
+  function getDefaultSizeKey(item) {
+    if (item.itemType === 'drink') return 'medium';
+    return 'small';
+  }
+
+  function getBasePrice(item) {
+    const key = getDefaultSizeKey(item);
+    return item.sizes[key].price;
+  }
+
+  function calculateVoucherDiscount(voucherCode, cartItems, subtotal) {
+    if (!voucherCode) return { valid: false, discount: 0, reason: '' };
+    const v = VOUCHERS.find((x) => x.code === voucherCode);
+    if (!v) return { valid: false, discount: 0, reason: 'Voucher not found' };
+
+    if (subtotal < v.minSpend) {
+      return {
+        valid: false,
+        discount: 0,
+        reason: `Min. spend ${formatRp(v.minSpend)}`,
+      };
+    }
+
+    if (v.type === 'pastry_flat') {
+      const hasPastry = cartItems.some((c) => {
+        const ref = getItemById(c.itemId);
+        return ref && ref.category === 'pastry';
+      });
+      if (!hasPastry) {
+        return {
+          valid: false,
+          discount: 0,
+          reason: 'Add any Pastry & Dessert item first',
+        };
+      }
+      return { valid: true, discount: Math.min(v.value, subtotal), voucher: v };
+    }
+
+    if (v.type === 'percent') {
+      const raw = Math.round((subtotal * v.value) / 100);
+      return {
+        valid: true,
+        discount: Math.min(raw, v.maxDiscount, subtotal),
+        voucher: v,
+      };
+    }
+
+    return {
+      valid: true,
+      discount: Math.min(v.value, subtotal),
+      voucher: v,
+    };
+  }
+
+  global.GOOD_GIRL_DATA = {
+    formatRp,
+    CATEGORIES,
+    MENU_ITEMS,
+    VOUCHERS,
+    PROMO_BANNERS,
+    PAYMENT_METHODS,
+    getItemById,
+    getDefaultSizeKey,
+    getBasePrice,
+    calculateVoucherDiscount,
+  };
+})(window);
