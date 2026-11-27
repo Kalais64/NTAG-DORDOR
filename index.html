@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@400;500;600;700&family=Oxanium:wght@500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=3.0" />
+  <link rel="stylesheet" href="styles.css?v=3.1" />
 </head>
 <body class="show-statusbar">
   <!-- Shared SVG Definitions: Concentric Concave-Notched Card ClipPath -->
@@ -791,6 +791,20 @@
       </section>
 
       <!-- ================================================================
+           FLOATING LIQUID-GLASS MINI-CART BAR (Slides up when items added)
+           ================================================================ -->
+      <button type="button" class="floating-minicart" id="floatingMiniCart" aria-label="View items in your bag" aria-hidden="true">
+        <div class="minicart-left">
+          <div class="minicart-thumbs" id="miniCartThumbs"></div>
+          <div class="minicart-copy">
+            <strong id="miniCartSummary">1 item • Rp42.000</strong>
+            <small id="miniCartMeta">Tap to review bag &amp; checkout</small>
+          </div>
+        </div>
+        <span class="minicart-cta">View Bag &rarr;</span>
+      </button>
+
+      <!-- ================================================================
            FLOATING 5-TAB BOTTOM DOCK (Mobile Native & Phone Preview Mode)
            ================================================================ -->
       <nav class="glass-bottom-dock" id="bottomDock" aria-label="Mobile navigation">
@@ -943,8 +957,8 @@
     </div>
   </main>
 
-  <script src="menu-data.js?v=3.0"></script>
-  <script src="pos-bridge.js?v=3.0"></script>
-  <script src="app.js?v=3.0" defer></script>
+  <script src="menu-data.js?v=3.1"></script>
+  <script src="pos-bridge.js?v=3.1"></script>
+  <script src="app.js?v=3.1" defer></script>
 </body>
 </html>

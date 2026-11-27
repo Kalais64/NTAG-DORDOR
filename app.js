@@ -25,8 +25,9 @@
      ======================================================================== */
 
   const state = {
-    currentView: 'menu', // 'menu' | 'promo' | 'bag' | 'orders' | 'me' | 'detail'
+    currentView: 'menu', // 'menu' | 'promo' | 'bag' | 'orders' | 'me'
     previousTab: 'menu',
+    detailOpen: false,
     activeCategory: 'all',
     searchQuery: '',
     outletId: initialOutlet,
@@ -191,10 +192,15 @@
     themeToggleBtns: Array.from(document.querySelectorAll('[data-theme-toggle]')),
     themeSetBtns: Array.from(document.querySelectorAll('[data-set-theme]')),
 
-    // Product Detail
+    // Product Detail & Floating Mini-Cart
     detailDesktopScrim: document.getElementById('detailDesktopScrim'),
+    detailFrameContainer: document.querySelector('#screenDetail .detail-frame-container'),
     productGlassSheet: document.getElementById('productGlassSheet'),
     detailHandleBar: document.getElementById('detailHandleBar'),
+    floatingMiniCart: document.getElementById('floatingMiniCart'),
+    miniCartThumbs: document.getElementById('miniCartThumbs'),
+    miniCartSummary: document.getElementById('miniCartSummary'),
+    miniCartMeta: document.getElementById('miniCartMeta'),
     detailScroll: document.getElementById('detailScroll'),
     detailBackBtn: document.getElementById('detailBackBtn'),
     detailCategoryPill: document.getElementById('detailCategoryPill'),
@@ -359,11 +365,45 @@
      NAVIGATION
      ======================================================================== */
 
+  function triggerPop(node) {
+    if (!node) return;
+    node.classList.remove('is-popping');
+    void node.offsetWidth;
+    node.classList.add('is-popping');
+  }
+
+  function openDetailSheet() {
+    state.detailOpen = true;
+    el.screens.detail.classList.add('is-active');
+    el.screens.detail.setAttribute('aria-hidden', 'false');
+    el.phoneShell.classList.add('has-detail-open');
+    el.phoneShell.dataset.view = 'detail';
+    if (el.detailFrameContainer) el.detailFrameContainer.style.transform = '';
+    syncMiniCartVisibility();
+  }
+
+  function closeDetailSheet() {
+    if (!state.detailOpen) return;
+    state.detailOpen = false;
+    el.screens.detail.classList.remove('is-active');
+    el.screens.detail.setAttribute('aria-hidden', 'true');
+    el.phoneShell.classList.remove('has-detail-open');
+    el.phoneShell.dataset.view = state.currentView;
+    if (el.detailFrameContainer) el.detailFrameContainer.style.transform = '';
+    syncMiniCartVisibility();
+  }
+
   function switchView(target) {
+    if (target === 'detail') {
+      openDetailSheet();
+      return;
+    }
     if (!el.screens[target]) return;
-    if (target !== 'detail') state.previousTab = target;
+    if (state.detailOpen) closeDetailSheet();
+    state.previousTab = target;
 
     Object.entries(el.screens).forEach(([key, node]) => {
+      if (key === 'detail') return;
       const active = key === target;
       node.classList.toggle('is-active', active);
       node.setAttribute('aria-hidden', String(!active));
@@ -380,20 +420,20 @@
     });
 
     el.toolbarTabs.forEach((tab) => {
-      const active = tab.dataset.navView === (target === 'detail' ? state.previousTab : target);
+      const active = tab.dataset.navView === target;
       tab.classList.toggle('is-active', active);
       tab.setAttribute('aria-selected', String(active));
     });
 
     if (target === 'menu') {
       renderOrderAgain();
-      renderMenuGrid();
+      renderMenuGrid(false);
     }
     if (target === 'bag') renderBag();
     if (target === 'orders') renderOrdersView();
     if (target === 'promo') renderPromoView();
     if (target === 'me') renderMeView();
-    if (target === 'detail') renderDetailView();
+    syncMiniCartVisibility();
   }
 
   function openItemDetail(itemId, editItem) {
@@ -437,7 +477,7 @@
 
     renderDetailView();
     if (el.detailScroll) el.detailScroll.scrollTop = 0;
-    switchView('detail');
+    openDetailSheet();
   }
 
   /* ========================================================================
@@ -478,13 +518,42 @@
     return { count, subtotal, deliveryFee, discount, total, pointsEarned, voucherRes };
   }
 
-  function syncGlobalBadges() {
+  function syncMiniCartVisibility() {
+    if (!el.floatingMiniCart) return;
+    const { count, total } = getCartMetrics();
+    const shouldShow = count > 0 && state.currentView !== 'bag' && !state.detailOpen;
+
+    document.body.classList.toggle('has-cart-items', count > 0);
+    el.floatingMiniCart.classList.toggle('is-visible', shouldShow);
+    el.floatingMiniCart.setAttribute('aria-hidden', String(!shouldShow));
+
+    if (count > 0) {
+      const thumbs = state.cart
+        .slice(0, 3)
+        .map((c) => `<img src="${c.image}" alt="" class="minicart-thumb" />`)
+        .join('');
+      el.miniCartThumbs.innerHTML = thumbs;
+      el.miniCartSummary.textContent = `${count} ${count === 1 ? 'item' : 'items'} • ${DATA.formatRp(total)}`;
+      const outlet = DATA.getOutletById(state.outletId);
+      const loc = state.orderMode === 'dine-in' ? `Table ${state.tableNumber}` : state.orderMode === 'delivery' ? 'Delivery' : 'Pick Up';
+      el.miniCartMeta.textContent = `${outlet.name} • ${loc}`;
+    }
+  }
+
+  function syncGlobalBadges(shouldPop) {
     const { count } = getCartMetrics();
     el.dockBagBadge.textContent = String(count);
     el.dockBagBadge.hidden = count === 0;
     el.toolbarBagBadge.textContent = String(count);
     el.toolbarBagBadge.hidden = count === 0;
     el.detailBagCount.textContent = String(count);
+
+    syncMiniCartVisibility();
+    if (shouldPop && count > 0) {
+      triggerPop(el.dockBagBadge);
+      triggerPop(el.toolbarBagBadge);
+      triggerPop(el.floatingMiniCart);
+    }
 
     const online = POS.isBackendOnline();
     el.homeSyncLabel.textContent = online
@@ -560,7 +629,7 @@
       }, 650);
     }
 
-    syncGlobalBadges();
+    syncGlobalBadges(true);
     if (state.currentView === 'bag') renderBag();
     showToast(`Added ${item.shortName} • ${DATA.formatRp(sizeObj.price)}`);
   }
@@ -614,7 +683,8 @@
       if (idx !== -1) state.cart[idx] = entry;
       else state.cart.push(entry);
       showToast(`Updated ${item.shortName} in My Bag`);
-      syncGlobalBadges();
+      closeDetailSheet();
+      syncGlobalBadges(true);
       switchView('bag');
       return;
     }
@@ -623,9 +693,10 @@
     if (existing) existing.qty += d.qty;
     else state.cart.push(entry);
 
-    syncGlobalBadges();
-    showToast(`${d.qty}× ${item.shortName} added to My Bag`);
-    switchView('bag');
+    // Dismiss bottom sheet cleanly back to Menu & surface Floating Mini-Cart Bar!
+    closeDetailSheet();
+    syncGlobalBadges(true);
+    showToast(`${d.qty}× ${item.shortName} added to Bag • Tap View Bag anytime`);
   }
 
   /* ========================================================================
@@ -727,13 +798,13 @@
       btn.addEventListener('click', () => {
         state.activeCategory = cat.id;
         renderCategoryPills();
-        renderMenuGrid();
+        renderMenuGrid(true);
       });
       el.categoryPills.appendChild(btn);
     });
   }
 
-  function renderMenuGrid() {
+  function renderMenuGrid(animateCards) {
     const q = state.searchQuery.trim().toLowerCase();
     const filtered = DATA.MENU_ITEMS.filter((item) => {
       const catOk = state.activeCategory === 'all' || item.category === state.activeCategory;
@@ -761,11 +832,12 @@
       return;
     }
 
-    filtered.forEach((item) => {
+    filtered.forEach((item, idx) => {
       const price = DATA.getBasePrice(item);
       const available = POS.isItemAvailable(item.id);
       const card = document.createElement('article');
-      card.className = `menu-card ${available ? '' : 'is-soldout'}`;
+      card.className = `menu-card ${available ? '' : 'is-soldout'} ${animateCards ? 'is-entering' : ''}`;
+      if (animateCards) card.style.setProperty('--card-delay', `${Math.min(idx * 24, 180)}ms`);
       card.setAttribute('role', 'listitem');
       card.dataset.itemId = item.id;
 
@@ -1965,10 +2037,60 @@
       }
     });
 
-    // Product Detail
-    el.detailBackBtn.addEventListener('click', () => switchView(state.previousTab || 'menu'));
-    el.detailDesktopScrim.addEventListener('click', () => switchView(state.previousTab || 'menu'));
-    el.detailBagShortcut.addEventListener('click', () => switchView('bag'));
+    // Floating Mini-Cart Bar
+    if (el.floatingMiniCart) {
+      el.floatingMiniCart.addEventListener('click', () => switchView('bag'));
+    }
+
+    // Reusable pointer drag-to-dismiss helper for bottom sheets & drawers
+    function attachSheetDrag(handleEl, sheetEl, onDismiss) {
+      if (!handleEl || !sheetEl) return;
+      let startY = 0;
+      let deltaY = 0;
+      let dragging = false;
+
+      handleEl.addEventListener('pointerdown', (e) => {
+        dragging = true;
+        startY = e.clientY;
+        deltaY = 0;
+        sheetEl.classList.add('is-dragging');
+        if (handleEl.setPointerCapture) {
+          try { handleEl.setPointerCapture(e.pointerId); } catch (_) {}
+        }
+      });
+
+      handleEl.addEventListener('pointermove', (e) => {
+        if (!dragging) return;
+        deltaY = Math.max(0, e.clientY - startY);
+        sheetEl.style.transform = `translate3d(0, ${deltaY}px, 0)`;
+      });
+
+      const endDrag = () => {
+        if (!dragging) return;
+        dragging = false;
+        sheetEl.classList.remove('is-dragging');
+        sheetEl.style.transform = '';
+        if (deltaY > 70) onDismiss();
+      };
+
+      handleEl.addEventListener('pointerup', endDrag);
+      handleEl.addEventListener('pointercancel', endDrag);
+    }
+
+    // Product Detail (Bottom-Up Sheet Popup)
+    el.detailBackBtn.addEventListener('click', closeDetailSheet);
+    el.detailDesktopScrim.addEventListener('click', closeDetailSheet);
+    if (el.detailHandleBar) {
+      el.detailHandleBar.addEventListener('click', closeDetailSheet);
+      el.detailHandleBar.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') closeDetailSheet();
+      });
+      attachSheetDrag(el.detailHandleBar, el.detailFrameContainer, closeDetailSheet);
+    }
+    el.detailBagShortcut.addEventListener('click', () => {
+      closeDetailSheet();
+      switchView('bag');
+    });
 
     el.detailFavBtn.addEventListener('click', async () => {
       const m = POS.getMember();
@@ -2025,9 +2147,14 @@
 
     el.detailAddBtn.addEventListener('click', saveDetailToBag);
 
-    // Modals & Call Sheet
+    // Modals & Call Sheet (plus interactive downward drag-to-dismiss)
     document.querySelectorAll('[data-close-modal]').forEach((btn) => {
-      btn.addEventListener('click', () => closeModal(btn.dataset.closeModal));
+      const modalName = btn.dataset.closeModal;
+      btn.addEventListener('click', () => closeModal(modalName));
+      if (btn.classList.contains('sheet-handle-bar')) {
+        const drawer = btn.closest('.glass-drawer');
+        attachSheetDrag(btn, drawer, () => closeModal(modalName));
+      }
     });
     Object.entries(MODAL_MAP).forEach(([name, node]) => {
       node.addEventListener('click', (e) => {
@@ -2047,7 +2174,7 @@
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         closeModal('all');
-        if (state.currentView === 'detail') switchView(state.previousTab || 'menu');
+        if (state.detailOpen) closeDetailSheet();
       }
     });
 
