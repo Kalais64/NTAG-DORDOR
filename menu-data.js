@@ -1,6 +1,6 @@
 /* ==========================================================================
-   GOOD GIRL — Unified Café Menu Catalog, Dynamic Adaptive Themes & Vouchers
-   Shared by Customer Mobile Web (index.html) and Live POS Terminal (pos.html)
+   GOOD GIRL — Unified 23-Item Café Catalog, Outlets, Add-Ons, Rewards & Themes
+   Shared by Customer App (index.html), Live POS (pos.html) & Backend Sync
    ========================================================================== */
 
 (function (global) {
@@ -11,17 +11,72 @@
     return 'Rp' + n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
   }
 
+  const OUTLETS = [
+    {
+      id: 'senopati',
+      name: 'Senopati Flagship',
+      area: 'Jl. Senopati No. 42, Jakarta',
+      distance: '0.4 km',
+      prepTime: '~5 min',
+      status: 'Open • Normal',
+      deliveryFee: 12000,
+    },
+    {
+      id: 'scbd',
+      name: 'SCBD Botanical Bar',
+      area: 'Ashta District 8, GF',
+      distance: '1.2 km',
+      prepTime: '~8 min',
+      status: 'Open • Busy',
+      deliveryFee: 15000,
+    },
+    {
+      id: 'kemang',
+      name: 'Kemang Garden Lab',
+      area: 'Jl. Kemang Raya No. 18',
+      distance: '2.8 km',
+      prepTime: '~4 min',
+      status: 'Open • Fast',
+      deliveryFee: 18000,
+    },
+  ];
+
+  const PICKUP_SLOTS = [
+    { id: 'now', label: 'Now (~5 min)' },
+    { id: '15m', label: 'In 15 min' },
+    { id: '30m', label: 'In 30 min' },
+  ];
+
+  const MILK_OPTIONS = [
+    { id: 'dairy', label: 'Fresh Dairy', price: 0 },
+    { id: 'oat', label: 'Oatside Oat', price: 10000 },
+    { id: 'almond', label: 'Almond Milk', price: 10000 },
+    { id: 'soy', label: 'Organic Soy', price: 7000 },
+  ];
+
+  const ADDONS = [
+    { id: 'double-shot', label: 'Extra Espresso Shot', price: 8000, forCategories: ['coffee', 'signature'] },
+    { id: 'extra-matcha', label: 'Extra Uji Matcha Scoop', price: 12000, forCategories: ['signature', 'non-coffee'] },
+    { id: 'cheese-foam', label: 'Sea Salt Cheese Foam', price: 9000, forCategories: ['signature', 'coffee', 'non-coffee'] },
+    { id: 'brown-boba', label: 'Brown Sugar Boba', price: 7000, forCategories: ['coffee', 'non-coffee'] },
+    { id: 'whip-cream', label: 'Whipped Cream Crown', price: 6000, forCategories: ['coffee', 'non-coffee'] },
+    { id: 'biscoff-crumble', label: 'Biscoff Crumble', price: 8000, forCategories: ['coffee', 'non-coffee', 'pastry'] },
+    { id: 'truffle-butter', label: 'Extra Truffle Butter', price: 9000, forCategories: ['food'] },
+    { id: 'warm-cheese', label: 'Melted Gruyere Add-on', price: 10000, forCategories: ['food'] },
+  ];
+
   const CATEGORIES = [
     { id: 'all', label: 'All' },
     { id: 'signature', label: 'Signature Blends' },
     { id: 'coffee', label: 'Coffee' },
-    { id: 'non-coffee', label: 'Non-Coffee' },
+    { id: 'non-coffee', label: 'Non-Coffee & Tea' },
+    { id: 'food', label: 'Food & Brunch' },
     { id: 'pastry', label: 'Pastry & Dessert' },
-    { id: 'merch', label: 'Merch' },
+    { id: 'merch', label: 'Merch & Beans' },
   ];
 
   const MENU_ITEMS = [
-    /* ===================== SIGNATURE BLENDS ===================== */
+    /* ===================== SIGNATURE BLENDS (4) ===================== */
     {
       id: 'matcha-nitro',
       skuPrefix: 'SIG-MNT',
@@ -32,6 +87,9 @@
       badge: 'Best Seller',
       itemType: 'drink',
       hasLevels: true,
+      hasMilk: false,
+      kcal: 145,
+      caffeine: 'Medium',
       image: 'assets/matcha-nitro.png',
       shortDesc:
         'A smooth, layered drink that combines ceremonial matcha with nitrogen-infused botanical base. Velvety texture,...',
@@ -61,8 +119,7 @@
         glowTop: 'rgba(164, 236, 56, 0.34)',
         glowBot: 'rgba(18, 128, 214, 0.48)',
         accent: '#c3fb52',
-        statusDark: true,
-        cardTint: 'rgba(148, 224, 62, 0.14)',
+        cardTint: 'rgba(148, 224, 62, 0.16)',
       },
     },
     {
@@ -75,14 +132,17 @@
       badge: 'Signature',
       itemType: 'drink',
       hasLevels: true,
+      hasMilk: true,
+      kcal: 180,
+      caffeine: 'Caffeine-Free',
       image: 'assets/blue-cloud-latte.png',
       shortDesc:
         'Velvety sky-blue spirulina cold foam suspended above chilled barista oat milk with botanical sapphire swirls,...',
       fullDesc:
-        'Velvety sky-blue spirulina cold foam suspended above chilled organic barista oat milk with delicate botanical sapphire swirls and cold-steeped Madagascar vanilla bean.',
+        'Velvety sky-blue spirulina cold foam suspended above chilled organic barista milk with delicate botanical sapphire swirls and cold-steeped Madagascar vanilla bean.',
       tags: [
         { label: 'CLOUDY', note: 'Whipped blue spirulina cold cloud foam.' },
-        { label: 'OAT', note: 'Silky micro-filtered Scandinavian oat base.' },
+        { label: 'OAT', note: 'Pairs seamlessly with Oatside oat milk.' },
         { label: 'VANILLA', note: 'Cold-steeped Madagascar vanilla pod infusion.' },
         { label: 'SMOOTH', note: 'Naturally caffeine-free restorative sip.' },
       ],
@@ -104,7 +164,6 @@
         glowTop: 'rgba(124, 204, 255, 0.38)',
         glowBot: 'rgba(232, 242, 252, 0.26)',
         accent: '#8ee6ff',
-        statusDark: true,
         cardTint: 'rgba(124, 204, 255, 0.16)',
       },
     },
@@ -118,6 +177,9 @@
       badge: 'Refreshing',
       itemType: 'drink',
       hasLevels: true,
+      hasMilk: false,
+      kcal: 115,
+      caffeine: 'Medium',
       image: 'assets/yuzu-matcha-fizz.png',
       shortDesc:
         'Bright emerald ceremonial matcha layered cleanly over sparkling Japanese yuzu citrus botanical tonic,...',
@@ -147,12 +209,101 @@
         glowTop: 'rgba(140, 224, 62, 0.34)',
         glowBot: 'rgba(242, 186, 40, 0.44)',
         accent: '#daf95c',
-        statusDark: true,
-        cardTint: 'rgba(220, 206, 62, 0.14)',
+        cardTint: 'rgba(220, 206, 62, 0.16)',
+      },
+    },
+    {
+      id: 'hojicha-oat-cloud',
+      skuPrefix: 'SIG-HOC',
+      name: 'HOJICHA OAT CLOUD',
+      shortName: 'Hojicha Oat Cloud',
+      category: 'signature',
+      categoryLabel: 'Signature Blends',
+      badge: 'New',
+      itemType: 'drink',
+      hasLevels: true,
+      hasMilk: true,
+      kcal: 190,
+      caffeine: 'Low',
+      image: 'assets/hojicha-oat-cloud.png',
+      shortDesc:
+        'Charcoal-roasted Kyoto hojicha tea cloud whisked silky over chilled oat milk with toasted chestnut aroma,...',
+      fullDesc:
+        'Slow-roasted Kyoto stem hojicha whisked into a velvety toasted-chestnut micro-foam layered above silky iced milk. Naturally low caffeine with warm caramel-smoky comfort.',
+      tags: [
+        { label: 'ROASTED', note: 'Charcoal-roasted Uji green tea stems.' },
+        { label: 'NUTTY', note: 'Warm toasted chestnut & caramel aroma.' },
+        { label: 'LOW CAF', note: 'Gentle evening-friendly roasted tea.' },
+        { label: 'VELVET', note: 'Whipped hojicha cold cloud crown.' },
+      ],
+      styles: [
+        { id: 'ice', label: 'Ice', icon: 'ice' },
+        { id: 'hot', label: 'Hot', icon: 'hot' },
+      ],
+      sizes: {
+        small: { label: 'Small', volume: '200 ML', price: 34000 },
+        medium: { label: 'Medium', volume: '250 ML', price: 39000 },
+        large: { label: 'Large', volume: '350 ML', price: 46000 },
+      },
+      theme: {
+        topBg: '#d8b48a',
+        topBg2: '#9a6e42',
+        sheetTop: 'rgba(34, 24, 15, 0.80)',
+        sheetMid: 'rgba(50, 36, 23, 0.66)',
+        sheetBot: 'rgba(42, 34, 28, 0.82)',
+        glowTop: 'rgba(216, 166, 108, 0.38)',
+        glowBot: 'rgba(244, 230, 212, 0.28)',
+        accent: '#f2cb96',
+        cardTint: 'rgba(212, 166, 114, 0.16)',
       },
     },
 
-    /* ===================== COFFEE ===================== */
+    /* ===================== COFFEE (5) ===================== */
+    {
+      id: 'aren-palm-latte',
+      skuPrefix: 'COF-ARN',
+      name: 'AREN PALM LATTE',
+      shortName: 'Aren Palm Latte',
+      category: 'coffee',
+      categoryLabel: 'Coffee',
+      badge: 'Top Order',
+      itemType: 'drink',
+      hasLevels: true,
+      hasMilk: true,
+      kcal: 210,
+      caffeine: 'High',
+      image: 'assets/aren-palm-latte.png',
+      shortDesc:
+        'Signature Kopi Susu Gula Aren crafted with single-origin espresso, organic Banten palm nectar & creamy milk,...',
+      fullDesc:
+        'Our elevated Indonesian Kopi Susu Gula Aren: slow-simmered organic Banten dark palm sugar syrup layered with cold-textured milk and double-shot Flores specialty espresso crema.',
+      tags: [
+        { label: 'GULA AREN', note: 'Organic slow-reduced dark Banten palm nectar.' },
+        { label: 'DOUBLE SHOT', note: 'House Flores & Aceh Gayo espresso blend.' },
+        { label: 'CREAMY', note: 'Balanced sweet-bold Jakarta café favorite.' },
+        { label: 'SILKY', note: 'Smooth caramel-brown sugar aftertaste.' },
+      ],
+      styles: [
+        { id: 'ice', label: 'Ice', icon: 'ice' },
+        { id: 'hot', label: 'Hot', icon: 'hot' },
+      ],
+      sizes: {
+        small: { label: 'Small', volume: '200 ML', price: 27000 },
+        medium: { label: 'Medium', volume: '250 ML', price: 32000 },
+        large: { label: 'Large', volume: '350 ML', price: 38000 },
+      },
+      theme: {
+        topBg: '#dfa96d',
+        topBg2: '#9a5d26',
+        sheetTop: 'rgba(38, 22, 12, 0.80)',
+        sheetMid: 'rgba(54, 34, 18, 0.66)',
+        sheetBot: 'rgba(42, 30, 22, 0.82)',
+        glowTop: 'rgba(228, 152, 72, 0.38)',
+        glowBot: 'rgba(248, 232, 210, 0.26)',
+        accent: '#ffc47c',
+        cardTint: 'rgba(218, 148, 76, 0.16)',
+      },
+    },
     {
       id: 'iced-americano',
       skuPrefix: 'COF-AMR',
@@ -163,6 +314,9 @@
       badge: 'Classic',
       itemType: 'drink',
       hasLevels: true,
+      hasMilk: false,
+      kcal: 15,
+      caffeine: 'High',
       image: 'assets/iced-americano.png',
       shortDesc:
         'Double-shot single-origin Flores & Ethiopia espresso poured over crystal ice with velvety golden crema,...',
@@ -172,7 +326,7 @@
         { label: 'ROASTED', note: 'Medium-dark specialty Arabica double espresso.' },
         { label: 'CRISP', note: 'Zero bitterness, chilled mineral water balance.' },
         { label: 'COCOA', note: 'Dark nib chocolate undertones on the finish.' },
-        { label: 'BOLD', note: 'High-clarity caffeine kick for focus.' },
+        { label: '15 KCAL', note: 'Pure clean espresso energy.' },
       ],
       styles: [
         { id: 'ice', label: 'Ice', icon: 'ice' },
@@ -192,8 +346,52 @@
         glowTop: 'rgba(176, 114, 68, 0.36)',
         glowBot: 'rgba(246, 238, 230, 0.28)',
         accent: '#f4d6b0',
-        statusDark: true,
         cardTint: 'rgba(196, 148, 108, 0.16)',
+      },
+    },
+    {
+      id: 'caramel-macchiato',
+      skuPrefix: 'COF-CRM',
+      name: 'CARAMEL MACCHIATO',
+      shortName: 'Caramel Macchiato',
+      category: 'coffee',
+      categoryLabel: 'Coffee',
+      badge: 'Popular',
+      itemType: 'drink',
+      hasLevels: true,
+      hasMilk: true,
+      kcal: 240,
+      caffeine: 'High',
+      image: 'assets/caramel-macchiato.png',
+      shortDesc:
+        'Layered vanilla milk marked with bold house espresso, silky micro-foam & sea-salt caramel criss-cross drizzle,...',
+      fullDesc:
+        'Chilled Madagascar vanilla milk layered beneath rich signature espresso, crowned with cloud micro-foam and house-torched golden sea-salt caramel drizzle.',
+      tags: [
+        { label: 'CARAMEL', note: 'House-torched buttery sea-salt caramel.' },
+        { label: 'LAYERED', note: 'Classic marked espresso macchiato pour.' },
+        { label: 'VANILLA', note: 'Silky sweet vanilla bean milk foundation.' },
+        { label: 'SMOOTH', note: 'Crowd-pleasing café gold standard.' },
+      ],
+      styles: [
+        { id: 'ice', label: 'Ice', icon: 'ice' },
+        { id: 'hot', label: 'Hot', icon: 'hot' },
+      ],
+      sizes: {
+        small: { label: 'Small', volume: '200 ML', price: 32000 },
+        medium: { label: 'Medium', volume: '250 ML', price: 37000 },
+        large: { label: 'Large', volume: '350 ML', price: 44000 },
+      },
+      theme: {
+        topBg: '#f0cc96',
+        topBg2: '#c0823c',
+        sheetTop: 'rgba(38, 26, 14, 0.80)',
+        sheetMid: 'rgba(54, 38, 22, 0.66)',
+        sheetBot: 'rgba(48, 40, 32, 0.80)',
+        glowTop: 'rgba(244, 184, 92, 0.38)',
+        glowBot: 'rgba(252, 240, 224, 0.28)',
+        accent: '#ffd48e',
+        cardTint: 'rgba(238, 182, 98, 0.16)',
       },
     },
     {
@@ -206,6 +404,9 @@
       badge: 'New',
       itemType: 'drink',
       hasLevels: true,
+      hasMilk: true,
+      kcal: 360,
+      caffeine: 'Medium',
       image: 'assets/biscoff-choco-frappe.png',
       shortDesc:
         'Velvety Belgian dark chocolate and house espresso blended smooth with salted caramel & Lotus Biscoff,...',
@@ -235,7 +436,6 @@
         glowTop: 'rgba(232, 162, 78, 0.40)',
         glowBot: 'rgba(148, 80, 40, 0.44)',
         accent: '#ffc980',
-        statusDark: true,
         cardTint: 'rgba(222, 152, 82, 0.16)',
       },
     },
@@ -249,11 +449,14 @@
       badge: 'Favorite',
       itemType: 'drink',
       hasLevels: true,
+      hasMilk: true,
+      kcal: 205,
+      caffeine: 'High',
       image: 'assets/vanilla-cinnamon-latte.png',
       shortDesc:
         'Silky house espresso cascaded over chilled Madagascar vanilla milk with warm Ceylon cinnamon dusting,...',
       fullDesc:
-        'Silky house espresso cascaded gently over chilled Madagascar vanilla bean oat-dairy blend, finished with micro-foam and aromatic warm Ceylon cinnamon dusting.',
+        'Silky house espresso cascaded gently over chilled Madagascar vanilla bean milk, finished with micro-foam and aromatic warm Ceylon cinnamon dusting.',
       tags: [
         { label: 'VANILLA', note: 'Real Madagascar vanilla bean pod syrup.' },
         { label: 'SPICED', note: 'Warm sweet Ceylon cinnamon aroma.' },
@@ -278,22 +481,24 @@
         glowTop: 'rgba(236, 198, 146, 0.36)',
         glowBot: 'rgba(252, 244, 232, 0.26)',
         accent: '#ffe2b8',
-        statusDark: true,
         cardTint: 'rgba(232, 198, 152, 0.16)',
       },
     },
 
-    /* ===================== NON-COFFEE ===================== */
+    /* ===================== NON-COFFEE & TEA (4) ===================== */
     {
       id: 'strawberry-matcha-cloud',
       skuPrefix: 'NCF-SMC',
       name: 'STRAWBERRY MATCHA CLOUD',
       shortName: 'Strawberry Matcha',
       category: 'non-coffee',
-      categoryLabel: 'Non-Coffee',
+      categoryLabel: 'Non-Coffee & Tea',
       badge: 'Trending',
       itemType: 'drink',
       hasLevels: true,
+      hasMilk: true,
+      kcal: 215,
+      caffeine: 'Medium',
       image: 'assets/strawberry-matcha-cloud.png',
       shortDesc:
         'Triple-layered ruby strawberry compote, chilled silky milk, and ceremonial emerald matcha foam cloud,...',
@@ -323,8 +528,97 @@
         glowTop: 'rgba(144, 224, 68, 0.34)',
         glowBot: 'rgba(238, 70, 112, 0.48)',
         accent: '#ff96b6',
-        statusDark: true,
         cardTint: 'rgba(232, 92, 128, 0.16)',
+      },
+    },
+    {
+      id: 'belgian-dark-choco',
+      skuPrefix: 'NCF-BDC',
+      name: 'BELGIAN DARK CHOCOLATE',
+      shortName: 'Belgian Dark Choco',
+      category: 'non-coffee',
+      categoryLabel: 'Non-Coffee & Tea',
+      badge: 'Rich 70%',
+      itemType: 'drink',
+      hasLevels: true,
+      hasMilk: true,
+      kcal: 295,
+      caffeine: 'Caffeine-Free',
+      image: 'assets/belgian-dark-choco.png',
+      shortDesc:
+        'Single-origin 70% Callebaut Belgian dark chocolate whisked velvety over ice with cocoa cold foam,...',
+      fullDesc:
+        'Decadent 70% Callebaut Belgian dark couverture chocolate melted into silky chilled milk over crystal ice, crowned with airy dark cocoa foam and dusted nibs.',
+      tags: [
+        { label: '70% DARK', note: 'Authentic Belgian couverture chocolate.' },
+        { label: 'VELVETY', note: 'Thick silky ganache mouthfeel.' },
+        { label: 'NO COFFEE', note: 'Pure indulgent chocolate comfort.' },
+        { label: 'COCOA FOAM', note: 'Whipped cold dark chocolate crown.' },
+      ],
+      styles: [
+        { id: 'ice', label: 'Ice', icon: 'ice' },
+        { id: 'hot', label: 'Hot', icon: 'hot' },
+      ],
+      sizes: {
+        small: { label: 'Small', volume: '200 ML', price: 32000 },
+        medium: { label: 'Medium', volume: '250 ML', price: 37000 },
+        large: { label: 'Large', volume: '350 ML', price: 44000 },
+      },
+      theme: {
+        topBg: '#a67b60',
+        topBg2: '#5c3624',
+        sheetTop: 'rgba(30, 16, 12, 0.84)',
+        sheetMid: 'rgba(46, 24, 18, 0.72)',
+        sheetBot: 'rgba(24, 14, 12, 0.88)',
+        glowTop: 'rgba(182, 114, 78, 0.36)',
+        glowBot: 'rgba(116, 62, 42, 0.42)',
+        accent: '#e8b496',
+        cardTint: 'rgba(164, 102, 72, 0.16)',
+      },
+    },
+    {
+      id: 'lychee-rose-tea',
+      skuPrefix: 'NCF-LRT',
+      name: 'LYCHEE ROSE TEA',
+      shortName: 'Lychee Rose Tea',
+      category: 'non-coffee',
+      categoryLabel: 'Non-Coffee & Tea',
+      badge: 'Floral',
+      itemType: 'drink',
+      hasLevels: true,
+      hasMilk: false,
+      kcal: 95,
+      caffeine: 'Low',
+      image: 'assets/lychee-rose-tea.png',
+      shortDesc:
+        'Cold-brewed jasmine & Damascus rose botanical tea infused with whole sweet lychee fruit & crystal ice,...',
+      fullDesc:
+        'Luminous rose-blush cold-steeped jasmine green tea infused with Damascus rose petals and served with two plump whole sweet lychees over crystal ice.',
+      tags: [
+        { label: 'FLORAL', note: 'Fragrant Damascus rose & jasmine infusion.' },
+        { label: 'LYCHEE', note: 'Served with juicy whole sweet lychees.' },
+        { label: 'LIGHT', note: 'Only 95 kcal ultra-refreshing iced tea.' },
+        { label: 'BOTANICAL', note: '12-hour cold-steeped tea clarity.' },
+      ],
+      styles: [
+        { id: 'ice', label: 'Ice', icon: 'ice' },
+        { id: 'hot', label: 'Hot Pot', icon: 'hot' },
+      ],
+      sizes: {
+        small: { label: 'Small', volume: '220 ML', price: 27000 },
+        medium: { label: 'Medium', volume: '280 ML', price: 32000 },
+        large: { label: 'Large', volume: '380 ML', price: 38000 },
+      },
+      theme: {
+        topBg: '#f6a8c0',
+        topBg2: '#cf6488',
+        sheetTop: 'rgba(42, 16, 28, 0.78)',
+        sheetMid: 'rgba(58, 22, 38, 0.66)',
+        sheetBot: 'rgba(44, 18, 30, 0.82)',
+        glowTop: 'rgba(248, 146, 178, 0.40)',
+        glowBot: 'rgba(255, 212, 226, 0.28)',
+        accent: '#ffb0cb',
+        cardTint: 'rgba(244, 144, 178, 0.16)',
       },
     },
     {
@@ -333,10 +627,13 @@
       name: 'THAI MILK TEA',
       shortName: 'Thai Milk Tea',
       category: 'non-coffee',
-      categoryLabel: 'Non-Coffee',
+      categoryLabel: 'Non-Coffee & Tea',
       badge: 'House Brew',
       itemType: 'drink',
       hasLevels: true,
+      hasMilk: true,
+      kcal: 225,
+      caffeine: 'Medium',
       image: 'assets/thai-milk-tea.png',
       shortDesc:
         'Slow-steeped Chiang Mai spiced black tea layered with velvety condensed cream over crisp crystal ice,...',
@@ -346,7 +643,7 @@
         { label: 'AROMATIC', note: 'Star anise, vanilla bean & Assam black tea.' },
         { label: 'SILKY', note: 'Swirled sweet cream richness.' },
         { label: 'AMBER', note: 'Deep golden-terracotta slow brew.' },
-        { label: 'CLASSIC', note: 'Beloved iced street-café comfort elevated.' },
+        { label: 'CLASSIC', note: 'Beloved iced café comfort elevated.' },
       ],
       styles: [
         { id: 'ice', label: 'Ice', icon: 'ice' },
@@ -366,12 +663,148 @@
         glowTop: 'rgba(248, 148, 62, 0.42)',
         glowBot: 'rgba(252, 230, 198, 0.28)',
         accent: '#ffbc75',
-        statusDark: true,
         cardTint: 'rgba(244, 152, 68, 0.16)',
       },
     },
 
-    /* ===================== PASTRY & DESSERT ===================== */
+    /* ===================== FOOD & BRUNCH (3) ===================== */
+    {
+      id: 'butter-croissant',
+      skuPrefix: 'FOD-CRS',
+      name: 'BUTTER CROISSANT',
+      shortName: 'Butter Croissant',
+      category: 'food',
+      categoryLabel: 'Food & Brunch',
+      badge: 'Fresh Baked',
+      itemType: 'food',
+      hasLevels: false,
+      hasMilk: false,
+      kcal: 310,
+      caffeine: null,
+      image: 'assets/butter-croissant.png',
+      shortDesc:
+        'Hand-laminated 27-layer French AOP Isigny butter croissant baked golden every morning with honeycomb crumb,...',
+      fullDesc:
+        'Hand-laminated 27-layer French AOP Isigny cultured butter croissant fermented 48 hours and baked fresh every morning for shatteringly crisp golden pastry and tender honeycomb crumb.',
+      tags: [
+        { label: 'AOP BUTTER', note: '100% French Isigny cultured butter.' },
+        { label: 'FLAKY', note: '27 crisp golden laminated pastry layers.' },
+        { label: 'WARM', note: 'Served oven-warmed on request.' },
+        { label: 'MORNING', note: 'Perfect match for Iced Americano.' },
+      ],
+      styles: [
+        { id: 'warm', label: 'Oven Warmed', icon: 'hot' },
+        { id: 'room', label: 'Room Temp', icon: 'box' },
+      ],
+      sizes: {
+        small: { label: '1 Piece', volume: '85 g', price: 28000 },
+        medium: { label: 'Duo (2)', volume: '170 g', price: 52000 },
+        large: { label: 'Box (4)', volume: '340 g', price: 98000 },
+      },
+      theme: {
+        topBg: '#f2ca7e',
+        topBg2: '#c28836',
+        sheetTop: 'rgba(40, 28, 14, 0.80)',
+        sheetMid: 'rgba(56, 40, 20, 0.66)',
+        sheetBot: 'rgba(42, 32, 20, 0.82)',
+        glowTop: 'rgba(246, 198, 108, 0.38)',
+        glowBot: 'rgba(222, 162, 74, 0.30)',
+        accent: '#ffe099',
+        cardTint: 'rgba(242, 194, 106, 0.16)',
+      },
+    },
+    {
+      id: 'truffle-egg-brioche',
+      skuPrefix: 'FOD-TEB',
+      name: 'TRUFFLE EGG BRIOCHE',
+      shortName: 'Truffle Egg Brioche',
+      category: 'food',
+      categoryLabel: 'Food & Brunch',
+      badge: 'Brunch Hit',
+      itemType: 'food',
+      hasLevels: false,
+      hasMilk: false,
+      kcal: 440,
+      caffeine: null,
+      image: 'assets/truffle-egg-brioche.png',
+      shortDesc:
+        'Toasted Hokkaido butter brioche stacked with silky truffle soft-scrambled eggs, aged cheddar & chives,...',
+      fullDesc:
+        'Thick-cut toasted Hokkaido milk brioche overflowing with silky Japanese soft-scrambled organic eggs folded with black truffle butter, melted red cheddar glaze, and fresh chives.',
+      tags: [
+        { label: 'TRUFFLE', note: 'Aromatic Italian black truffle butter.' },
+        { label: 'BRIOCHE', note: 'Griddle-toasted Hokkaido milk bread.' },
+        { label: 'SILKY EGG', note: 'Soft-folded free-range scrambled eggs.' },
+        { label: 'SAVORY', note: 'All-day café brunch bestseller.' },
+      ],
+      styles: [
+        { id: 'warm', label: 'Served Hot', icon: 'hot' },
+        { id: 'cut', label: 'Cut in Half', icon: 'box' },
+      ],
+      sizes: {
+        small: { label: 'Regular', volume: '220 g', price: 54000 },
+        medium: { label: '+ Fries', volume: '340 g', price: 68000 },
+        large: { label: 'Brunch Duo', volume: '440 g', price: 102000 },
+      },
+      theme: {
+        topBg: '#f6d57c',
+        topBg2: '#c8922e',
+        sheetTop: 'rgba(38, 28, 12, 0.80)',
+        sheetMid: 'rgba(54, 42, 18, 0.68)',
+        sheetBot: 'rgba(34, 28, 16, 0.84)',
+        glowTop: 'rgba(248, 206, 88, 0.38)',
+        glowBot: 'rgba(136, 184, 78, 0.28)',
+        accent: '#ffe382',
+        cardTint: 'rgba(244, 202, 92, 0.16)',
+      },
+    },
+    {
+      id: 'smoked-beef-panini',
+      skuPrefix: 'FOD-SBP',
+      name: 'SMOKED BEEF PANINI',
+      shortName: 'Smoked Beef Panini',
+      category: 'food',
+      categoryLabel: 'Food & Brunch',
+      badge: 'Chef Special',
+      itemType: 'food',
+      hasLevels: false,
+      hasMilk: false,
+      kcal: 510,
+      caffeine: null,
+      image: 'assets/smoked-beef-panini.png',
+      shortDesc:
+        'Crisp grill-pressed sourdough panini filled with hickory smoked beef brisket, melted gruyere & wild arugula,...',
+      fullDesc:
+        'Artisanal country sourdough pressed golden on the panini grill with slow-smoked beef brisket, caramelized balsamic onion, melted Swiss gruyere cheese, honey mustard aioli, and peppery baby arugula.',
+      tags: [
+        { label: 'BRISKET', note: '12-hour hickory smoked sliced beef.' },
+        { label: 'GRUYERE', note: 'Nutty melted Swiss artisanal cheese.' },
+        { label: 'SOURDOUGH', note: 'Crisp naturally leavened grill bread.' },
+        { label: 'HEARTY', note: 'Satisfying lunch & coffee pairing.' },
+      ],
+      styles: [
+        { id: 'warm', label: 'Pressed Hot', icon: 'hot' },
+        { id: 'box', label: 'Takeaway Wrap', icon: 'box' },
+      ],
+      sizes: {
+        small: { label: 'Half', volume: '160 g', price: 42000 },
+        medium: { label: 'Full Panini', volume: '290 g', price: 64000 },
+        large: { label: '+ Salad', volume: '380 g', price: 78000 },
+      },
+      theme: {
+        topBg: '#d8a878',
+        topBg2: '#8a5434',
+        sheetTop: 'rgba(34, 22, 16, 0.82)',
+        sheetMid: 'rgba(48, 30, 22, 0.68)',
+        sheetBot: 'rgba(26, 30, 20, 0.84)',
+        glowTop: 'rgba(216, 152, 96, 0.36)',
+        glowBot: 'rgba(116, 178, 86, 0.30)',
+        accent: '#f2c292',
+        cardTint: 'rgba(204, 142, 88, 0.16)',
+      },
+    },
+
+    /* ===================== PASTRY & DESSERT (4) ===================== */
     {
       id: 'spirulina-cake',
       skuPrefix: 'PST-SPC',
@@ -382,6 +815,9 @@
       badge: 'Pairing Pick',
       itemType: 'pastry',
       hasLevels: false,
+      hasMilk: false,
+      kcal: 340,
+      caffeine: null,
       image: 'assets/spirulina-cake.png',
       shortDesc:
         'Chilled marbled sky-blue spirulina mousse & coconut-vanilla cream atop golden toasted oat biscuit crust,...',
@@ -411,7 +847,6 @@
         glowTop: 'rgba(132, 200, 255, 0.38)',
         glowBot: 'rgba(222, 186, 132, 0.30)',
         accent: '#98deff',
-        statusDark: true,
         cardTint: 'rgba(134, 202, 255, 0.16)',
       },
     },
@@ -425,6 +860,9 @@
       badge: 'Best Seller',
       itemType: 'pastry',
       hasLevels: false,
+      hasMilk: false,
+      kcal: 220,
+      caffeine: 'Low',
       image: 'assets/matcha-mochi.png',
       shortDesc:
         'Pillow-soft pastel matcha daifuku stuffed with whipped cream, molten Uji matcha ganache & berry bits,...',
@@ -454,7 +892,6 @@
         glowTop: 'rgba(176, 228, 118, 0.34)',
         glowBot: 'rgba(222, 86, 114, 0.28)',
         accent: '#c8f587',
-        statusDark: true,
         cardTint: 'rgba(168, 228, 114, 0.16)',
       },
     },
@@ -468,6 +905,9 @@
       badge: 'Artisanal',
       itemType: 'pastry',
       hasLevels: false,
+      hasMilk: false,
+      kcal: 330,
+      caffeine: null,
       image: 'assets/blueberry-tart.png',
       shortDesc:
         'Velvety indigo blueberry cheesecake tart on roasted cocoa crust finished with lavender marble glaze,...',
@@ -497,7 +937,6 @@
         glowTop: 'rgba(166, 138, 248, 0.38)',
         glowBot: 'rgba(110, 84, 218, 0.42)',
         accent: '#cbb8ff',
-        statusDark: true,
         cardTint: 'rgba(162, 132, 246, 0.16)',
       },
     },
@@ -511,6 +950,9 @@
       badge: 'Chef Pick',
       itemType: 'pastry',
       hasLevels: false,
+      hasMilk: false,
+      kcal: 270,
+      caffeine: 'Low',
       image: 'assets/yuzu-matcha-roll.png',
       shortDesc:
         'Fluffy Japanese ceremonial matcha sponge rolled around silky cream and bright golden yuzu citrus curd,...',
@@ -540,22 +982,24 @@
         glowTop: 'rgba(146, 216, 74, 0.34)',
         glowBot: 'rgba(252, 202, 52, 0.40)',
         accent: '#f8e16c',
-        statusDark: true,
         cardTint: 'rgba(202, 224, 74, 0.16)',
       },
     },
 
-    /* ===================== MERCH ===================== */
+    /* ===================== MERCH & BEANS (3) ===================== */
     {
       id: 'glass-tumbler',
       skuPrefix: 'MRC-TMB',
       name: 'GOOD GIRL TUMBLER',
       shortName: 'Glass Tumbler',
       category: 'merch',
-      categoryLabel: 'Merch',
+      categoryLabel: 'Merch & Beans',
       badge: 'Limited Merch',
       itemType: 'merch',
       hasLevels: false,
+      hasMilk: false,
+      kcal: null,
+      caffeine: null,
       image: 'assets/glass-tumbler.png',
       shortDesc:
         'Double-walled emerald-tinted borosilicate glass tumbler with obsidian grip & reusable glass straw,...',
@@ -585,7 +1029,6 @@
         glowTop: 'rgba(104, 228, 206, 0.36)',
         glowBot: 'rgba(42, 158, 178, 0.36)',
         accent: '#7ef5de',
-        statusDark: true,
         cardTint: 'rgba(102, 224, 202, 0.16)',
       },
     },
@@ -595,10 +1038,13 @@
       name: 'UJI CEREMONIAL TIN',
       shortName: 'Uji Matcha Tin',
       category: 'merch',
-      categoryLabel: 'Merch',
+      categoryLabel: 'Merch & Beans',
       badge: 'First Harvest',
       itemType: 'merch',
       hasLevels: false,
+      hasMilk: false,
+      kcal: null,
+      caffeine: 'Medium',
       image: 'assets/uji-matcha-tin.png',
       shortDesc:
         'Stone-ground first-harvest Kyoto Uji ceremonial matcha sealed in a matte-obsidian airtight caddy tin,...',
@@ -628,8 +1074,52 @@
         glowTop: 'rgba(188, 248, 68, 0.30)',
         glowBot: 'rgba(120, 182, 82, 0.24)',
         accent: '#c9fb46',
-        statusDark: true,
         cardTint: 'rgba(186, 244, 72, 0.14)',
+      },
+    },
+    {
+      id: 'espresso-beans-bag',
+      skuPrefix: 'MRC-BNS',
+      name: 'HOUSE BLEND BEANS',
+      shortName: 'House Blend Beans',
+      category: 'merch',
+      categoryLabel: 'Merch & Beans',
+      badge: 'Fresh Roast',
+      itemType: 'merch',
+      hasLevels: false,
+      hasMilk: false,
+      kcal: null,
+      caffeine: 'High',
+      image: 'assets/espresso-beans-bag.png',
+      shortDesc:
+        'Small-batch roasted Flores Manggarai & Ethiopia Guji specialty whole beans — dark cocoa & bergamot notes,...',
+      fullDesc:
+        'Roasted weekly in small batches at our Senopati roastery. A velvety 60/40 blend of washed Flores Manggarai and natural Ethiopia Guji Arabica delivering dark chocolate, roasted hazelnut, and bright bergamot finish.',
+      tags: [
+        { label: 'ARABICA', note: '100% specialty grade single-lot blend.' },
+        { label: 'MEDIUM ROAST', note: 'Ideal for espresso, pour-over & moka.' },
+        { label: 'COCOA NOTES', note: 'Dark chocolate, hazelnut & bergamot.' },
+        { label: 'FREE GRIND', note: 'Request Espresso or V60 grind in Note.' },
+      ],
+      styles: [
+        { id: 'whole', label: 'Whole Beans', icon: 'box' },
+        { id: 'ground', label: 'Espresso Grind', icon: 'gift' },
+      ],
+      sizes: {
+        small: { label: '250 g', volume: '250 g', price: 135000 },
+        medium: { label: '500 g', volume: '500 g', price: 245000 },
+        large: { label: '1 kg Barista', volume: '1 kg', price: 450000 },
+      },
+      theme: {
+        topBg: '#9bd8a2',
+        topBg2: '#2c683a',
+        sheetTop: 'rgba(14, 22, 18, 0.84)',
+        sheetMid: 'rgba(20, 32, 24, 0.72)',
+        sheetBot: 'rgba(10, 16, 14, 0.88)',
+        glowTop: 'rgba(114, 212, 128, 0.30)',
+        glowBot: 'rgba(164, 114, 72, 0.26)',
+        accent: '#9cf58c',
+        cardTint: 'rgba(98, 198, 116, 0.16)',
       },
     },
   ];
@@ -644,29 +1134,26 @@
       maxDiscount: 25000,
       minSpend: 40000,
       badge: 'POPULAR',
-      accent: '#c9fb46',
     },
     {
       code: 'FIRSTBREW',
       title: 'Rp15.000 Off Any Order',
-      desc: 'Instant discount for online mobile ordering • Min. Rp35.000',
+      desc: 'Instant mobile ordering perk • Min. Rp35.000',
       type: 'flat',
       value: 15000,
       maxDiscount: 15000,
       minSpend: 35000,
       badge: 'NEW USER',
-      accent: '#7ce8ff',
     },
     {
       code: 'FREEPASTRY',
-      title: 'Rp20.000 Pastry Pairing',
-      desc: 'Valid when your bag includes any Pastry & Dessert item',
+      title: 'Rp20.000 Pastry & Brunch Pairing',
+      desc: 'Valid when bag includes any Pastry or Food item',
       type: 'pastry_flat',
       value: 20000,
       maxDiscount: 20000,
       minSpend: 30000,
       badge: 'PAIRING',
-      accent: '#ff9ec0',
     },
     {
       code: 'GGVIP10',
@@ -677,7 +1164,57 @@
       maxDiscount: 35000,
       minSpend: 0,
       badge: 'MEMBER',
-      accent: '#ffe08a',
+    },
+  ];
+
+  const REWARDS_STORE = [
+    {
+      id: 'rew-mochi',
+      cost: 200,
+      title: 'Free Matcha Mochi Voucher',
+      desc: 'Rp28.000 instant voucher toward any pastry or order',
+      voucher: {
+        code: 'REWARD-MOCHI',
+        title: 'Redeemed Free Matcha Mochi',
+        desc: 'Rp28.000 off from Stars Rewards Store',
+        type: 'flat',
+        value: 28000,
+        maxDiscount: 28000,
+        minSpend: 0,
+        badge: 'REDEEMED',
+      },
+    },
+    {
+      id: 'rew-americano',
+      cost: 250,
+      title: 'Free Iced Americano Voucher',
+      desc: 'Rp30.000 instant voucher for your daily coffee fix',
+      voucher: {
+        code: 'REWARD-AMERICANO',
+        title: 'Redeemed Free Americano',
+        desc: 'Rp30.000 off from Stars Rewards Store',
+        type: 'flat',
+        value: 30000,
+        maxDiscount: 30000,
+        minSpend: 0,
+        badge: 'REDEEMED',
+      },
+    },
+    {
+      id: 'rew-sig',
+      cost: 380,
+      title: 'Free Signature Nitro Brew',
+      desc: 'Rp45.000 off any Signature Blend drink',
+      voucher: {
+        code: 'REWARD-NITRO',
+        title: 'Redeemed Free Signature Brew',
+        desc: 'Rp45.000 off from Stars Rewards Store',
+        type: 'flat',
+        value: 45000,
+        maxDiscount: 45000,
+        minSpend: 0,
+        badge: 'VIP REWARD',
+      },
     },
   ];
 
@@ -690,30 +1227,42 @@
       itemId: 'biscoff-choco-frappe',
       image: 'assets/biscoff-choco-frappe.png',
       gradient:
-        'linear-gradient(135deg, rgba(168, 108, 54, 0.56) 0%, rgba(44, 24, 15, 0.78) 65%, rgba(28, 16, 10, 0.88) 100%)',
+        'linear-gradient(135deg, rgba(168, 108, 54, 0.88) 0%, rgba(56, 30, 18, 0.92) 65%, rgba(30, 16, 10, 0.96) 100%)',
       accent: '#ffc980',
     },
     {
       id: 'banner-nitro',
       kicker: 'Signature Lab',
-      title: 'Matcha Nitro + Spirulina Pairing',
+      title: 'Matcha Nitro + Spirulina 20% Off',
       cta: 'Use MATCHA20',
       itemId: 'matcha-nitro',
       voucherCode: 'MATCHA20',
       image: 'assets/matcha-nitro.png',
       gradient:
-        'linear-gradient(135deg, rgba(132, 206, 46, 0.44) 0%, rgba(12, 68, 98, 0.72) 65%, rgba(6, 26, 42, 0.88) 100%)',
+        'linear-gradient(135deg, rgba(46, 134, 52, 0.9) 0%, rgba(16, 78, 104, 0.92) 65%, rgba(8, 34, 54, 0.96) 100%)',
       accent: '#c9fb46',
+    },
+    {
+      id: 'banner-brunch',
+      kicker: 'All-Day Brunch',
+      title: 'Truffle Egg Brioche & Aren Latte',
+      cta: 'Order Brunch',
+      itemId: 'truffle-egg-brioche',
+      voucherCode: 'FREEPASTRY',
+      image: 'assets/truffle-egg-brioche.png',
+      gradient:
+        'linear-gradient(135deg, rgba(176, 128, 38, 0.9) 0%, rgba(64, 44, 18, 0.92) 68%, rgba(36, 24, 12, 0.96) 100%)',
+      accent: '#ffe382',
     },
     {
       id: 'banner-merch',
       kicker: 'Limited Merch',
-      title: 'Emerald Glass Tumbler • Save Rp5k/Brew',
+      title: 'Emerald Tumbler • Save Rp5k/Brew',
       cta: 'Explore Merch',
       itemId: 'glass-tumbler',
       image: 'assets/glass-tumbler.png',
       gradient:
-        'linear-gradient(135deg, rgba(64, 198, 178, 0.44) 0%, rgba(12, 48, 56, 0.76) 65%, rgba(6, 22, 28, 0.90) 100%)',
+        'linear-gradient(135deg, rgba(36, 136, 118, 0.9) 0%, rgba(14, 58, 66, 0.92) 65%, rgba(8, 28, 34, 0.96) 100%)',
       accent: '#7ef5de',
     },
   ];
@@ -723,40 +1272,44 @@
       id: 'qris',
       group: 'Instant QR',
       name: 'QRIS',
-      subtitle: 'Scan with any Indonesian bank or e-wallet',
+      subtitle: 'Scan with any bank or e-wallet',
       badge: 'FASTEST',
-      iconType: 'qris',
     },
     {
       id: 'gopay',
       group: 'E-Wallet / Handpay',
       name: 'GoPay / OVO / DANA',
-      subtitle: 'One-tap digital wallet & Handpay checkout',
+      subtitle: 'One-tap digital wallet & Handpay',
       badge: '0% FEE',
-      iconType: 'wallet',
       providers: ['GoPay', 'OVO', 'DANA', 'ShopeePay', 'Apple Pay'],
     },
     {
       id: 'va',
       group: 'Bank Transfer',
       name: 'Virtual Account',
-      subtitle: 'Auto-verified BCA, Mandiri, or BNI VA',
+      subtitle: 'Auto-verified BCA, Mandiri, BNI',
       badge: 'AUTO',
-      iconType: 'bank',
       providers: ['BCA VA', 'Mandiri VA', 'BNI VA'],
     },
     {
       id: 'ggpay',
       group: 'Membership',
       name: 'GG Member Pay',
-      subtitle: 'Pay using member balance + 2× Points',
+      subtitle: 'Member balance + 2× Points',
       badge: '2× PTS',
-      iconType: 'member',
     },
   ];
 
   function getItemById(id) {
     return MENU_ITEMS.find((item) => item.id === id) || MENU_ITEMS[0];
+  }
+
+  function getOutletById(id) {
+    return OUTLETS.find((o) => o.id === id) || OUTLETS[0];
+  }
+
+  function getAddonsForItem(item) {
+    return ADDONS.filter((a) => a.forCategories.includes(item.category));
   }
 
   function getDefaultSizeKey(item) {
@@ -765,64 +1318,61 @@
   }
 
   function getBasePrice(item) {
-    const key = getDefaultSizeKey(item);
-    return item.sizes[key].price;
+    return item.sizes[getDefaultSizeKey(item)].price;
   }
 
-  function calculateVoucherDiscount(voucherCode, cartItems, subtotal) {
+  function getAllVouchers(member) {
+    const unlocked = (member && Array.isArray(member.unlockedRewards)) ? member.unlockedRewards : [];
+    return [...unlocked, ...VOUCHERS];
+  }
+
+  function calculateVoucherDiscount(voucherCode, cartItems, subtotal, member) {
     if (!voucherCode) return { valid: false, discount: 0, reason: '' };
-    const v = VOUCHERS.find((x) => x.code === voucherCode);
+    const allV = getAllVouchers(member);
+    const v = allV.find((x) => x.code === voucherCode);
     if (!v) return { valid: false, discount: 0, reason: 'Voucher not found' };
 
-    if (subtotal < v.minSpend) {
-      return {
-        valid: false,
-        discount: 0,
-        reason: `Min. spend ${formatRp(v.minSpend)}`,
-      };
+    if (subtotal < (v.minSpend || 0)) {
+      return { valid: false, discount: 0, reason: `Min. spend ${formatRp(v.minSpend)}` };
     }
 
     if (v.type === 'pastry_flat') {
-      const hasPastry = cartItems.some((c) => {
+      const hasPairing = cartItems.some((c) => {
         const ref = getItemById(c.itemId);
-        return ref && ref.category === 'pastry';
+        return ref && (ref.category === 'pastry' || ref.category === 'food');
       });
-      if (!hasPastry) {
-        return {
-          valid: false,
-          discount: 0,
-          reason: 'Add any Pastry & Dessert item first',
-        };
+      if (!hasPairing) {
+        return { valid: false, discount: 0, reason: 'Add any Pastry or Brunch item first' };
       }
       return { valid: true, discount: Math.min(v.value, subtotal), voucher: v };
     }
 
     if (v.type === 'percent') {
       const raw = Math.round((subtotal * v.value) / 100);
-      return {
-        valid: true,
-        discount: Math.min(raw, v.maxDiscount, subtotal),
-        voucher: v,
-      };
+      return { valid: true, discount: Math.min(raw, v.maxDiscount, subtotal), voucher: v };
     }
 
-    return {
-      valid: true,
-      discount: Math.min(v.value, subtotal),
-      voucher: v,
-    };
+    return { valid: true, discount: Math.min(v.value, subtotal), voucher: v };
   }
 
   global.GOOD_GIRL_DATA = {
     formatRp,
+    OUTLETS,
+    PICKUP_SLOTS,
+    MILK_OPTIONS,
+    ADDONS,
     CATEGORIES,
     MENU_ITEMS,
     VOUCHERS,
+    REWARDS_STORE,
     PROMO_BANNERS,
     PAYMENT_METHODS,
     getItemById,
+    getOutletById,
+    getAddonsForItem,
     getDefaultSizeKey,
     getBasePrice,
+    getAllVouchers,
     calculateVoucherDiscount,
   };
 })(window);

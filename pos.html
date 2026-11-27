@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GOOD GIRL — Live Barista POS &amp; Kitchen Display</title>
+  <title>GOOD GIRL — Full Barista POS, Cashier &amp; Stock Terminal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@400;500;600;700&family=Oxanium:wght@500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="pos.css" />
+  <link rel="stylesheet" href="pos.css?v=3.0" />
 </head>
 <body>
   <div class="pos-bg" aria-hidden="true">
@@ -28,88 +28,207 @@
         </div>
         <div>
           <div class="pos-kicker-row">
-            <span class="live-dot"></span>
-            <span class="pos-kicker">LIVE POS KITCHEN DISPLAY • REAL-TIME SYNC</span>
+            <span class="live-dot" id="posConnDot"></span>
+            <span class="pos-kicker" id="posConnText">LIVE POS • CHECKING SYNC...</span>
           </div>
-          <h1 class="pos-title">BARISTA &amp; ORDER DISPATCH</h1>
+          <h1 class="pos-title">BARISTA, CASHIER &amp; STOCK POS</h1>
         </div>
       </div>
 
-      <div class="pos-kpis" aria-label="Live metrics">
-        <div class="kpi-pill">
-          <span class="kpi-label">ACTIVE</span>
-          <strong class="kpi-val" id="kpiActive">0</strong>
-        </div>
-        <div class="kpi-pill">
-          <span class="kpi-label">READY</span>
-          <strong class="kpi-val kpi-cyan" id="kpiReady">0</strong>
-        </div>
-        <div class="kpi-pill">
-          <span class="kpi-label">SERVED</span>
-          <strong class="kpi-val" id="kpiServed">0</strong>
-        </div>
-        <div class="kpi-pill kpi-rev">
-          <span class="kpi-label">REVENUE</span>
-          <strong class="kpi-val kpi-lime" id="kpiRevenue">Rp0</strong>
-        </div>
-      </div>
+      <!-- 4 Integrated POS Workspace Tabs -->
+      <nav class="pos-nav-tabs" role="tablist" aria-label="POS Workspaces">
+        <button type="button" class="pos-tab-btn is-active" data-pos-tab="kanban" role="tab" aria-selected="true">Kitchen Kanban</button>
+        <button type="button" class="pos-tab-btn" data-pos-tab="cashier" role="tab" aria-selected="false">Counter Cashier</button>
+        <button type="button" class="pos-tab-btn" data-pos-tab="stock" role="tab" aria-selected="false">Menu &amp; Stock 86</button>
+        <button type="button" class="pos-tab-btn" data-pos-tab="sales" role="tab" aria-selected="false">Sales &amp; QR</button>
+      </nav>
 
       <div class="pos-actions">
         <button type="button" class="pos-btn pos-btn-glass" id="posThemeToggle" aria-label="Switch POS theme">
-          <span id="posThemeIcon" aria-hidden="true">&#9728;</span>
+          <span id="posThemeIcon" aria-hidden="true"></span>
           <span id="posThemeLabel">Fresh White</span>
         </button>
         <button type="button" class="pos-btn pos-btn-glass" id="simOrderBtn">+ Simulate Web Order</button>
-        <a href="index.html" target="_blank" rel="noopener" class="pos-btn pos-btn-lime">Customer Mobile App &nearr;</a>
+        <a href="index.html" target="_blank" rel="noopener" class="pos-btn pos-btn-lime">
+          <span>Customer App</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg>
+        </a>
       </div>
     </header>
 
-    <!-- 4-Stage Live Kanban Board -->
-    <main class="pos-board" aria-label="Order queue columns">
-      <section class="pos-lane" data-lane="received">
-        <header class="lane-head">
-          <div class="lane-title-wrap">
-            <span class="lane-dot dot-received"></span>
-            <h2>1. ORDER RECEIVED</h2>
-          </div>
-          <span class="lane-count" id="count-received">0</span>
-        </header>
-        <div class="lane-list" id="lane-received"></div>
-      </section>
+    <!-- KPI Ribbon -->
+    <section class="pos-kpi-ribbon" aria-label="Live metrics">
+      <div class="kpi-pill">
+        <span class="kpi-label">ACTIVE QUEUE</span>
+        <strong class="kpi-val" id="kpiActive">0</strong>
+      </div>
+      <div class="kpi-pill">
+        <span class="kpi-label">READY TO SERVE</span>
+        <strong class="kpi-val kpi-cyan" id="kpiReady">0</strong>
+      </div>
+      <div class="kpi-pill">
+        <span class="kpi-label">SERVED TODAY</span>
+        <strong class="kpi-val" id="kpiServed">0</strong>
+      </div>
+      <div class="kpi-pill">
+        <span class="kpi-label">SOLD OUT (86)</span>
+        <strong class="kpi-val kpi-amber" id="kpiSoldOut">0</strong>
+      </div>
+      <div class="kpi-pill">
+        <span class="kpi-label">AVG RATING</span>
+        <strong class="kpi-val" id="kpiRating">—</strong>
+      </div>
+      <div class="kpi-pill kpi-rev">
+        <span class="kpi-label">TODAY REVENUE</span>
+        <strong class="kpi-val kpi-lime" id="kpiRevenue">Rp0</strong>
+      </div>
+    </section>
 
-      <section class="pos-lane" data-lane="preparing">
-        <header class="lane-head">
-          <div class="lane-title-wrap">
-            <span class="lane-dot dot-preparing"></span>
-            <h2>2. PREPARING</h2>
-          </div>
-          <span class="lane-count" id="count-preparing">0</span>
-        </header>
-        <div class="lane-list" id="lane-preparing"></div>
-      </section>
+    <!-- ================================================================
+         TAB 1: 4-STAGE LIVE KITCHEN KANBAN BOARD
+         ================================================================ -->
+    <main class="pos-panel is-active" id="panel-kanban" aria-label="Kitchen Kanban">
+      <div class="pos-board">
+        <section class="pos-lane" data-lane="received">
+          <header class="lane-head">
+            <div class="lane-title-wrap">
+              <span class="lane-dot dot-received"></span>
+              <h2>1. ORDER RECEIVED</h2>
+            </div>
+            <span class="lane-count" id="count-received">0</span>
+          </header>
+          <div class="lane-list" id="lane-received"></div>
+        </section>
 
-      <section class="pos-lane" data-lane="ready">
-        <header class="lane-head">
-          <div class="lane-title-wrap">
-            <span class="lane-dot dot-ready"></span>
-            <h2>3. READY TO SERVE</h2>
-          </div>
-          <span class="lane-count" id="count-ready">0</span>
-        </header>
-        <div class="lane-list" id="lane-ready"></div>
-      </section>
+        <section class="pos-lane" data-lane="preparing">
+          <header class="lane-head">
+            <div class="lane-title-wrap">
+              <span class="lane-dot dot-preparing"></span>
+              <h2>2. PREPARING</h2>
+            </div>
+            <span class="lane-count" id="count-preparing">0</span>
+          </header>
+          <div class="lane-list" id="lane-preparing"></div>
+        </section>
 
-      <section class="pos-lane" data-lane="complete">
-        <header class="lane-head">
-          <div class="lane-title-wrap">
-            <span class="lane-dot dot-complete"></span>
-            <h2>4. COMPLETED</h2>
-          </div>
-          <span class="lane-count" id="count-complete">0</span>
-        </header>
-        <div class="lane-list" id="lane-complete"></div>
-      </section>
+        <section class="pos-lane" data-lane="ready">
+          <header class="lane-head">
+            <div class="lane-title-wrap">
+              <span class="lane-dot dot-ready"></span>
+              <h2>3. READY TO SERVE</h2>
+            </div>
+            <span class="lane-count" id="count-ready">0</span>
+          </header>
+          <div class="lane-list" id="lane-ready"></div>
+        </section>
+
+        <section class="pos-lane" data-lane="complete">
+          <header class="lane-head">
+            <div class="lane-title-wrap">
+              <span class="lane-dot dot-complete"></span>
+              <h2>4. COMPLETED</h2>
+            </div>
+            <span class="lane-count" id="count-complete">0</span>
+          </header>
+          <div class="lane-list" id="lane-complete"></div>
+        </section>
+      </div>
     </main>
+
+    <!-- ================================================================
+         TAB 2: WALK-IN COUNTER CASHIER POS (MANUAL ORDER ENTRY)
+         ================================================================ -->
+    <section class="pos-panel" id="panel-cashier" aria-label="Counter Cashier POS" hidden>
+      <div class="cashier-grid">
+        <div class="cashier-catalog-col">
+          <div class="cashier-filter-row" id="cashierCatBar"></div>
+          <div class="cashier-menu-grid" id="cashierMenuGrid"></div>
+        </div>
+
+        <aside class="cashier-register-col">
+          <div class="register-head">
+            <div>
+              <span class="pos-kicker">WALK-IN COUNTER TICKET</span>
+              <h2>NEW POS ORDER</h2>
+            </div>
+            <button type="button" class="btn-json" id="clearRegisterBtn">Clear</button>
+          </div>
+
+          <div class="register-meta-form">
+            <input type="text" id="regGuestName" class="pos-input" placeholder="Guest Name (e.g. Walk-in / Budi)" value="Walk-in Guest" />
+            <div class="register-mode-row">
+              <select id="regMode" class="pos-select" aria-label="Order Mode">
+                <option value="dine-in">Dine-In</option>
+                <option value="pickup">Takeaway / Pick Up</option>
+              </select>
+              <input type="text" id="regTable" class="pos-input" placeholder="Table" value="04" maxlength="4" />
+            </div>
+            <select id="regPayMethod" class="pos-select" aria-label="Payment method">
+              <option value="Cash">Cash (Tunai)</option>
+              <option value="QRIS">QRIS Counter</option>
+              <option value="EDC Debit">EDC Debit / Credit</option>
+              <option value="GoPay">GoPay / E-Wallet</option>
+            </select>
+          </div>
+
+          <div class="register-items" id="registerItems"></div>
+
+          <div class="register-footer">
+            <div class="register-total-row">
+              <span>Total Charge</span>
+              <strong id="registerTotal">Rp0</strong>
+            </div>
+            <button type="button" class="pos-btn pos-btn-lime register-submit-btn" id="submitCounterOrderBtn" disabled>
+              Charge &amp; Send to Kitchen &rarr;
+            </button>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ================================================================
+         TAB 3: MENU & LIVE STOCK (86 / SOLD OUT CONTROL)
+         ================================================================ -->
+    <section class="pos-panel" id="panel-stock" aria-label="Menu Stock Control" hidden>
+      <div class="stock-toolbar">
+        <div>
+          <span class="pos-kicker">REAL-TIME INVENTORY SYNC</span>
+          <h2>MENU AVAILABILITY (86 / SOLD OUT CONTROL)</h2>
+        </div>
+        <button type="button" class="pos-btn pos-btn-glass" id="restockAllBtn">Mark All In Stock</button>
+      </div>
+      <div class="stock-grid" id="stockGrid"></div>
+    </section>
+
+    <!-- ================================================================
+         TAB 4: SALES ANALYTICS & MOBILE QR TABLE CONNECTION
+         ================================================================ -->
+    <section class="pos-panel" id="panel-sales" aria-label="Sales Analytics and QR" hidden>
+      <div class="sales-grid">
+        <div class="sales-card">
+          <span class="pos-kicker">PAYMENT BREAKDOWN</span>
+          <h3>REVENUE BY PAYMENT METHOD</h3>
+          <div class="sales-bars" id="salesMethodBars"></div>
+        </div>
+
+        <div class="sales-card">
+          <span class="pos-kicker">MENU PERFORMANCE</span>
+          <h3>TOP SELLING ITEMS</h3>
+          <div class="sales-bars" id="salesTopItems"></div>
+        </div>
+
+        <div class="sales-card sales-qr-card">
+          <span class="pos-kicker">CROSS-DEVICE MOBILE ORDERING</span>
+          <h3>TABLE QR LINK (WI-FI SYNC)</h3>
+          <p class="sales-qr-desc">Buka link di bawah dari HP di jaringan Wi-Fi yang sama untuk tes pemesanan langsung masuk ke POS ini:</p>
+          <div class="sales-link-box">
+            <code id="lanQrLink">http://127.0.0.1:8765/?table=07</code>
+            <button type="button" class="btn-json" id="copyLanLinkBtn">Copy</button>
+          </div>
+          <div class="sales-qr-preview" id="salesQrSvgBox"></div>
+        </div>
+      </div>
+    </section>
   </div>
 
   <!-- POS Payload JSON Inspector Modal -->
@@ -131,8 +250,8 @@
 
   <div class="pos-toast" id="posToast" role="status" aria-live="polite"></div>
 
-  <script src="menu-data.js"></script>
-  <script src="pos-bridge.js"></script>
-  <script src="pos.js" defer></script>
+  <script src="menu-data.js?v=3.0"></script>
+  <script src="pos-bridge.js?v=3.0"></script>
+  <script src="pos.js?v=3.0" defer></script>
 </body>
 </html>
