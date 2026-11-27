@@ -78,6 +78,8 @@ a {
 }
 
 button {
+  appearance: none;
+  -webkit-appearance: none;
   background: none;
   border: none;
 }
@@ -371,9 +373,18 @@ body.show-statusbar .ios-statusbar {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transform: translate3d(0, 14px, 0) scale(0.988);
-  transition: opacity 0.3s var(--ease-ios), transform 0.38s cubic-bezier(0.22, 1, 0.36, 1), filter 0.32s var(--ease-ios), visibility 0s linear 0.38s;
+  transform: translate3d(calc(var(--nav-dir, 1) * 20px), 0, 0) scale(0.99);
+  transition: opacity 0.32s var(--ease-ios), transform 0.38s cubic-bezier(0.22, 1, 0.36, 1), filter 0.32s var(--ease-ios), visibility 0s linear 0.38s;
   z-index: 1;
+}
+
+.screen.is-leaving {
+  opacity: 0;
+  visibility: visible;
+  pointer-events: none;
+  transform: translate3d(calc(var(--nav-dir, 1) * -18px), 0, 0) scale(0.99);
+  transition: opacity 0.28s var(--ease-ios), transform 0.34s cubic-bezier(0.22, 1, 0.36, 1), visibility 0s linear 0.34s;
+  z-index: 18;
 }
 
 .screen.is-active {
@@ -381,7 +392,7 @@ body.show-statusbar .ios-statusbar {
   visibility: visible;
   pointer-events: auto;
   transform: translate3d(0, 0, 0) scale(1);
-  transition: opacity 0.3s var(--ease-ios), transform 0.38s cubic-bezier(0.22, 1, 0.36, 1), filter 0.32s var(--ease-ios), visibility 0s;
+  transition: opacity 0.32s var(--ease-ios), transform 0.38s cubic-bezier(0.22, 1, 0.36, 1), filter 0.32s var(--ease-ios), visibility 0s;
   z-index: 20;
 }
 
@@ -484,18 +495,16 @@ body:not(.show-statusbar) .scroll-body {
 .brand-badge-sm { width: 42px; height: 42px; border-radius: 15px; }
 .brand-badge-lg { width: 66px; height: 66px; border-radius: 24px; margin-bottom: 12px; }
 
-.goodgirl-svg { width: 84%; height: 84%; overflow: visible; }
+.brand-coffee-svg {
+  width: 60%;
+  height: 60%;
+  color: #9cf0ff;
+  filter: drop-shadow(0 0 6px rgba(84, 218, 255, 0.55));
+}
 
-.gg-text {
-  font-family: var(--font-display);
-  font-size: 14.2px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  fill: #9cf0ff;
-  stroke: #39b8e6;
-  stroke-width: 0.65;
-  paint-order: stroke fill;
-  filter: drop-shadow(0 0 5px rgba(84, 218, 255, 0.72));
+.toolbar-coffee-svg {
+  color: var(--lime-neon);
+  flex-shrink: 0;
 }
 
 .live-pulse {
@@ -875,22 +884,27 @@ body:not(.show-statusbar) .scroll-body {
 
 .search-clear-btn[hidden] { display: none; }
 
-/* Featured Promo Banner Carousel */
+/* Featured Promo Banner Carousel (Clean Left Padding & Zero Background Bleed) */
 .promo-carousel {
   display: flex;
   gap: 12px;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
+  scroll-padding-inline: 18px;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+  scroll-behavior: smooth;
   scrollbar-width: none;
-  margin: 0 -18px 14px;
-  padding: 2px 18px;
+  background: transparent !important;
+  margin: 0 -18px 10px;
+  padding: 4px 18px 14px;
 }
 
 .promo-carousel::-webkit-scrollbar { display: none; }
 
 .promo-banner-card {
   position: relative;
-  flex: 0 0 88%;
+  flex: 0 0 87%;
   min-height: 126px;
   padding: 15px 14px 15px 16px;
   border-radius: 28px;
@@ -900,8 +914,11 @@ body:not(.show-statusbar) .scroll-body {
   justify-content: space-between;
   gap: 10px;
   overflow: hidden;
-  border: 1px solid rgba(226, 248, 255, 0.22);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28), 0 14px 30px rgba(0, 8, 16, 0.34);
+  isolation: isolate;
+  background-clip: padding-box;
+  -webkit-mask-image: -webkit-radial-gradient(white, black);
+  border: 1px solid rgba(226, 248, 255, 0.24);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28), 0 8px 18px rgba(10, 32, 20, 0.14);
   text-align: left;
   transition: transform 0.24s var(--ease-spring);
 }
@@ -963,9 +980,13 @@ body:not(.show-statusbar) .scroll-body {
   display: flex;
   gap: 8px;
   overflow-x: auto;
+  scroll-padding-inline: 18px;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+  scroll-behavior: smooth;
   scrollbar-width: none;
   margin: 0 -18px 14px;
-  padding: 2px 18px;
+  padding: 4px 18px 8px;
 }
 
 .category-pills::-webkit-scrollbar { display: none; }
@@ -1024,33 +1045,24 @@ body:not(.show-statusbar) .scroll-body {
 .notched-glass-surface {
   position: absolute;
   inset: 0;
-  clip-path: url(#notchedCardClip);
-  -webkit-clip-path: url(#notchedCardClip);
+  border-radius: 26px;
+  overflow: hidden;
   background:
-    radial-gradient(circle at 30% 22%, var(--card-tint, rgba(162, 224, 255, 0.18)) 0%, rgba(15, 34, 48, 0.62) 56%, rgba(6, 17, 27, 0.78) 100%);
+    radial-gradient(ellipse 115% 68% at 50% 2%, var(--card-top, rgba(154, 238, 48, 0.36)) 0%, transparent 66%),
+    radial-gradient(ellipse 115% 68% at 50% 100%, var(--card-bot, rgba(20, 134, 236, 0.38)) 0%, transparent 66%),
+    linear-gradient(180deg, rgba(16, 32, 44, 0.86) 0%, rgba(8, 18, 28, 0.94) 100%);
+  border: 1px solid rgba(224, 248, 255, 0.22);
+  box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 0.22), 0 10px 24px rgba(0, 8, 16, 0.24);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 28px 18px 18px 14px;
-  transition: background 0.28s var(--ease-ios);
+  padding: 24px 14px 16px;
+  transition: transform 0.28s var(--ease-ios), filter 0.28s var(--ease-ios);
 }
 
 .menu-card:hover .notched-glass-surface,
 .pairing-card:hover .notched-glass-surface {
-  filter: brightness(1.08);
-}
-
-.notched-border-svg {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 3;
-}
-
-.notched-border-svg path {
-  vector-effect: non-scaling-stroke;
+  filter: brightness(1.05);
 }
 
 .card-badge-chip {
@@ -1065,7 +1077,7 @@ body:not(.show-statusbar) .scroll-body {
   font-weight: 700;
   letter-spacing: 0.04em;
   color: #f4ffea;
-  background: rgba(4, 16, 24, 0.78);
+  background: rgba(4, 16, 24, 0.76);
   border: 1px solid rgba(220, 246, 255, 0.22);
 }
 
@@ -1075,32 +1087,32 @@ body:not(.show-statusbar) .scroll-body {
   width: 76%;
   height: 76%;
   object-fit: contain;
-  transform: translate(-4px, 2px);
-  filter: drop-shadow(0 12px 16px rgba(0, 6, 14, 0.56));
+  transform: translateY(2px);
+  filter: drop-shadow(0 12px 16px rgba(0, 6, 14, 0.48));
   transition: transform 0.34s var(--ease-spring);
   pointer-events: none;
 }
 
 .menu-card:hover .card-item-img,
 .pairing-card:hover .card-item-img {
-  transform: translate(-4px, -2px) scale(1.045);
+  transform: translateY(-3px) scale(1.05);
 }
 
 .notched-add-btn {
   position: absolute;
-  right: 0;
-  bottom: 0;
+  right: 10px;
+  bottom: 10px;
   z-index: 6;
-  width: 30.2%;
-  height: 30.2%;
-  border-radius: 34%;
+  width: 34px;
+  height: 34px;
+  border-radius: 12px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   color: #091318;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.99) 0%, rgba(235, 244, 248, 0.94) 100%);
   border: 1px solid rgba(255, 255, 255, 0.92);
-  box-shadow: inset 0 2px 1px rgba(255, 255, 255, 1), 0 8px 20px rgba(0, 6, 14, 0.44);
+  box-shadow: inset 0 1.5px 1px rgba(255, 255, 255, 1), 0 6px 14px rgba(0, 6, 14, 0.32);
   transition: transform 0.24s var(--ease-spring), background 0.24s;
 }
 
@@ -1179,26 +1191,23 @@ body:not(.show-statusbar) .stacked-sheet-ghost { top: 18px; }
 
 .product-glass-sheet {
   position: absolute;
-  top: 72px;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
+  top: 0;
   z-index: 3;
-  border-radius: var(--radius-sheet) var(--radius-sheet) 0 0;
+  border-radius: inherit;
   display: flex;
   flex-direction: column;
   overflow: hidden;
   background:
-    radial-gradient(ellipse 110% 34% at 50% 0%, var(--item-glow-top) 0%, transparent 72%),
+    radial-gradient(ellipse 110% 38% at 50% 0%, var(--item-glow-top) 0%, transparent 72%),
+    radial-gradient(ellipse 110% 44% at 50% 96%, var(--item-glow-bot) 0%, transparent 74%),
     linear-gradient(180deg, var(--item-sheet-top) 0%, var(--item-sheet-mid) 48%, var(--item-sheet-bot) 100%);
   backdrop-filter: blur(18px) saturate(165%);
   -webkit-backdrop-filter: blur(18px) saturate(165%);
   border-top: 1px solid rgba(255, 255, 255, 0.26);
   box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 0.26), 0 -14px 40px rgba(0, 0, 0, 0.34);
-  transition: top 0.28s var(--ease-ios), background 0.5s var(--ease-ios), transform 0.38s var(--ease-ios);
+  transition: background 0.45s var(--ease-ios);
 }
-
-body:not(.show-statusbar) .product-glass-sheet { top: 32px; }
 
 .product-inner-glow {
   position: absolute;
@@ -1428,9 +1437,9 @@ body:not(.show-statusbar) .product-glass-sheet { top: 32px; }
   transition: transform 0.44s var(--ease-spring), opacity 0.24s;
 }
 
-.hero-drink-img[data-scale="small"] { transform: scale(0.9); }
-.hero-drink-img[data-scale="medium"] { transform: scale(1); }
-.hero-drink-img[data-scale="large"] { transform: scale(1.07); }
+.hero-drink-img[data-scale="small"] { --hero-scale: 0.80; }
+.hero-drink-img[data-scale="medium"] { --hero-scale: 1; }
+.hero-drink-img[data-scale="large"] { --hero-scale: 1.16; }
 
 /* Segmented Liquid-Glass Size Selector */
 .size-selector-glass {
@@ -2530,8 +2539,13 @@ body:not(.show-statusbar) .orders-scroll { padding-top: 20px; }
   display: flex;
   gap: 12px;
   overflow-x: auto;
+  scroll-padding-inline: 18px;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+  scroll-behavior: smooth;
   scrollbar-width: none;
-  padding-bottom: 4px;
+  margin: 0 -18px;
+  padding: 4px 18px 10px;
 }
 
 .favorites-row::-webkit-scrollbar { display: none; }
@@ -3139,10 +3153,13 @@ html[data-theme="light"] .brand-badge {
   box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.35), 0 8px 18px rgba(24, 88, 38, 0.22);
 }
 
-html[data-theme="light"] .gg-text {
-  fill: #eaffd2;
-  stroke: #9be858;
-  filter: drop-shadow(0 0 4px rgba(180, 250, 108, 0.5));
+html[data-theme="light"] .brand-coffee-svg {
+  color: #eaffd2;
+  filter: drop-shadow(0 0 4px rgba(180, 250, 108, 0.45));
+}
+
+html[data-theme="light"] .toolbar-coffee-svg {
+  color: #1d7630;
 }
 
 /* Floating White Frosted Bottom Dock */
@@ -3281,15 +3298,19 @@ html[data-theme="light"] .cat-pill.is-active {
   box-shadow: 0 6px 18px rgba(34, 126, 48, 0.28);
 }
 
-/* Concave-Notched Fresh White Liquid-Glass Cards + Matcha "+" Button */
+/* Clean Rounded White Frosted Cards + Per-Item Dual-Tone Top/Bottom Glow + Compact "+" Button */
 html[data-theme="light"] .notched-glass-surface {
   background:
-    radial-gradient(circle at 28% 20%, var(--card-tint, rgba(164, 232, 122, 0.18)) 0%, rgba(255, 255, 255, 0.84) 62%, rgba(244, 250, 244, 0.92) 100%);
+    radial-gradient(ellipse 118% 68% at 50% 2%, var(--card-top, rgba(154, 238, 48, 0.38)) 0%, transparent 66%),
+    radial-gradient(ellipse 118% 68% at 50% 100%, var(--card-bot, rgba(20, 134, 236, 0.38)) 0%, transparent 66%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(250, 253, 250, 0.97) 100%);
+  border: 1.5px solid rgba(255, 255, 255, 0.96);
+  box-shadow: inset 0 1.5px 0 #ffffff, 0 8px 22px rgba(18, 62, 30, 0.08);
 }
 
 html[data-theme="light"] .card-badge-chip {
-  background: rgba(255, 255, 255, 0.88);
-  border-color: rgba(42, 128, 58, 0.2);
+  background: rgba(255, 255, 255, 0.9);
+  border-color: rgba(42, 128, 58, 0.18);
   color: #1b652a;
   box-shadow: 0 3px 8px rgba(20, 66, 32, 0.08);
 }
@@ -3301,8 +3322,8 @@ html[data-theme="light"] .card-item-img {
 html[data-theme="light"] .notched-add-btn {
   background: linear-gradient(135deg, #21712f 0%, #48b040 100%);
   color: #ffffff;
-  border-color: rgba(255, 255, 255, 0.65);
-  box-shadow: inset 0 1.5px 1px rgba(255, 255, 255, 0.45), 0 8px 18px rgba(32, 118, 46, 0.3);
+  border-color: rgba(255, 255, 255, 0.72);
+  box-shadow: inset 0 1.5px 1px rgba(255, 255, 255, 0.42), 0 6px 14px rgba(32, 118, 46, 0.28);
 }
 
 html[data-theme="light"] .notched-add-btn.is-added {
@@ -3496,23 +3517,18 @@ html[data-theme="light"] .member-glass-card .topup-pill-btn {
   color: #ffffff;
 }
 
-/* Adaptive Per-Item Product Detail in Fresh White Liquid Glass! */
+/* Adaptive Per-Item Product Detail in Fresh White Liquid Glass (MUST keep .screen-detail transparent!) */
 html[data-theme="light"] .screen-detail {
-  background: #f4faf3;
-}
-
-html[data-theme="light"] .stacked-sheet-ghost {
-  background: rgba(255, 255, 255, 0.56);
-  border-color: rgba(255, 255, 255, 0.85);
+  background: transparent !important;
 }
 
 html[data-theme="light"] .product-glass-sheet {
   background:
     radial-gradient(ellipse 110% 38% at 50% 0%, var(--item-glow-top) 0%, transparent 70%),
-    radial-gradient(ellipse 110% 44% at 50% 92%, var(--item-glow-bot) 0%, transparent 72%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.78) 0%, rgba(250, 253, 250, 0.84) 55%, rgba(246, 251, 247, 0.92) 100%);
-  border-top-color: rgba(255, 255, 255, 0.96);
-  box-shadow: inset 0 2px 0 #ffffff, 0 -14px 36px rgba(18, 60, 30, 0.12);
+    radial-gradient(ellipse 110% 44% at 50% 94%, var(--item-glow-bot) 0%, transparent 72%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.93) 0%, rgba(250, 253, 250, 0.96) 55%, rgba(246, 251, 247, 0.98) 100%);
+  border-top-color: rgba(255, 255, 255, 0.98);
+  box-shadow: inset 0 2px 0 #ffffff, 0 -14px 36px rgba(18, 60, 30, 0.14);
 }
 
 html[data-theme="light"] .inner-orb-top,
@@ -3828,15 +3844,29 @@ html[data-theme="light"] .delivery-fee-pill {
   background: rgba(42, 152, 58, 0.12);
 }
 
-/* Order Again Quick Strip */
+/* Zero-Clip Horizontal Scrollers Across All Views */
+.bag-left-col,
+.bag-right-col,
+.orders-left-col,
+.orders-right-col,
+.promo-two-col > *,
+.me-responsive-grid > * {
+  min-width: 0;
+}
+
 .order-again-block { margin-bottom: 14px; }
 .order-again-block[hidden] { display: none; }
 .order-again-row {
   display: flex;
   gap: 10px;
   overflow-x: auto;
+  scroll-padding-inline: 18px;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+  scroll-behavior: smooth;
   scrollbar-width: none;
-  padding-bottom: 2px;
+  margin: 0 -18px;
+  padding: 4px 18px 8px;
 }
 .order-again-row::-webkit-scrollbar { display: none; }
 
@@ -4026,12 +4056,18 @@ html[data-theme="light"] .addon-chip-btn.is-active strong { color: #eaffd0; }
 
 /* Bag Add-ons & Smart Upsell */
 .bag-item-addons { font-size: 11px; color: var(--lime-soft); margin-top: 2px; font-weight: 600; }
-.bag-upsell-block { margin-top: 4px; }
+.bag-upsell-block { margin-top: 4px; min-width: 0; }
 .bag-upsell-row {
   display: flex;
-  gap: 9px;
+  gap: 10px;
   overflow-x: auto;
+  scroll-padding-inline: 18px;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+  scroll-behavior: smooth;
   scrollbar-width: none;
+  margin: 0 -18px;
+  padding: 4px 18px 10px;
 }
 .bag-upsell-row::-webkit-scrollbar { display: none; }
 .upsell-mini-card {
@@ -4139,14 +4175,20 @@ html[data-theme="light"] .detail-desktop-scrim {
 }
 
 .detail-frame-container {
-  position: relative;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: calc(100% - 54px);
   z-index: 2;
-  width: 100%;
-  height: 100%;
-  border-radius: 38px 38px 0 0;
+  border-radius: 36px 36px 0 0;
   overflow: hidden;
   transform: translate3d(0, 100%, 0);
   transition: transform 0.46s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s var(--ease-ios);
+}
+
+body:not(.show-statusbar) .detail-frame-container {
+  height: calc(100% - 28px);
 }
 
 .screen-detail.is-active .detail-frame-container {
@@ -4158,15 +4200,15 @@ html[data-theme="light"] .detail-desktop-scrim {
   transition: none !important;
 }
 
-/* Smooth Hero Drink Reveal inside Rising Sheet */
+/* Smooth Hero Drink Reveal + Dynamic Small/Medium/Large Size Scaling */
 .screen-detail .hero-drink-img {
   opacity: 0;
-  transform: translate3d(0, 24px, 0) scale(0.88);
-  transition: transform 0.52s cubic-bezier(0.22, 1, 0.36, 1) 0.08s, opacity 0.36s var(--ease-ios) 0.06s;
+  transform: translate3d(0, 22px, 0) scale(0.84);
+  transition: transform 0.42s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.32s var(--ease-ios);
 }
 .screen-detail.is-active .hero-drink-img {
   opacity: 1;
-  transform: translate3d(0, 0, 0) scale(1);
+  transform: translate3d(0, 0, 0) scale(var(--hero-scale, 1));
 }
 
 /* Upgraded Drawer Spring Physics */
@@ -4469,9 +4511,13 @@ body.has-cart-items .menu-scroll {
   }
 
   body:not(.mobile-preview-mode) .detail-frame-container {
+    position: relative;
+    left: auto;
+    right: auto;
+    bottom: auto;
     width: min(500px, 100%);
     height: min(820px, calc(100dvh - 104px));
-    border-radius: 40px;
+    border-radius: 38px;
     overflow: hidden;
     box-shadow: 0 32px 84px rgba(0, 8, 16, 0.44);
     z-index: 2;
@@ -4485,8 +4531,15 @@ body.has-cart-items .menu-scroll {
     transform: translate3d(0, 0, 0) scale(1);
   }
 
-  body:not(.mobile-preview-mode) .stacked-sheet-ghost { top: 18px; }
-  body:not(.mobile-preview-mode) .product-glass-sheet { top: 32px; }
+  body:not(.mobile-preview-mode) .product-glass-sheet { top: 0; }
+
+  body:not(.mobile-preview-mode) .order-again-row,
+  body:not(.mobile-preview-mode) .bag-upsell-row,
+  body:not(.mobile-preview-mode) .favorites-row {
+    margin: 0;
+    padding: 4px 2px 10px;
+    scroll-padding-inline: 2px;
+  }
 
   /* Floating Mini-Cart Pill on Desktop (centered sleek floating bar at bottom) */
   body:not(.mobile-preview-mode) .floating-minicart {
@@ -4557,9 +4610,11 @@ body.has-cart-items .menu-scroll {
   .bag-layout {
     padding-top: calc(env(safe-area-inset-top, 10px) + 14px) !important;
   }
-  .stacked-sheet-ghost { top: calc(env(safe-area-inset-top, 10px) + 12px) !important; }
+  .detail-frame-container {
+    height: calc(100dvh - env(safe-area-inset-top, 10px) - 24px) !important;
+  }
   .product-glass-sheet {
-    top: calc(env(safe-area-inset-top, 10px) + 26px) !important;
+    top: 0 !important;
     padding-bottom: env(safe-area-inset-bottom, 0px);
   }
   .glass-bottom-dock { bottom: calc(env(safe-area-inset-bottom, 8px) + 10px); }

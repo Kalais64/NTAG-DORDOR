@@ -1,5 +1,5 @@
 /* ==========================================================================
-   GOOD GIRL — Unified 23-Item Café Catalog, Outlets, Add-Ons, Rewards & Themes
+   KOTA COFFEE — Unified 23-Item Café Catalog, Outlets, Add-Ons, Rewards & Themes
    Shared by Customer App (index.html), Live POS (pos.html) & Backend Sync
    ========================================================================== */
 
@@ -990,7 +990,7 @@
     {
       id: 'glass-tumbler',
       skuPrefix: 'MRC-TMB',
-      name: 'GOOD GIRL TUMBLER',
+      name: 'KOTA EMERALD TUMBLER',
       shortName: 'Glass Tumbler',
       category: 'merch',
       categoryLabel: 'Merch & Beans',
@@ -1004,7 +1004,7 @@
       shortDesc:
         'Double-walled emerald-tinted borosilicate glass tumbler with obsidian grip & reusable glass straw,...',
       fullDesc:
-        'Signature GOOD GIRL Botanical Lab double-walled frosted emerald borosilicate glass tumbler with matte-obsidian silicone grip sleeve, spill-resistant lid, and reusable borosilicate straw. Bring it in-store for Rp5.000 off every drink.',
+        'Signature KOTA Coffee & Botanical Bar double-walled frosted emerald borosilicate glass tumbler with matte-obsidian silicone grip sleeve, spill-resistant lid, and reusable borosilicate straw. Bring it in-store for Rp5.000 off every drink.',
       tags: [
         { label: 'BOROSILICATE', note: 'Thermal-shock resistant insulated double wall.' },
         { label: 'REUSABLE', note: 'Includes borosilicate straw & cleaning brush.' },
@@ -1299,6 +1299,39 @@
       badge: '2× PTS',
     },
   ];
+
+  /* Per-item Dual-Tone Card Backdrops (Top + Bottom glow matched to every menu photo!) */
+  const CARD_DUAL_TONES = {
+    'matcha-nitro': { top: 'rgba(154, 238, 48, 0.44)', bot: 'rgba(20, 134, 236, 0.46)' },
+    'blue-cloud-latte': { top: 'rgba(88, 190, 255, 0.42)', bot: 'rgba(48, 122, 224, 0.30)' },
+    'yuzu-matcha-fizz': { top: 'rgba(132, 224, 54, 0.40)', bot: 'rgba(248, 186, 28, 0.44)' },
+    'hojicha-oat-cloud': { top: 'rgba(222, 174, 112, 0.38)', bot: 'rgba(156, 98, 46, 0.36)' },
+    'aren-palm-latte': { top: 'rgba(242, 202, 148, 0.36)', bot: 'rgba(152, 84, 34, 0.42)' },
+    'iced-americano': { top: 'rgba(222, 182, 142, 0.32)', bot: 'rgba(112, 62, 30, 0.42)' },
+    'caramel-macchiato': { top: 'rgba(250, 192, 92, 0.42)', bot: 'rgba(164, 92, 38, 0.38)' },
+    'biscoff-choco-frappe': { top: 'rgba(232, 158, 72, 0.42)', bot: 'rgba(118, 58, 28, 0.44)' },
+    'vanilla-cinnamon-latte': { top: 'rgba(244, 210, 158, 0.38)', bot: 'rgba(176, 112, 58, 0.36)' },
+    'strawberry-matcha-cloud': { top: 'rgba(134, 224, 64, 0.40)', bot: 'rgba(238, 68, 114, 0.46)' },
+    'belgian-dark-choco': { top: 'rgba(178, 112, 74, 0.38)', bot: 'rgba(96, 46, 28, 0.44)' },
+    'lychee-rose-tea': { top: 'rgba(252, 152, 184, 0.42)', bot: 'rgba(224, 72, 118, 0.38)' },
+    'thai-milk-tea': { top: 'rgba(252, 194, 128, 0.38)', bot: 'rgba(232, 104, 24, 0.44)' },
+    'butter-croissant': { top: 'rgba(250, 204, 106, 0.40)', bot: 'rgba(196, 128, 48, 0.36)' },
+    'truffle-egg-brioche': { top: 'rgba(250, 208, 82, 0.42)', bot: 'rgba(122, 178, 68, 0.36)' },
+    'smoked-beef-panini': { top: 'rgba(238, 174, 92, 0.38)', bot: 'rgba(184, 78, 56, 0.36)' },
+    'spirulina-cake': { top: 'rgba(104, 196, 255, 0.42)', bot: 'rgba(214, 168, 104, 0.36)' },
+    'matcha-mochi': { top: 'rgba(158, 228, 96, 0.40)', bot: 'rgba(226, 86, 118, 0.34)' },
+    'blueberry-tart': { top: 'rgba(168, 138, 252, 0.40)', bot: 'rgba(98, 68, 214, 0.44)' },
+    'yuzu-matcha-roll': { top: 'rgba(138, 218, 68, 0.40)', bot: 'rgba(252, 196, 42, 0.42)' },
+    'glass-tumbler': { top: 'rgba(92, 228, 202, 0.40)', bot: 'rgba(34, 148, 168, 0.40)' },
+    'uji-matcha-tin': { top: 'rgba(176, 244, 62, 0.40)', bot: 'rgba(58, 148, 64, 0.38)' },
+    'espresso-beans-bag': { top: 'rgba(98, 208, 118, 0.38)', bot: 'rgba(148, 92, 48, 0.40)' },
+  };
+
+  MENU_ITEMS.forEach((item) => {
+    const dt = CARD_DUAL_TONES[item.id];
+    item.theme.cardTop = (dt && dt.top) || item.theme.glowTop;
+    item.theme.cardBot = (dt && dt.bot) || item.theme.glowBot;
+  });
 
   function getItemById(id) {
     return MENU_ITEMS.find((item) => item.id === id) || MENU_ITEMS[0];

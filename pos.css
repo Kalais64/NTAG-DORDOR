@@ -121,7 +121,7 @@ button {
   flex-shrink: 0;
 }
 
-.gg-svg { width: 84%; height: 84%; }
+.gg-svg { width: 62%; height: 62%; color: #9cf0ff; }
 .gg-text {
   font-family: var(--font-display);
   font-size: 14.2px;
@@ -819,7 +819,7 @@ html[data-theme="light"] .pos-brand-badge {
   background: linear-gradient(145deg, #1a5828 0%, #2d843b 100%);
   border-color: rgba(255, 255, 255, 0.65);
 }
-html[data-theme="light"] .gg-text { fill: #ebffd4; stroke: #9be858; }
+html[data-theme="light"] .gg-svg { color: #ebffd4 !important; }
 html[data-theme="light"] .pos-kicker { color: #227c32; }
 html[data-theme="light"] .live-dot { background: #36b244; box-shadow: 0 0 10px rgba(54, 178, 68, 0.65); }
 

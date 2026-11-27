@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GOOD GIRL — Full Barista POS, Cashier &amp; Stock Terminal</title>
+  <title>KOTA COFFEE — Full Barista POS, Cashier &amp; Stock Terminal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@400;500;600;700&family=Oxanium:wght@500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="pos.css?v=3.2" />
+  <link rel="stylesheet" href="pos.css?v=3.3" />
 </head>
 <body>
   <div class="pos-bg" aria-hidden="true">
@@ -20,16 +20,18 @@
     <!-- Top Liquid-Glass Header -->
     <header class="pos-header">
       <div class="pos-brand-group">
-        <div class="pos-brand-badge" aria-label="GOOD GIRL Logo">
-          <svg viewBox="0 0 56 56" class="gg-svg" aria-hidden="true">
-            <text x="28" y="25" text-anchor="middle" class="gg-text">GOOD</text>
-            <text x="28" y="42" text-anchor="middle" class="gg-text">GIRL</text>
+        <div class="pos-brand-badge" aria-label="KOTA Coffee Logo">
+          <svg viewBox="0 0 24 24" class="gg-svg" aria-hidden="true" style="color:#9cf0ff;">
+            <path d="M5 9.5h11.5v5.2a5.8 5.8 0 0 1-5.8 5.8h-.1A5.8 5.8 0 0 1 4.8 14.7V9.5Z" fill="currentColor" fill-opacity="0.2" stroke="currentColor" stroke-width="1.85" stroke-linejoin="round" />
+            <path d="M16.5 10.8h1.8a2.5 2.5 0 0 1 0 5h-2" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" />
+            <path d="M8.4 6.4c0-1.3 1.1-1.9 1.1-3.2M12.2 6.4c0-1.3 1.1-1.9 1.1-3.2" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" />
+            <path d="M3.5 20.5h14.5" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" />
           </svg>
         </div>
         <div>
           <div class="pos-kicker-row">
             <span class="live-dot" id="posConnDot"></span>
-            <span class="pos-kicker" id="posConnText">LIVE POS • CHECKING SYNC...</span>
+            <span class="pos-kicker" id="posConnText">KOTA COFFEE POS • CHECKING SYNC...</span>
           </div>
           <h1 class="pos-title">BARISTA, CASHIER &amp; STOCK POS</h1>
         </div>
@@ -250,8 +252,8 @@
 
   <div class="pos-toast" id="posToast" role="status" aria-live="polite"></div>
 
-  <script src="menu-data.js?v=3.0"></script>
-  <script src="pos-bridge.js?v=3.0"></script>
-  <script src="pos.js?v=3.0" defer></script>
+  <script src="menu-data.js?v=3.3"></script>
+  <script src="pos-bridge.js?v=3.3"></script>
+  <script src="pos.js?v=3.3" defer></script>
 </body>
 </html>

@@ -4,9 +4,6 @@
   const DATA = window.GOOD_GIRL_DATA;
   const POS = window.GOOD_GIRL_POS;
 
-  const NOTCH_BORDER_PATH =
-    'M 28 0.75 L 138 0.75 A 27.25 27.25 0 0 1 165.25 28 L 165.25 90 A 17.25 17.25 0 0 1 148 107.25 L 134 107.25 A 26.75 26.75 0 0 0 107.25 134 L 107.25 148 A 17.25 17.25 0 0 1 90 165.25 L 28 165.25 A 27.25 27.25 0 0 1 0.75 138 L 0.75 28 A 27.25 27.25 0 0 1 28 0.75 Z';
-
   const SUN_SVG = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>`;
   const MOON_SVG = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>`;
 
@@ -365,6 +362,9 @@
      NAVIGATION
      ======================================================================== */
 
+  const TAB_ORDER = ['menu', 'promo', 'bag', 'orders', 'me'];
+  let leavingTimer = null;
+
   function triggerPop(node) {
     if (!node) return;
     node.classList.remove('is-popping');
@@ -372,8 +372,22 @@
     node.classList.add('is-popping');
   }
 
+  function resetUnderlyingScreenTransform() {
+    const under = el.screens[state.currentView];
+    if (under) {
+      under.style.transform = '';
+      under.style.filter = '';
+      under.style.transition = '';
+    }
+    if (el.detailDesktopScrim) {
+      el.detailDesktopScrim.style.opacity = '';
+      el.detailDesktopScrim.style.transition = '';
+    }
+  }
+
   function openDetailSheet() {
     state.detailOpen = true;
+    resetUnderlyingScreenTransform();
     el.screens.detail.classList.add('is-active');
     el.screens.detail.setAttribute('aria-hidden', 'false');
     el.phoneShell.classList.add('has-detail-open');
@@ -385,6 +399,7 @@
   function closeDetailSheet() {
     if (!state.detailOpen) return;
     state.detailOpen = false;
+    resetUnderlyingScreenTransform();
     el.screens.detail.classList.remove('is-active');
     el.screens.detail.setAttribute('aria-hidden', 'true');
     el.phoneShell.classList.remove('has-detail-open');
@@ -400,6 +415,21 @@
     }
     if (!el.screens[target]) return;
     if (state.detailOpen) closeDetailSheet();
+
+    const prev = state.currentView;
+    if (prev && prev !== target && el.screens[prev]) {
+      const prevIdx = TAB_ORDER.indexOf(prev);
+      const nextIdx = TAB_ORDER.indexOf(target);
+      const dir = nextIdx >= prevIdx ? 1 : -1;
+      el.phoneShell.style.setProperty('--nav-dir', String(dir));
+
+      clearTimeout(leavingTimer);
+      Object.values(el.screens).forEach((s) => s.classList.remove('is-leaving'));
+      const outNode = el.screens[prev];
+      outNode.classList.add('is-leaving');
+      leavingTimer = setTimeout(() => outNode.classList.remove('is-leaving'), 340);
+    }
+
     state.previousTab = target;
 
     Object.entries(el.screens).forEach(([key, node]) => {
@@ -557,8 +587,8 @@
 
     const online = POS.isBackendOnline();
     el.homeSyncLabel.textContent = online
-      ? 'Botanical Lab • Live Multi-Device POS Connected'
-      : 'Botanical Lab • Live Browser POS Sync';
+      ? 'KOTA Coffee • Live Multi-Device POS Connected'
+      : 'KOTA Coffee • Live Browser POS Sync';
 
     const activeOrder = POS.getActiveOrder();
     const hasRunning = activeOrder && activeOrder.status !== 'complete' && activeOrder.status !== 'cancelled';
@@ -622,10 +652,10 @@
 
     if (btnEl) {
       btnEl.classList.add('is-added');
-      btnEl.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M5 13l4 4L19 7"/></svg>`;
+      btnEl.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M5 13l4 4L19 7"/></svg>`;
       setTimeout(() => {
         btnEl.classList.remove('is-added');
-        btnEl.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>`;
+        btnEl.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>`;
       }, 650);
     }
 
@@ -796,9 +826,14 @@
       btn.setAttribute('aria-selected', String(state.activeCategory === cat.id));
       btn.textContent = cat.label;
       btn.addEventListener('click', () => {
+        if (state.activeCategory === cat.id) return;
         state.activeCategory = cat.id;
         renderCategoryPills();
         renderMenuGrid(true);
+        const activeBtn = el.categoryPills.querySelector('.cat-pill.is-active');
+        if (activeBtn && activeBtn.scrollIntoView) {
+          activeBtn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        }
       });
       el.categoryPills.appendChild(btn);
     });
@@ -843,18 +878,15 @@
 
       card.innerHTML = `
         <div class="notched-frame-wrap">
-          <div class="notched-glass-surface" style="--card-tint:${item.theme.cardTint}">
+          <div class="notched-glass-surface" style="--card-top:${item.theme.cardTop};--card-bot:${item.theme.cardBot}">
             <span class="card-badge-chip">${available ? escapeHtml(item.badge) : 'SOLD OUT'}</span>
             <img src="${item.image}" alt="${escapeHtml(item.shortName)}" class="card-item-img" draggable="false" />
+            <button type="button" class="notched-add-btn" ${available ? '' : 'disabled'} aria-label="Quick add ${escapeHtml(item.shortName)}">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                <path d="M12 5v14M5 12h14" />
+              </svg>
+            </button>
           </div>
-          <svg class="notched-border-svg" viewBox="0 0 166 166" fill="none" aria-hidden="true">
-            <path d="${NOTCH_BORDER_PATH}" stroke="url(#notchGlassBorder)" stroke-width="1.35" />
-          </svg>
-          <button type="button" class="notched-add-btn" ${available ? '' : 'disabled'} aria-label="Quick add ${escapeHtml(item.shortName)}">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
-              <path d="M12 5v14M5 12h14" />
-            </svg>
-          </button>
         </div>
         <div class="menu-card-meta">
           <h3 class="menu-card-name">${escapeHtml(item.shortName)}</h3>
@@ -1344,8 +1376,8 @@
       el.payGatewayPanel.innerHTML = `
         <div class="qris-box">
           <span class="qris-header-pill">QRIS • NATIONAL STANDARD</span>
-          <div class="qris-svg-frame">${buildQrisSvg(`GOODGIRL-${finalAmount}-${metrics.count}`)}</div>
-          <div style="font-size:12px;color:var(--text-secondary);">Merchant: <strong>GOOD GIRL BOTANICAL LAB</strong></div>
+          <div class="qris-svg-frame">${buildQrisSvg(`KOTACOFFEE-${finalAmount}-${metrics.count}`)}</div>
+          <div style="font-size:12px;color:var(--text-secondary);">Merchant: <strong>KOTA COFFEE &amp; BOTANICAL BAR</strong></div>
           <div class="qris-timer">Expires in <strong id="qrisCountdownVal">${mm}:${ss}</strong></div>
         </div>
       `;
@@ -1459,7 +1491,7 @@
         return;
       }
       methodLabel = 'GG Pay';
-      providerLabel = 'GOOD GIRL Member Balance';
+      providerLabel = 'KOTA Member Balance';
     }
 
     const posItems = state.cart.map((c) => ({
@@ -1591,16 +1623,13 @@
       card.setAttribute('role', 'listitem');
       card.innerHTML = `
         <div class="notched-frame-wrap">
-          <div class="notched-glass-surface" style="--card-tint:${item.theme.cardTint}">
+          <div class="notched-glass-surface" style="--card-top:${item.theme.cardTop};--card-bot:${item.theme.cardBot}">
             ${!available ? '<span class="card-badge-chip">SOLD OUT</span>' : ''}
             <img src="${item.image}" alt="${escapeHtml(item.shortName)}" class="card-item-img" draggable="false" />
+            <button type="button" class="notched-add-btn" ${available ? '' : 'disabled'} aria-label="Add ${escapeHtml(item.shortName)}">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            </button>
           </div>
-          <svg class="notched-border-svg" viewBox="0 0 166 166" fill="none" aria-hidden="true">
-            <path d="${NOTCH_BORDER_PATH}" stroke="url(#notchGlassBorder)" stroke-width="1.35" />
-          </svg>
-          <button type="button" class="notched-add-btn" ${available ? '' : 'disabled'} aria-label="Add ${escapeHtml(item.shortName)}">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
-          </button>
         </div>
         <h3 class="pairing-card-name">${escapeHtml(item.shortName)}</h3>
         <p class="pairing-card-sub">${escapeHtml(item.sizes.small.volume)} • ${DATA.formatRp(item.sizes.small.price)}</p>
@@ -2042,18 +2071,24 @@
       el.floatingMiniCart.addEventListener('click', () => switchView('bag'));
     }
 
-    // Reusable pointer drag-to-dismiss helper for bottom sheets & drawers
-    function attachSheetDrag(handleEl, sheetEl, onDismiss) {
+    // Reusable pointer drag-to-dismiss helper (interpolates live underlying screen & scrim!)
+    function attachSheetDrag(handleEl, sheetEl, onDismiss, isDetailOverlay) {
       if (!handleEl || !sheetEl) return;
       let startY = 0;
       let deltaY = 0;
       let dragging = false;
 
       handleEl.addEventListener('pointerdown', (e) => {
+        if (e.target.closest('button, input, a')) return;
         dragging = true;
         startY = e.clientY;
         deltaY = 0;
         sheetEl.classList.add('is-dragging');
+        if (isDetailOverlay) {
+          const under = el.screens[state.currentView];
+          if (under) under.style.transition = 'none';
+          if (el.detailDesktopScrim) el.detailDesktopScrim.style.transition = 'none';
+        }
         if (handleEl.setPointerCapture) {
           try { handleEl.setPointerCapture(e.pointerId); } catch (_) {}
         }
@@ -2062,7 +2097,24 @@
       handleEl.addEventListener('pointermove', (e) => {
         if (!dragging) return;
         deltaY = Math.max(0, e.clientY - startY);
-        sheetEl.style.transform = `translate3d(0, ${deltaY}px, 0)`;
+        const isDesktopModal = window.innerWidth > 680 && !document.body.classList.contains('mobile-preview-mode');
+        sheetEl.style.transform = isDesktopModal
+          ? `translate3d(0, ${deltaY * 0.7}px, 0) scale(${Math.max(0.94, 1 - deltaY / 2400)})`
+          : `translate3d(0, ${deltaY}px, 0)`;
+
+        if (isDetailOverlay) {
+          const progress = Math.min(1, deltaY / 320);
+          if (el.detailDesktopScrim) {
+            el.detailDesktopScrim.style.opacity = String(Math.max(0, 1 - progress * 0.92));
+          }
+          const under = el.screens[state.currentView];
+          if (under) {
+            const baseScale = isDesktopModal ? 0.986 : 0.962;
+            const curScale = baseScale + (1 - baseScale) * progress;
+            under.style.transform = `translate3d(0, 0, 0) scale(${curScale.toFixed(4)})`;
+            under.style.filter = `brightness(${(0.92 + 0.08 * progress).toFixed(3)})`;
+          }
+        }
       });
 
       const endDrag = () => {
@@ -2070,14 +2122,15 @@
         dragging = false;
         sheetEl.classList.remove('is-dragging');
         sheetEl.style.transform = '';
-        if (deltaY > 70) onDismiss();
+        resetUnderlyingScreenTransform();
+        if (deltaY > 75) onDismiss();
       };
 
       handleEl.addEventListener('pointerup', endDrag);
       handleEl.addEventListener('pointercancel', endDrag);
     }
 
-    // Product Detail (Bottom-Up Sheet Popup)
+    // Product Detail (Single Clean Bottom-Up Sheet Popup + Live Slide-Down Reveal)
     el.detailBackBtn.addEventListener('click', closeDetailSheet);
     el.detailDesktopScrim.addEventListener('click', closeDetailSheet);
     if (el.detailHandleBar) {
@@ -2085,8 +2138,63 @@
       el.detailHandleBar.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === ' ') closeDetailSheet();
       });
-      attachSheetDrag(el.detailHandleBar, el.detailFrameContainer, closeDetailSheet);
+      attachSheetDrag(el.detailHandleBar, el.detailFrameContainer, closeDetailSheet, true);
     }
+    const detailTopbar = document.querySelector('#screenDetail .product-topbar');
+    if (detailTopbar) {
+      attachSheetDrag(detailTopbar, el.detailFrameContainer, closeDetailSheet, true);
+    }
+
+    // Touch pull-down to dismiss when scrolled to very top of detail sheet
+    if (el.detailScroll && el.detailFrameContainer) {
+      let touchStartY = 0;
+      let pullingSheet = false;
+      let pullDelta = 0;
+
+      el.detailScroll.addEventListener('touchstart', (e) => {
+        if (el.detailScroll.scrollTop <= 0 && e.touches.length === 1) {
+          touchStartY = e.touches[0].clientY;
+          pullingSheet = false;
+          pullDelta = 0;
+        } else {
+          touchStartY = -1;
+        }
+      }, { passive: true });
+
+      el.detailScroll.addEventListener('touchmove', (e) => {
+        if (touchStartY < 0 || e.touches.length !== 1) return;
+        const dy = e.touches[0].clientY - touchStartY;
+        if (dy > 8 && el.detailScroll.scrollTop <= 0) {
+          pullingSheet = true;
+          pullDelta = dy;
+          el.detailFrameContainer.classList.add('is-dragging');
+          el.detailFrameContainer.style.transform = `translate3d(0, ${dy * 0.85}px, 0)`;
+          const progress = Math.min(1, dy / 320);
+          if (el.detailDesktopScrim) {
+            el.detailDesktopScrim.style.transition = 'none';
+            el.detailDesktopScrim.style.opacity = String(Math.max(0, 1 - progress * 0.92));
+          }
+          const under = el.screens[state.currentView];
+          if (under) {
+            under.style.transition = 'none';
+            const s = 0.962 + 0.038 * progress;
+            under.style.transform = `translate3d(0, 0, 0) scale(${s.toFixed(4)})`;
+          }
+        }
+      }, { passive: true });
+
+      const endTouchPull = () => {
+        if (!pullingSheet) return;
+        pullingSheet = false;
+        el.detailFrameContainer.classList.remove('is-dragging');
+        el.detailFrameContainer.style.transform = '';
+        resetUnderlyingScreenTransform();
+        if (pullDelta > 85) closeDetailSheet();
+      };
+      el.detailScroll.addEventListener('touchend', endTouchPull, { passive: true });
+      el.detailScroll.addEventListener('touchcancel', endTouchPull, { passive: true });
+    }
+
     el.detailBagShortcut.addEventListener('click', () => {
       closeDetailSheet();
       switchView('bag');
@@ -2164,7 +2272,7 @@
 
     el.dialNowBtn.addEventListener('click', () => {
       closeModal('call');
-      showToast('Calling GOOD GIRL Botanical Lab...');
+      showToast('Calling KOTA Coffee & Botanical Bar...');
     });
     el.pingBaristaBtn.addEventListener('click', () => {
       closeModal('call');

@@ -6,38 +6,23 @@
   <meta name="theme-color" content="#f5faf3" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <title>GOOD GIRL — Botanical Café Ordering &amp; Live POS</title>
+  <title>KOTA COFFEE — Specialty Café Ordering &amp; Live POS</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@400;500;600;700&family=Oxanium:wght@500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=3.2" />
+  <link rel="stylesheet" href="styles.css?v=3.3" />
 </head>
 <body class="show-statusbar">
-  <!-- Shared SVG Definitions: Concentric Concave-Notched Card ClipPath -->
+  <!-- Shared SVG Icon Definitions (KOTA Coffee Emblem) -->
   <svg class="svg-defs" aria-hidden="true" width="0" height="0" focusable="false">
     <defs>
-      <clipPath id="notchedCardClip" clipPathUnits="objectBoundingBox">
-        <path d="M 0.1687 0
-                 L 0.8313 0
-                 A 0.1687 0.1687 0 0 1 1 0.1687
-                 L 1 0.5422
-                 A 0.1084 0.1084 0 0 1 0.8916 0.6506
-                 L 0.8072 0.6506
-                 A 0.1566 0.1566 0 0 0 0.6506 0.8072
-                 L 0.6506 0.8916
-                 A 0.1084 0.1084 0 0 1 0.5422 1
-                 L 0.1687 1
-                 A 0.1687 0.1687 0 0 1 0 0.8313
-                 L 0 0.1687
-                 A 0.1687 0.1687 0 0 1 0.1687 0 Z" />
-      </clipPath>
-
-      <linearGradient id="notchGlassBorder" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stop-color="var(--notch-stroke-1)" />
-        <stop offset="48%" stop-color="var(--notch-stroke-2)" />
-        <stop offset="100%" stop-color="var(--notch-stroke-3)" />
-      </linearGradient>
+      <symbol id="kotaCoffeeIcon" viewBox="0 0 24 24">
+        <path d="M5 9.5h11.5v5.2a5.8 5.8 0 0 1-5.8 5.8h-.1A5.8 5.8 0 0 1 4.8 14.7V9.5Z" fill="currentColor" fill-opacity="0.18" stroke="currentColor" stroke-width="1.85" stroke-linejoin="round" />
+        <path d="M16.5 10.8h1.8a2.5 2.5 0 0 1 0 5h-2" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" />
+        <path d="M8.4 6.4c0-1.3 1.1-1.9 1.1-3.2M12.2 6.4c0-1.3 1.1-1.9 1.1-3.2" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" />
+        <path d="M3.5 20.5h14.5" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" />
+      </symbol>
     </defs>
   </svg>
 
@@ -52,7 +37,8 @@
   <header class="desktop-toolbar" aria-label="Primary desktop navigation">
     <div class="toolbar-brand">
       <span class="toolbar-dot" id="toolbarSyncDot"></span>
-      <span>GOOD GIRL</span>
+      <svg width="16" height="16" class="toolbar-coffee-svg" aria-hidden="true"><use href="#kotaCoffeeIcon" /></svg>
+      <span>KOTA COFFEE</span>
     </div>
 
     <nav class="toolbar-segmented" role="tablist" aria-label="App views">
@@ -122,15 +108,12 @@
             <!-- Greeting & Header Tools -->
             <div class="home-header">
               <div class="home-brand-left">
-                <div class="brand-badge brand-badge-sm" aria-label="GOOD GIRL Logo">
-                  <svg viewBox="0 0 56 56" class="goodgirl-svg" aria-hidden="true">
-                    <text x="28" y="25" text-anchor="middle" class="gg-text">GOOD</text>
-                    <text x="28" y="42" text-anchor="middle" class="gg-text">GIRL</text>
-                  </svg>
+                <div class="brand-badge brand-badge-sm" aria-label="KOTA Coffee Logo">
+                  <svg class="brand-coffee-svg" aria-hidden="true"><use href="#kotaCoffeeIcon" /></svg>
                 </div>
                 <div class="home-greeting">
                   <h1>Good to see you, <span id="homeMemberName">Mochi</span>!</h1>
-                  <p id="homeSyncLabel">Botanical Lab • Live POS Connected</p>
+                  <p id="homeSyncLabel">KOTA Coffee • Live POS Connected</p>
                 </div>
               </div>
 
@@ -145,7 +128,24 @@
               </div>
             </div>
 
-            <!-- Outlet Selector + 3 Fulfillment Modes Bar -->
+            <!-- 1. Search Bar AT THE TOP -->
+            <div class="search-glass-wrap">
+              <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <circle cx="11" cy="11" r="7" />
+                <path d="M20 20l-3.5-3.5" />
+              </svg>
+              <input
+                type="search"
+                id="menuSearchInput"
+                class="search-glass-input"
+                placeholder="Search coffee, matcha, aren latte, croissant, panini..."
+                autocomplete="off"
+                aria-label="Search menu"
+              />
+              <button type="button" class="search-clear-btn" id="searchClearBtn" hidden aria-label="Clear search">&times;</button>
+            </div>
+
+            <!-- 2. Outlet Location + 3 Fulfillment Modes Bar -->
             <div class="fulfillment-glass-bar">
               <button type="button" class="outlet-selector-btn" id="outletSelectBtn">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-5.7-7-11a7 7 0 1 1 14 0c0 5.3-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>
@@ -183,6 +183,9 @@
               <span class="delivery-fee-pill" id="deliveryFeePill">+Rp12.000</span>
             </div>
 
+            <!-- 3. Directly Below Location: Featured Promo Banner Carousel -->
+            <div class="promo-carousel" id="promoCarousel" aria-label="Featured promotions"></div>
+
             <!-- Live Active Order Status Banner -->
             <button type="button" class="active-order-banner" id="homeActiveOrderBanner" hidden>
               <span class="live-pulse"></span>
@@ -192,26 +195,6 @@
               </span>
               <span class="banner-order-arrow">&rarr;</span>
             </button>
-
-            <!-- Search Bar -->
-            <div class="search-glass-wrap">
-              <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                <circle cx="11" cy="11" r="7" />
-                <path d="M20 20l-3.5-3.5" />
-              </svg>
-              <input
-                type="search"
-                id="menuSearchInput"
-                class="search-glass-input"
-                placeholder="Search matcha, aren latte, croissant, panini, merch..."
-                autocomplete="off"
-                aria-label="Search menu"
-              />
-              <button type="button" class="search-clear-btn" id="searchClearBtn" hidden aria-label="Clear search">&times;</button>
-            </div>
-
-            <!-- Featured Promo Banner Carousel -->
-            <div class="promo-carousel" id="promoCarousel" aria-label="Featured promotions"></div>
 
             <!-- Order Again Quick Strip (Starbucks / Fore style 1-Tap Reorder!) -->
             <div class="order-again-block" id="orderAgainBlock" hidden>
@@ -250,7 +233,7 @@
           <div class="content-wrap">
             <div class="page-head">
               <div>
-                <p class="page-kicker">GOOD GIRL REWARDS</p>
+                <p class="page-kicker">KOTA COFFEE REWARDS</p>
                 <h1 class="page-title">PROMO, STAMPS &amp; VOUCHERS</h1>
               </div>
               <span class="active-voucher-pill" id="promoAppliedPill" hidden>1 Applied</span>
@@ -482,7 +465,7 @@
 
                 <!-- Post-Serve 5-Star Rating Card (Appears when Order Complete!) -->
                 <div class="rating-card" id="orderRatingCard" hidden>
-                  <p class="rating-prompt">How was your GOOD GIRL brew?</p>
+                  <p class="rating-prompt">How was your KOTA brew?</p>
                   <div class="rating-stars-row" id="ratingStarsRow">
                     <button type="button" class="star-btn" data-star="1">★</button>
                     <button type="button" class="star-btn" data-star="2">★</button>
@@ -501,10 +484,7 @@
                 <!-- Restaurant Support & Call -->
                 <div class="order-card-lower">
                   <button type="button" class="brand-badge" id="trackerBrandBtn" aria-label="Back to menu">
-                    <svg viewBox="0 0 56 56" class="goodgirl-svg" aria-hidden="true">
-                      <text x="28" y="25" text-anchor="middle" class="gg-text">GOOD</text>
-                      <text x="28" y="42" text-anchor="middle" class="gg-text">GIRL</text>
-                    </svg>
+                    <svg class="brand-coffee-svg" aria-hidden="true"><use href="#kotaCoffeeIcon" /></svg>
                   </button>
 
                   <div class="support-copy">
@@ -574,10 +554,7 @@
                     <p class="member-tier-sub">Earn 1 pt per Rp1.000 • 2&times; with GG Pay</p>
                   </div>
                   <div class="brand-badge brand-badge-sm">
-                    <svg viewBox="0 0 56 56" class="goodgirl-svg" aria-hidden="true">
-                      <text x="28" y="25" text-anchor="middle" class="gg-text">GOOD</text>
-                      <text x="28" y="42" text-anchor="middle" class="gg-text">GIRL</text>
-                    </svg>
+                    <svg class="brand-coffee-svg" aria-hidden="true"><use href="#kotaCoffeeIcon" /></svg>
                   </div>
                 </div>
 
@@ -646,15 +623,12 @@
       </section>
 
       <!-- ================================================================
-           ADAPTIVE PER-ITEM PRODUCT DETAIL SHEET (Pro Customizer + Add-ons!)
+           ADAPTIVE PER-ITEM PRODUCT DETAIL SHEET (Single Clean Rising Sheet!)
            ================================================================ -->
       <section class="screen screen-detail" id="screenDetail" aria-label="Product Detail" aria-hidden="true">
         <div class="detail-desktop-scrim" id="detailDesktopScrim" aria-hidden="true"></div>
 
         <div class="detail-frame-container">
-          <div class="product-top-backdrop" id="productTopBackdrop" aria-hidden="true"></div>
-          <div class="stacked-sheet-ghost" aria-hidden="true"></div>
-
           <div class="product-glass-sheet" id="productGlassSheet">
             <div class="product-inner-glow" aria-hidden="true">
               <div class="inner-orb inner-orb-top"></div>
@@ -932,12 +906,9 @@
           <div class="sheet-handle-bar" data-close-modal="call"><span class="sheet-handle-pill"></span></div>
           <div class="call-sheet-hero">
             <div class="brand-badge brand-badge-lg">
-              <svg viewBox="0 0 56 56" class="goodgirl-svg" aria-hidden="true">
-                <text x="28" y="25" text-anchor="middle" class="gg-text">GOOD</text>
-                <text x="28" y="42" text-anchor="middle" class="gg-text">GIRL</text>
-              </svg>
+              <svg class="brand-coffee-svg" aria-hidden="true"><use href="#kotaCoffeeIcon" /></svg>
             </div>
-            <h3 class="call-sheet-title" id="callSheetTitle">GOOD GIRL Botanical Lab</h3>
+            <h3 class="call-sheet-title" id="callSheetTitle">KOTA Coffee &amp; Botanical Bar</h3>
             <p class="call-sheet-meta">Open until 22:00 WIB</p>
             <p class="call-sheet-phone">+62 21 5098 4210</p>
           </div>
@@ -957,8 +928,8 @@
     </div>
   </main>
 
-  <script src="menu-data.js?v=3.1"></script>
-  <script src="pos-bridge.js?v=3.1"></script>
-  <script src="app.js?v=3.1" defer></script>
+  <script src="menu-data.js?v=3.3"></script>
+  <script src="pos-bridge.js?v=3.3"></script>
+  <script src="app.js?v=3.3" defer></script>
 </body>
 </html>
