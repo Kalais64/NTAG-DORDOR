@@ -70,7 +70,10 @@
 
   const runtime = {
     backendOnline: false,
-    lanUrl: global.location ? global.location.origin : 'http://127.0.0.1:8765',
+    lanUrl:
+      global.location && global.location.protocol !== 'file:' && global.location.origin !== 'null'
+        ? global.location.origin
+        : 'http://127.0.0.1:8765',
     orders: null,
     stock: null,
     member: null,
