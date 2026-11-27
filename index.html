@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <meta name="theme-color" content="#f5faf3" />
+  <meta name="theme-color" content="#f1f4f2" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <title>KOTA COFFEE — Specialty Café Ordering &amp; Live POS</title>
@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@400;500;600;700&family=Oxanium:wght@500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=3.3" />
+  <link rel="stylesheet" href="styles.css?v=4.0" />
 </head>
 <body class="show-statusbar">
   <!-- Shared SVG Icon Definitions (KOTA Coffee Emblem) -->
@@ -26,7 +26,7 @@
     </defs>
   </svg>
 
-  <!-- Ambient Botanical Backdrop -->
+  <!-- Ambient Backdrop -->
   <div class="desktop-backdrop" aria-hidden="true">
     <div class="ambient-orb orb-1"></div>
     <div class="ambient-orb orb-2"></div>
@@ -42,8 +42,8 @@
     </div>
 
     <nav class="toolbar-segmented" role="tablist" aria-label="App views">
-      <button type="button" class="toolbar-tab is-active" data-nav-view="menu" role="tab" aria-selected="true">Menu</button>
-      <button type="button" class="toolbar-tab" data-nav-view="promo" role="tab" aria-selected="false">Promo</button>
+      <button type="button" class="toolbar-tab is-active" data-nav-view="home" role="tab" aria-selected="true">Home</button>
+      <button type="button" class="toolbar-tab" data-nav-view="menu" role="tab" aria-selected="false">Menu</button>
       <button type="button" class="toolbar-tab" data-nav-view="bag" role="tab" aria-selected="false">Bag <span class="toolbar-bag-pill" id="toolbarBagBadge" hidden>0</span></button>
       <button type="button" class="toolbar-tab" data-nav-view="orders" role="tab" aria-selected="false">Orders</button>
       <button type="button" class="toolbar-tab" data-nav-view="me" role="tab" aria-selected="false">Me</button>
@@ -65,9 +65,9 @@
     </div>
   </header>
 
-  <!-- Main Responsive Stage (Full-Width Web on Desktop, Native App on Mobile, Toggleable Phone Frame) -->
+  <!-- Main Responsive Stage -->
   <main class="mobile-stage">
-    <div class="phone-shell" id="phoneShell" data-view="menu">
+    <div class="phone-shell" id="phoneShell" data-view="home">
 
       <!-- Optional iOS Status Bar (visible ONLY in Phone View preview on desktop) -->
       <header class="ios-statusbar" id="iosStatusBar" aria-hidden="true">
@@ -94,75 +94,81 @@
       </header>
 
       <!-- ================================================================
-           VIEW 1: MENU HOME (Outlet, 3 Modes, Order Again, Promo, 23-Item Grid)
+           VIEW 1: HOME (Curated Storefront: Event Hero, Quick Order, Stamps, Specials)
            ================================================================ -->
-      <section class="screen screen-menu is-active" id="screenMenu" aria-label="Menu Home">
-        <div class="ambient-layer menu-ambient" aria-hidden="true">
+      <section class="screen screen-home is-active" id="screenHome" aria-label="Home">
+        <div class="ambient-layer home-ambient" aria-hidden="true">
           <div class="a-orb a-orb-lime"></div>
           <div class="a-orb a-orb-ocean"></div>
-          <div class="a-orb a-orb-cyan"></div>
         </div>
 
-        <div class="scroll-body menu-scroll">
-          <div class="content-wrap">
-            <!-- Greeting & Header Tools -->
+        <div class="scroll-body home-scroll">
+          <div class="content-wrap home-content-stack">
+            <!-- Top Brand & Greeting Header -->
             <div class="home-header">
               <div class="home-brand-left">
                 <div class="brand-badge brand-badge-sm" aria-label="KOTA Coffee Logo">
                   <svg class="brand-coffee-svg" aria-hidden="true"><use href="#kotaCoffeeIcon" /></svg>
                 </div>
                 <div class="home-greeting">
-                  <h1>Good to see you, <span id="homeMemberName">Mochi</span>!</h1>
+                  <h1>Halo, <span id="homeMemberName">Mochi</span>!</h1>
                   <p id="homeSyncLabel">KOTA Coffee • Live POS Connected</p>
                 </div>
               </div>
 
               <div class="home-header-actions">
+                <button type="button" class="theme-mini-btn event-bell-btn" id="homeEventBellBtn" aria-label="New seasonal launch event">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                  <span class="bell-new-dot" aria-hidden="true"></span>
+                </button>
                 <button type="button" class="theme-mini-btn" id="homeThemeBtn" data-theme-toggle aria-label="Switch theme">
                   <span class="theme-pill-icon" aria-hidden="true"></span>
-                </button>
-                <button type="button" class="points-chip" id="homePointsChip" aria-label="View membership points">
-                  <svg class="pts-star-svg" width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.6 6.8L21.5 12l-6.9 3.2L12 22l-2.6-6.8L2.5 12l6.9-3.2L12 2Z"/></svg>
-                  <span id="homePointsVal">840</span>
                 </button>
               </div>
             </div>
 
-            <!-- 1. Search Bar AT THE TOP -->
-            <div class="search-glass-wrap">
-              <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                <circle cx="11" cy="11" r="7" />
-                <path d="M20 20l-3.5-3.5" />
-              </svg>
-              <input
-                type="search"
-                id="menuSearchInput"
-                class="search-glass-input"
-                placeholder="Search coffee, matcha, aren latte, croissant, panini..."
-                autocomplete="off"
-                aria-label="Search menu"
-              />
-              <button type="button" class="search-clear-btn" id="searchClearBtn" hidden aria-label="Clear search">&times;</button>
+            <!-- 1. Hero New Product Launch & Event Slider -->
+            <div class="hero-event-wrap">
+              <div class="hero-event-carousel" id="homeEventCarousel" aria-label="New product launches and events"></div>
+              <div class="hero-event-dots" id="homeEventDots" role="tablist" aria-label="Event slides"></div>
             </div>
 
-            <!-- 2. Outlet Location + 3 Fulfillment Modes Bar -->
-            <div class="fulfillment-glass-bar">
-              <button type="button" class="outlet-selector-btn" id="outletSelectBtn">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-5.7-7-11a7 7 0 1 1 14 0c0 5.3-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>
-                <span class="outlet-btn-copy">
-                  <strong id="activeOutletName">Senopati Flagship</strong>
-                  <small id="activeOutletMeta">0.4 km • ~5 min</small>
-                </span>
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
-              </button>
-
-              <div class="mode-controls-right">
+            <!-- 2. Crisp Floating Quick-Order & Points Card (Kopi Kenangan inspired clarity) -->
+            <div class="quick-order-card">
+              <div class="qo-top-row">
                 <div class="mode-segmented" role="radiogroup" aria-label="Order mode">
                   <button type="button" class="mode-opt is-active" data-order-mode="dine-in" role="radio" aria-checked="true">Dine-In</button>
                   <button type="button" class="mode-opt" data-order-mode="pickup" role="radio" aria-checked="false">Pick Up</button>
                   <button type="button" class="mode-opt" data-order-mode="delivery" role="radio" aria-checked="false">Delivery</button>
                 </div>
 
+                <button type="button" class="qo-points-pill" id="homePointsChip" aria-label="View membership points">
+                  <div class="qo-pts-meta">
+                    <span class="qo-pts-label" id="homeTierMini">Emerald</span>
+                    <strong class="qo-pts-num"><span id="homePointsVal">840</span> pts</strong>
+                  </div>
+                  <svg class="pts-star-svg" width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.6 6.8L21.5 12l-6.9 3.2L12 22l-2.6-6.8L2.5 12l6.9-3.2L12 2Z"/></svg>
+                </button>
+              </div>
+
+              <div class="qo-divider"></div>
+
+              <div class="qo-outlet-row">
+                <button type="button" class="outlet-selector-btn" id="outletSelectBtn">
+                  <span class="qo-pin-circle">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-5.7-7-11a7 7 0 1 1 14 0c0 5.3-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>
+                  </span>
+                  <span class="outlet-btn-copy">
+                    <strong id="activeOutletName">Senopati Flagship</strong>
+                    <small id="activeOutletMeta">0.4 km • ~5 min</small>
+                  </span>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+                </button>
+
+                <button type="button" class="qo-order-cta" id="homeOrderNowBtn">Order Now &rarr;</button>
+              </div>
+
+              <div class="qo-sub-controls">
                 <button type="button" class="table-pill" id="tableSelectBtn" aria-label="Select table number">
                   <span class="table-dot"></span>
                   <span id="tableNumberLabel">Table 07</span>
@@ -173,20 +179,21 @@
                   <span id="pickupSlotLabel">Now (~5 min)</span>
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
                 </button>
+
+                <button type="button" class="qo-promo-shortcut" id="homePromoShortcutBtn">
+                  <span>% Vouchers &amp; Rewards</span>
+                </button>
+              </div>
+
+              <!-- Delivery Address Bar (only shown in Delivery mode) -->
+              <div class="delivery-address-bar" id="deliveryAddressBar" hidden>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 11l18-8-8 18-2-8-8-2Z"/></svg>
+                <input type="text" id="deliveryAddressInput" class="delivery-input" placeholder="Masukkan alamat pengiriman (mis. Jl. Gunawarman No. 12)..." value="Jl. Gunawarman No. 12, Kebayoran Baru" />
+                <span class="delivery-fee-pill" id="deliveryFeePill">+Rp12.000</span>
               </div>
             </div>
 
-            <!-- Delivery Address Bar (only shown in Delivery mode) -->
-            <div class="delivery-address-bar" id="deliveryAddressBar" hidden>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 11l18-8-8 18-2-8-8-2Z"/></svg>
-              <input type="text" id="deliveryAddressInput" class="delivery-input" placeholder="Enter delivery address (e.g. Jl. Gunawarman No. 12)..." value="Jl. Gunawarman No. 12, Kebayoran Baru" />
-              <span class="delivery-fee-pill" id="deliveryFeePill">+Rp12.000</span>
-            </div>
-
-            <!-- 3. Directly Below Location: Featured Promo Banner Carousel -->
-            <div class="promo-carousel" id="promoCarousel" aria-label="Featured promotions"></div>
-
-            <!-- Live Active Order Status Banner -->
+            <!-- Live Active Order Status Banner (Shown only when an order is running) -->
             <button type="button" class="active-order-banner" id="homeActiveOrderBanner" hidden>
               <span class="live-pulse"></span>
               <span class="banner-order-copy">
@@ -196,32 +203,114 @@
               <span class="banner-order-arrow">&rarr;</span>
             </button>
 
-            <!-- Order Again Quick Strip (Starbucks / Fore style 1-Tap Reorder!) -->
-            <div class="order-again-block" id="orderAgainBlock" hidden>
-              <div class="menu-section-head">
-                <h2>ORDER AGAIN</h2>
-                <span>1-tap quick add</span>
+            <!-- 3. Visual 5-Stamp Collection Card right on Home! -->
+            <section class="home-section-card home-stamp-card" aria-label="Brew Stamp Mission">
+              <div class="home-sec-head">
+                <div>
+                  <h2 class="home-sec-title">Order &amp; Koleksi Stamp!</h2>
+                  <p class="home-sec-sub">5 pesanan &rarr; 1 minuman Signature gratis</p>
+                </div>
+                <strong class="home-stamp-pill" id="homeStampCount">3 / 5</strong>
+              </div>
+              <div class="home-stamp-track" id="homeStampTrack"></div>
+            </section>
+
+            <!-- 4. Spesial Hari Ini & New Launch Deals (Strikethrough prices + Lihat Semua) -->
+            <section class="home-section-block" aria-label="Spesial Hari Ini">
+              <div class="home-sec-head">
+                <div>
+                  <h2 class="home-sec-title">Spesial Hari Ini &amp; Produk Baru</h2>
+                  <p class="home-sec-sub">Harga promo peluncuran seri musiman</p>
+                </div>
+                <button type="button" class="home-see-all-btn" id="homeSeeAllMenuBtn">Lihat Semua &rarr;</button>
+              </div>
+              <div class="home-specials-row" id="homeSpecialsRow"></div>
+            </section>
+
+            <!-- 5. Event & Seasonal Series Spotlight -->
+            <section class="home-section-block" aria-label="Event dan Seri Musiman">
+              <div class="home-sec-head">
+                <div>
+                  <h2 class="home-sec-title">Event &amp; Promo Spesial</h2>
+                  <p class="home-sec-sub">Tap event untuk lihat katalog &amp; klaim voucher</p>
+                </div>
+                <button type="button" class="home-see-all-btn" id="homeSeeAllPromoBtn">Voucher &rarr;</button>
+              </div>
+              <div class="home-events-grid" id="homeEventsGrid"></div>
+            </section>
+
+            <!-- 6. Order Again Quick Strip -->
+            <section class="home-section-block order-again-block" id="orderAgainBlock" hidden aria-label="Order Again">
+              <div class="home-sec-head">
+                <div>
+                  <h2 class="home-sec-title">Pesan Lagi</h2>
+                  <p class="home-sec-sub">Tambah cepat minuman terakhir kamu</p>
+                </div>
               </div>
               <div class="order-again-row" id="orderAgainRow"></div>
+            </section>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================
+           VIEW 2: MENU (Dedicated Clean 26-Item Ordering Catalog)
+           ================================================================ -->
+      <section class="screen screen-menu" id="screenMenu" aria-label="Menu Catalog" aria-hidden="true">
+        <div class="ambient-layer menu-ambient" aria-hidden="true">
+          <div class="a-orb a-orb-lime"></div>
+          <div class="a-orb a-orb-cyan"></div>
+        </div>
+
+        <div class="scroll-body menu-scroll">
+          <div class="content-wrap">
+            <!-- Clean Menu Header + Active Store Pill -->
+            <div class="menu-top-bar">
+              <div>
+                <p class="page-kicker">KOTA COFFEE CATALOG</p>
+                <h1 class="page-title">PILIH MENU</h1>
+              </div>
+              <button type="button" class="menu-store-chip" id="menuOutletChip">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 21s-7-5.7-7-11a7 7 0 1 1 14 0c0 5.3-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>
+                <span id="menuOutletChipText">Senopati • T07</span>
+              </button>
             </div>
 
-            <!-- 7 Category Filter Pills (All + 6 Categories) -->
+            <!-- Search Bar AT THE TOP of Menu -->
+            <div class="search-glass-wrap">
+              <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <circle cx="11" cy="11" r="7" />
+                <path d="M20 20l-3.5-3.5" />
+              </svg>
+              <input
+                type="search"
+                id="menuSearchInput"
+                class="search-glass-input"
+                placeholder="Cari cheesecake, matcha, aren latte, croissant, panini..."
+                autocomplete="off"
+                aria-label="Search menu"
+              />
+              <button type="button" class="search-clear-btn" id="searchClearBtn" hidden aria-label="Clear search">&times;</button>
+            </div>
+
+            <!-- 7 Category Filter Pills -->
             <div class="category-pills" id="categoryPills" role="tablist" aria-label="Menu categories"></div>
 
             <!-- Menu Grid Header -->
             <div class="menu-section-head">
-              <h2 id="menuGridHeading">ALL BOTANICAL MENU</h2>
-              <span id="menuGridCount">23 items</span>
+              <h2 id="menuGridHeading">ALL SPECIALTY MENU</h2>
+              <span id="menuGridCount">26 items</span>
             </div>
 
-            <!-- Responsive 2 / 3 / 4-Column Concave-Notched Menu Grid -->
+            <!-- Clean Rounded Dual-Tone Menu Grid -->
             <div class="menu-grid" id="menuGrid" role="list"></div>
           </div>
         </div>
       </section>
 
       <!-- ================================================================
-           VIEW 2: PROMO, STAMP MISSION, VOUCHERS & REWARDS STORE
+           SUB-VIEW: PROMO, STAMP MISSION, VOUCHERS & REWARDS STORE
+           (Accessible from Home "Voucher →" & Me "Rewards")
            ================================================================ -->
       <section class="screen screen-promo" id="screenPromo" aria-label="Promotions and Rewards" aria-hidden="true">
         <div class="ambient-layer promo-ambient" aria-hidden="true">
@@ -232,14 +321,19 @@
         <div class="scroll-body tab-scroll">
           <div class="content-wrap">
             <div class="page-head">
-              <div>
-                <p class="page-kicker">KOTA COFFEE REWARDS</p>
-                <h1 class="page-title">PROMO, STAMPS &amp; VOUCHERS</h1>
+              <div class="promo-head-left">
+                <button type="button" class="subpage-back-btn" id="promoBackBtn" aria-label="Back to Home">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
+                </button>
+                <div>
+                  <p class="page-kicker">KOTA COFFEE REWARDS</p>
+                  <h1 class="page-title">PROMO &amp; VOUCHERS</h1>
+                </div>
               </div>
               <span class="active-voucher-pill" id="promoAppliedPill" hidden>1 Applied</span>
             </div>
 
-            <!-- 5-Brew Stamp Card Mission (Kopi Kenangan / Fore Style) -->
+            <!-- 5-Brew Stamp Card Mission -->
             <div class="stamp-mission-card">
               <div class="stamp-mission-head">
                 <div>
@@ -253,7 +347,7 @@
 
             <!-- Promo Code Quick Input -->
             <form class="voucher-input-row" id="promoCodeForm">
-              <input type="text" id="promoCodeInput" class="glass-text-input" placeholder="Enter voucher code (e.g. MATCHA20)" autocomplete="off" />
+              <input type="text" id="promoCodeInput" class="glass-text-input" placeholder="Masukkan kode voucher (BERRY15, MATCHA20)" autocomplete="off" />
               <button type="submit" class="apply-code-btn">Apply</button>
             </form>
 
@@ -285,9 +379,9 @@
       </section>
 
       <!-- ================================================================
-           VIEW 3: MY BAG (2-Col Responsive Checkout, Upsell, Merge, Voucher)
+           VIEW 3: MY BAG / CHECKOUT (Clean Route Timeline + Direct Payment List)
            ================================================================ -->
-      <section class="screen screen-bag" id="screenBag" aria-label="My Bag" aria-hidden="true">
+      <section class="screen screen-bag" id="screenBag" aria-label="Checkout and Bag" aria-hidden="true">
         <div class="ambient-layer bag-ambient" aria-hidden="true">
           <div class="a-orb a-orb-ocean"></div>
           <div class="a-orb a-orb-lime"></div>
@@ -297,7 +391,7 @@
           <div class="content-wrap bag-content-wrap">
             <div class="page-head bag-head">
               <div>
-                <p class="page-kicker">CHECKOUT TRAY</p>
+                <p class="page-kicker">CHECKOUT</p>
                 <h1 class="page-title">MY BAG <span class="bag-count-inline" id="bagHeaderCount">(0)</span></h1>
               </div>
               <button type="button" class="add-more-pill" id="bagAddMoreBtn">Add Order +</button>
@@ -306,32 +400,52 @@
             <div class="bag-scroll">
               <div class="bag-responsive-grid">
                 <div class="bag-left-col">
-                  <!-- Fulfillment Mode & Merge Active Order Bar -->
-                  <div class="bag-mode-card">
-                    <div class="bag-mode-top">
-                      <div>
-                        <span class="bag-mode-label" id="bagModeSummary">Dine-In • Table 07</span>
-                        <p class="bag-mode-sub" id="bagOutletSummary">Senopati Flagship • Direct to Barista POS</p>
+                  <!-- Clean Route Timeline Card (Store -> Table / Delivery Destination) -->
+                  <div class="bag-mode-card route-timeline-card">
+                    <div class="route-timeline">
+                      <div class="route-stop">
+                        <span class="route-pin is-store"></span>
+                        <div class="route-copy">
+                          <small>KOTA Coffee Outlet</small>
+                          <strong id="bagOutletSummary">Senopati Flagship</strong>
+                        </div>
+                        <button type="button" class="mini-glass-btn" id="bagChangeModeBtn">Ubah</button>
                       </div>
-                      <button type="button" class="mini-glass-btn" id="bagChangeModeBtn">Change</button>
+                      <div class="route-line" aria-hidden="true"></div>
+                      <div class="route-stop">
+                        <span class="route-pin is-dest"></span>
+                        <div class="route-copy">
+                          <small id="bagModeKicker">Metode Pesanan</small>
+                          <strong id="bagModeSummary">Dine-In • Table 07</strong>
+                        </div>
+                      </div>
                     </div>
 
                     <label class="merge-toggle-row" id="mergeToggleRow" hidden>
                       <span class="merge-toggle-copy">
-                        <strong>Merge into active order <span id="mergeTargetId">#GG-041</span></strong>
-                        <small>Combine with your current table ticket at POS</small>
+                        <strong>Gabung ke order aktif <span id="mergeTargetId">#GG-041</span></strong>
+                        <small>Satukan ke tiket meja yang sedang berjalan di POS</small>
                       </span>
                       <input type="checkbox" id="mergeOrderCheckbox" class="glass-switch" />
                     </label>
                   </div>
 
-                  <!-- Cart Item Cards -->
-                  <div class="bag-items-list" id="bagItemsList"></div>
+                  <!-- Order Summary Box with Branded Emerald Strip -->
+                  <div class="checkout-order-box">
+                    <div class="checkout-order-strip">
+                      <span class="checkout-strip-left">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"><path d="M6 8h12l-1 12H7L6 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+                        <span>Pesanan Kamu</span>
+                      </span>
+                      <strong id="bagStripCount">0 items</strong>
+                    </div>
+                    <div class="bag-items-list" id="bagItemsList"></div>
+                  </div>
 
                   <!-- Smart Pastry / Brunch Upsell Strip -->
                   <div class="bag-upsell-block" id="bagUpsellBlock">
                     <div class="section-label-row">
-                      <h2>COMPLETE YOUR ORDER</h2>
+                      <h2>LENGKAPI PESANANMU</h2>
                       <span>Fresh pairings</span>
                     </div>
                     <div class="bag-upsell-row" id="bagUpsellRow"></div>
@@ -339,17 +453,26 @@
                 </div>
 
                 <div class="bag-right-col">
-                  <!-- Have a Voucher Trigger Row -->
+                  <!-- Voucher Card -->
                   <button type="button" class="voucher-trigger-row" id="bagVoucherTrigger">
                     <span class="voucher-trigger-left">
                       <span class="voucher-icon-pill">%</span>
                       <span class="voucher-trigger-copy">
-                        <strong id="bagVoucherTitle">Have a voucher?</strong>
-                        <small id="bagVoucherSub">Tap to pick a promo or redeemed reward</small>
+                        <strong id="bagVoucherTitle">Punya kode voucher?</strong>
+                        <small id="bagVoucherSub">Tap untuk pilih promo BERRY15 / MATCHA20</small>
                       </span>
                     </span>
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
                   </button>
+
+                  <!-- Direct Vertical Payment Options List (OVO, GoPay, DANA, ShopeePay, QRIS, VA, KOTA Pay!) -->
+                  <div class="direct-pay-card">
+                    <div class="direct-pay-head">
+                      <h3>Pilih Opsi Pembayaran</h3>
+                      <span>Instan &amp; terverifikasi</span>
+                    </div>
+                    <div class="direct-pay-list" id="bagDirectPayList" role="radiogroup" aria-label="Payment method"></div>
+                  </div>
 
                   <!-- Price Breakdown Card -->
                   <div class="bag-summary-card" id="bagSummaryCard">
@@ -358,23 +481,23 @@
                       <span id="bagSubtotal">Rp0</span>
                     </div>
                     <div class="sum-row" id="bagDeliveryRow" hidden>
-                      <span>Delivery Fee</span>
+                      <span>Ongkir Delivery</span>
                       <span id="bagDeliveryVal">Rp12.000</span>
                     </div>
                     <div class="sum-row sum-discount" id="bagDiscountRow" hidden>
-                      <span id="bagDiscountLabel">Voucher Discount</span>
+                      <span id="bagDiscountLabel">Diskon Voucher</span>
                       <span id="bagDiscountVal">-Rp0</span>
                     </div>
                     <div class="sum-row">
-                      <span>Service &amp; Packaging</span>
-                      <span class="sum-free">Included</span>
+                      <span>Biaya Layanan</span>
+                      <span class="sum-free">Gratis</span>
                     </div>
                     <div class="sum-row">
-                      <span>Member Points Earned</span>
+                      <span>Poin Didapat</span>
                       <span class="sum-pts" id="bagPointsEarn">+0 pts</span>
                     </div>
                     <div class="sum-row sum-total">
-                      <span>Total</span>
+                      <span>Total Bayar</span>
                       <span id="bagTotal">Rp0</span>
                     </div>
                   </div>
@@ -386,7 +509,7 @@
                       <strong id="bagPayTotal">Rp0</strong>
                     </div>
                     <button type="button" class="pay-now-btn" id="payNowBtn" disabled>
-                      <span>Pay Now</span>
+                      <span id="payNowBtnText">Bayar Sekarang</span>
                       <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
                     </button>
                   </div>
@@ -410,7 +533,7 @@
         <div class="orders-scroll">
           <div class="content-wrap orders-responsive-grid">
             <div class="orders-left-col">
-              <!-- Active Order Liquid-Glass Card -->
+              <!-- Active Order Card -->
               <article class="order-glass-card" id="activeOrderCard" aria-label="Active order status">
                 <div class="order-card-upper">
                   <button type="button" class="order-thumb-glass" id="trackerDrinkThumbBtn" aria-label="View item details">
@@ -447,15 +570,14 @@
                   <button type="button" class="stage-pill" data-stage="complete">Complete</button>
                 </div>
 
-                <!-- Utility Row: Receipt, Open POS, Cancel (only when Received) -->
                 <div class="tracker-utility-row">
                   <button type="button" class="utility-glass-btn" id="openReceiptBtn">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2V3Z"/><path d="M9 8h6M9 12h6M9 16h4"/></svg>
-                    <span>Order Receipt</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2V3Z"/><path d="M9 8h6M9 12h6"/></svg>
+                    <span>Digital Receipt</span>
                   </button>
                   <a href="pos.html" target="_blank" rel="noopener" class="utility-glass-btn utility-pos-btn">
-                    <span class="live-dot-sm"></span>
-                    <span>Open Live POS &nearr;</span>
+                    <span>Open Live POS</span>
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
                   </a>
                 </div>
 
@@ -463,7 +585,7 @@
                   Cancel Order (Available before Preparing)
                 </button>
 
-                <!-- Post-Serve 5-Star Rating Card (Appears when Order Complete!) -->
+                <!-- Post-Serve 5-Star Rating Card -->
                 <div class="rating-card" id="orderRatingCard" hidden>
                   <p class="rating-prompt">How was your KOTA brew?</p>
                   <div class="rating-stars-row" id="ratingStarsRow">
@@ -483,7 +605,7 @@
 
                 <!-- Restaurant Support & Call -->
                 <div class="order-card-lower">
-                  <button type="button" class="brand-badge" id="trackerBrandBtn" aria-label="Back to menu">
+                  <button type="button" class="brand-badge" id="trackerBrandBtn" aria-label="Back to home">
                     <svg class="brand-coffee-svg" aria-hidden="true"><use href="#kotaCoffeeIcon" /></svg>
                   </button>
 
@@ -502,12 +624,12 @@
             </div>
 
             <div class="orders-right-col">
-              <!-- Pairing Liquid-Glass Sheet -->
-              <section class="pairing-glass-sheet" id="pairingSheet" aria-label="Match for your matcha desserts">
+              <!-- Pairing Sheet -->
+              <section class="pairing-glass-sheet" id="pairingSheet" aria-label="Match for your brew">
                 <div class="sheet-handle-bar" aria-hidden="true"><span class="sheet-handle-pill"></span></div>
 
                 <div class="pairing-header">
-                  <h2 class="pairing-title">MATCH FOR YOUR MATCHA?</h2>
+                  <h2 class="pairing-title">MATCH FOR YOUR BREW?</h2>
                   <p class="pairing-subtitle">Here’s our finest desserts, pastry &amp; brunch.</p>
                 </div>
 
@@ -527,7 +649,7 @@
       </section>
 
       <!-- ================================================================
-           VIEW 5: ME (Membership Card, GG Pay, Favorites, Theme, POS Portal)
+           VIEW 5: ME (Membership Card, Wallet, Rewards Shortcut, Theme, POS)
            ================================================================ -->
       <section class="screen screen-me" id="screenMe" aria-label="Member Account" aria-hidden="true">
         <div class="ambient-layer me-ambient" aria-hidden="true">
@@ -546,12 +668,12 @@
             </div>
 
             <div class="me-responsive-grid">
-              <!-- Holographic Membership Card -->
+              <!-- Membership Card -->
               <div class="member-glass-card">
                 <div class="member-card-top">
                   <div>
                     <span class="member-tier-badge" id="meTierBadge">EMERALD MEMBER</span>
-                    <p class="member-tier-sub">Earn 1 pt per Rp1.000 • 2&times; with GG Pay</p>
+                    <p class="member-tier-sub">Earn 1 pt per Rp1.000 • 2&times; with KOTA Pay</p>
                   </div>
                   <div class="brand-badge brand-badge-sm">
                     <svg class="brand-coffee-svg" aria-hidden="true"><use href="#kotaCoffeeIcon" /></svg>
@@ -572,7 +694,7 @@
 
                 <div class="member-wallet-row">
                   <div>
-                    <span class="wallet-label">GG MEMBER PAY BALANCE</span>
+                    <span class="wallet-label">KOTA MEMBER PAY BALANCE</span>
                     <strong class="wallet-balance" id="meWalletBalance">Rp250.000</strong>
                   </div>
                   <button type="button" class="topup-pill-btn" id="topUpWalletBtn">+ Top Up Rp100k</button>
@@ -580,11 +702,20 @@
               </div>
 
               <div class="me-side-stack">
+                <!-- Vouchers & Rewards Shortcut -->
+                <button type="button" class="appearance-glass-card me-rewards-btn" id="meRewardsPortalBtn">
+                  <div class="appearance-copy">
+                    <strong>Vouchers, Stamps &amp; Rewards Store</strong>
+                    <small>Klaim BERRY15, MATCHA20 &amp; tukar poin kamu</small>
+                  </div>
+                  <span class="pos-portal-arrow">&rarr;</span>
+                </button>
+
                 <!-- Appearance Toggle -->
                 <div class="appearance-glass-card">
                   <div class="appearance-copy">
                     <strong>App Theme Style</strong>
-                    <small id="meThemeDesc">Fresh White &amp; Matcha Green Glass</small>
+                    <small id="meThemeDesc">Fresh White &amp; Matcha Green</small>
                   </div>
                   <div class="appearance-segmented" role="radiogroup" aria-label="Theme preference">
                     <button type="button" class="appearance-opt is-active" data-set-theme="light" role="radio" aria-checked="true">
@@ -623,7 +754,57 @@
       </section>
 
       <!-- ================================================================
-           ADAPTIVE PER-ITEM PRODUCT DETAIL SHEET (Single Clean Rising Sheet!)
+           OVERLAY 1: EVENT & NEW PRODUCT LAUNCH PAGE (Single Rising Sheet!)
+           ================================================================ -->
+      <section class="screen screen-event" id="screenEvent" aria-label="Seasonal Event Launch" aria-hidden="true">
+        <div class="event-scrim" id="eventScrim" aria-hidden="true"></div>
+        <div class="event-frame-container" id="eventFrameContainer">
+          <div class="event-sheet" id="eventSheet">
+            <div class="sheet-handle-bar event-handle-bar" id="eventHandleBar" role="button" tabindex="0" aria-label="Close event">
+              <span class="sheet-handle-pill"></span>
+            </div>
+
+            <div class="event-scroll" id="eventScroll">
+              <!-- Poster Visual Hero Header (Dynamic per Event!) -->
+              <div class="event-hero-poster" id="eventHeroPoster">
+                <button type="button" class="event-close-circle" id="eventCloseBtn" aria-label="Close event">&times;</button>
+                <div class="event-poster-badges">
+                  <span class="event-poster-badge" id="eventBadge">NEW LAUNCH</span>
+                  <span class="event-poster-period" id="eventPeriod">27 Nov – 31 Des</span>
+                </div>
+                <p class="event-poster-kicker" id="eventKicker">LIMITED SEASONAL DROP</p>
+                <h1 class="event-poster-title" id="eventTitle">Cheesecake Berrylicious Series</h1>
+                <p class="event-poster-sub" id="eventSubtitle"></p>
+
+                <div class="event-poster-lineup" id="eventHeroLineup"></div>
+
+                <div class="event-poster-price-row">
+                  <span class="event-price-tag" id="eventPriceTag">Mulai Rp28rb</span>
+                  <button type="button" class="event-claim-btn" id="eventClaimVoucherBtn">Klaim Voucher BERRY15</button>
+                </div>
+              </div>
+
+              <!-- Event Story & Featured Product Lineup -->
+              <div class="event-body">
+                <p class="event-story" id="eventStory"></p>
+
+                <div class="home-sec-head" style="margin-bottom: 12px;">
+                  <div>
+                    <h2 class="home-sec-title">Menu Seri Ini</h2>
+                    <p class="home-sec-sub">Tap produk untuk kustomisasi atau + tambah langsung</p>
+                  </div>
+                  <span class="event-count-pill" id="eventItemsCount">4 menu</span>
+                </div>
+
+                <div class="menu-grid event-items-grid" id="eventItemsGrid" role="list"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================
+           OVERLAY 2: ADAPTIVE PER-ITEM PRODUCT DETAIL SHEET (Single Rising Sheet!)
            ================================================================ -->
       <section class="screen screen-detail" id="screenDetail" aria-label="Product Detail" aria-hidden="true">
         <div class="detail-desktop-scrim" id="detailDesktopScrim" aria-hidden="true"></div>
@@ -642,7 +823,7 @@
 
             <!-- Topbar -->
             <div class="product-topbar">
-              <button type="button" class="neon-action-btn" id="detailBackBtn" aria-label="Back to menu">
+              <button type="button" class="neon-action-btn" id="detailBackBtn" aria-label="Back">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M19 12H5" />
                   <path d="M11 6l-6 6 6 6" />
@@ -668,7 +849,6 @@
                 <span class="detail-price-tag" id="detailUnitPrice">Rp42.000</span>
               </div>
 
-              <!-- Nutritional / Caffeine micro-strip -->
               <div class="detail-nutrition-row" id="detailNutritionRow"></div>
 
               <p class="product-description">
@@ -679,7 +859,7 @@
               <div class="flavor-chips-row" id="detailFlavorChips" role="list"></div>
               <div class="flavor-note-toast" id="detailFlavorNote" aria-live="polite"></div>
 
-              <!-- Hero Transparent PNG Showcase -->
+              <!-- Hero Transparent PNG Showcase (Scales smoothly with Small/Medium/Large!) -->
               <div class="hero-drink-stage" id="heroDrinkStage">
                 <div class="drink-halo" aria-hidden="true"></div>
                 <div class="drink-caustic-shadow" aria-hidden="true"></div>
@@ -708,19 +888,16 @@
                   <div class="style-cards-row" id="detailStyleRow" role="radiogroup"></div>
                 </div>
 
-                <!-- Milk Choice (for milk drinks) -->
                 <div class="custom-group" id="detailMilkGroup" hidden>
                   <span class="level-label">Milk Choice</span>
                   <div class="milk-pills-grid" id="detailMilkPills"></div>
                 </div>
 
-                <!-- Paid Add-Ons & Toppings -->
                 <div class="custom-group" id="detailAddonsGroup" hidden>
                   <span class="level-label">Add-Ons &amp; Toppings <small style="opacity:0.65;">(optional)</small></span>
                   <div class="addons-list" id="detailAddonsList"></div>
                 </div>
 
-                <!-- Sugar & Ice Levels -->
                 <div class="custom-group" id="detailLevelsGroup">
                   <div class="level-block">
                     <span class="level-label">Sugar Level</span>
@@ -740,7 +917,6 @@
                   </div>
                 </div>
 
-                <!-- Barista Note -->
                 <div class="custom-group">
                   <label class="custom-note-label" for="detailNoteInput">Note <span>(optional)</span></label>
                   <input type="text" id="detailNoteInput" class="glass-note-input" placeholder="Add a note for barista (e.g. extra foam, separate ice)..." maxlength="80" />
@@ -765,7 +941,7 @@
       </section>
 
       <!-- ================================================================
-           FLOATING LIQUID-GLASS MINI-CART BAR (Slides up when items added)
+           FLOATING LIQUID-GLASS MINI-CART BAR
            ================================================================ -->
       <button type="button" class="floating-minicart" id="floatingMiniCart" aria-label="View items in your bag" aria-hidden="true">
         <div class="minicart-left">
@@ -779,17 +955,17 @@
       </button>
 
       <!-- ================================================================
-           FLOATING 5-TAB BOTTOM DOCK (Mobile Native & Phone Preview Mode)
+           FLOATING 5-TAB BOTTOM DOCK (Home, Menu, Bag, Orders, Me)
            ================================================================ -->
       <nav class="glass-bottom-dock" id="bottomDock" aria-label="Mobile navigation">
-        <button type="button" class="dock-btn is-active" data-tab="menu" aria-current="page">
-          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 10h11v5a5 5 0 0 1-5 5H10a5 5 0 0 1-5-5v-5Z"/><path d="M16 11h2a2.5 2.5 0 0 1 0 5h-2"/><path d="M8 6c0-1 1-1.5 1-2.5M12 6c0-1 1-1.5 1-2.5"/></svg>
-          <span>Menu</span>
+        <button type="button" class="dock-btn is-active" data-tab="home" aria-current="page">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5L12 3l9 7.5"/><path d="M5.5 9.5V20h13V9.5"/><path d="M9.5 20v-5.5h5V20"/></svg>
+          <span>Home</span>
         </button>
 
-        <button type="button" class="dock-btn" data-tab="promo">
-          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v1.5a2 2 0 0 0 0 3V15a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-1.5a2 2 0 0 0 0-3V9Z"/><path d="M9.5 14.5l5-5"/><circle cx="9.5" cy="9.5" r="0.8" fill="currentColor"/><circle cx="14.5" cy="14.5" r="0.8" fill="currentColor"/></svg>
-          <span>Promo</span>
+        <button type="button" class="dock-btn" data-tab="menu">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 10h11v5a5 5 0 0 1-5 5H10a5 5 0 0 1-5-5v-5Z"/><path d="M16 11h2a2.5 2.5 0 0 1 0 5h-2"/><path d="M8 6c0-1 1-1.5 1-2.5M12 6c0-1 1-1.5 1-2.5"/></svg>
+          <span>Menu</span>
         </button>
 
         <button type="button" class="dock-btn" data-tab="bag">
@@ -823,12 +999,12 @@
           <div class="drawer-header">
             <div>
               <p class="drawer-kicker">INSTANT PAYMENT GATEWAY</p>
-              <h3 class="drawer-title" id="paymentModalTitle">SELECT PAYMENT</h3>
+              <h3 class="drawer-title" id="paymentModalTitle">METODE PEMBAYARAN</h3>
             </div>
             <button type="button" class="glass-close-btn" data-close-modal="payment" aria-label="Close">&times;</button>
           </div>
           <div class="payment-amount-strip">
-            <span>Amount Due</span>
+            <span>Total Tagihan</span>
             <strong id="paymentAmountDue">Rp42.000</strong>
           </div>
           <div class="pay-methods-grid" id="payMethodsGrid"></div>
@@ -865,7 +1041,7 @@
           <div class="drawer-header">
             <div>
               <p class="drawer-kicker">APPLY PROMO OR REWARD</p>
-              <h3 class="drawer-title" id="voucherModalTitle">SELECT VOUCHER</h3>
+              <h3 class="drawer-title" id="voucherModalTitle">PILIH VOUCHER</h3>
             </div>
             <button type="button" class="glass-close-btn" data-close-modal="voucher" aria-label="Close">&times;</button>
           </div>
@@ -879,7 +1055,7 @@
           <div class="drawer-header">
             <div>
               <p class="drawer-kicker">CHOOSE CAFÉ OUTLET</p>
-              <h3 class="drawer-title" id="outletModalTitle">SELECT STORE</h3>
+              <h3 class="drawer-title" id="outletModalTitle">PILIH OUTLET</h3>
             </div>
             <button type="button" class="glass-close-btn" data-close-modal="outlet" aria-label="Close">&times;</button>
           </div>
@@ -893,7 +1069,7 @@
           <div class="drawer-header">
             <div>
               <p class="drawer-kicker">DINE-IN QR TABLE</p>
-              <h3 class="drawer-title" id="tableModalTitle">SELECT YOUR TABLE</h3>
+              <h3 class="drawer-title" id="tableModalTitle">PILIH NOMOR MEJA</h3>
             </div>
             <button type="button" class="glass-close-btn" data-close-modal="table" aria-label="Close">&times;</button>
           </div>
@@ -928,8 +1104,8 @@
     </div>
   </main>
 
-  <script src="menu-data.js?v=3.3"></script>
-  <script src="pos-bridge.js?v=3.3"></script>
-  <script src="app.js?v=3.3" defer></script>
+  <script src="menu-data.js?v=4.0"></script>
+  <script src="pos-bridge.js?v=4.0"></script>
+  <script src="app.js?v=4.0" defer></script>
 </body>
 </html>

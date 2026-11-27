@@ -1122,9 +1122,165 @@
         cardTint: 'rgba(98, 198, 116, 0.16)',
       },
     },
+
+    /* ===================== NEW SEASONAL SERIES: BERRY CHEESECAKE (3) ===================== */
+    {
+      id: 'strawberry-cheesecake-frappe',
+      skuPrefix: 'EVT-SCF',
+      name: 'STRAWBERRY CHEESECAKE FRAPPE',
+      shortName: 'Strawberry Cheesecake',
+      category: 'non-coffee',
+      categoryLabel: 'Non-Coffee & Tea',
+      badge: 'NEW DROP',
+      isNew: true,
+      eventId: 'berry-cheesecake-series',
+      originalPrice: 42000,
+      itemType: 'drink',
+      hasLevels: true,
+      hasMilk: true,
+      kcal: 310,
+      caffeine: 'Caffeine-Free',
+      image: 'assets/strawberry-cheesecake-frappe.png',
+      shortDesc:
+        'Velvety cream-cheese frappe swirled with ruby-red strawberry compote, whipped cream & golden biscuit crumble,...',
+      fullDesc:
+        'Limited-edition Berrylicious Series favorite: rich New York cheesecake cream base blended icy-smooth with ruby strawberry compote ribbons, crowned with fluffy chantilly cream, crushed graham biscuit crumbs, and a fresh strawberry slice.',
+      tags: [
+        { label: 'NEW SERIES', note: 'Limited-edition Cheesecake Berrylicious drop.' },
+        { label: 'CHEESECAKE', note: 'Velvety mascarpone & cream-cheese swirl.' },
+        { label: 'RUBY BERRY', note: 'House-simmered fresh strawberry compote.' },
+        { label: 'CRUMBLE', note: 'Topped with toasted golden graham crumbs.' },
+      ],
+      styles: [
+        { id: 'frappe', label: 'Ice Blended', icon: 'ice' },
+        { id: 'ice', label: 'Over Ice', icon: 'ice' },
+      ],
+      sizes: {
+        small: { label: 'Small', volume: '250 ML', price: 29000 },
+        medium: { label: 'Medium', volume: '350 ML', price: 34000 },
+        large: { label: 'Large', volume: '450 ML', price: 40000 },
+      },
+      theme: {
+        topBg: '#ff96b4',
+        topBg2: '#b22058',
+        sheetTop: 'rgba(42, 12, 26, 0.86)',
+        sheetMid: 'rgba(62, 16, 40, 0.72)',
+        sheetBot: 'rgba(26, 8, 20, 0.90)',
+        glowTop: 'rgba(255, 118, 158, 0.40)',
+        glowBot: 'rgba(224, 48, 102, 0.44)',
+        accent: '#ff8fb6',
+        cardTint: 'rgba(248, 108, 152, 0.18)',
+      },
+    },
+    {
+      id: 'blueberry-cheesecake-frappe',
+      skuPrefix: 'EVT-BCF',
+      name: 'BLUEBERRY CHEESECAKE FRAPPE',
+      shortName: 'Blueberry Cheesecake',
+      category: 'non-coffee',
+      categoryLabel: 'Non-Coffee & Tea',
+      badge: 'NEW DROP',
+      isNew: true,
+      eventId: 'berry-cheesecake-series',
+      originalPrice: 42000,
+      itemType: 'drink',
+      hasLevels: true,
+      hasMilk: true,
+      kcal: 305,
+      caffeine: 'Caffeine-Free',
+      image: 'assets/blueberry-cheesecake-frappe.png',
+      shortDesc:
+        'Creamy chilled cheesecake frappe marbled with wild royal blueberry compote & golden graham biscuit crumble,...',
+      fullDesc:
+        'Silky mascarpone cheesecake frappe swirled with tangy-sweet wild blueberry reduction, finished with airy whipped cream, buttery graham biscuit crumbs, and glistening whole blueberries.',
+      tags: [
+        { label: 'NEW SERIES', note: 'Part of Cheesecake Berrylicious seasonal drop.' },
+        { label: 'WILD BERRY', note: 'Rich royal violet blueberry compote ribbons.' },
+        { label: 'CREAMY', note: 'Whipped mascarpone cheesecake body.' },
+        { label: 'DESSERT CUP', note: 'Tastes like a chilled slice of berry cheesecake.' },
+      ],
+      styles: [
+        { id: 'frappe', label: 'Ice Blended', icon: 'ice' },
+        { id: 'ice', label: 'Over Ice', icon: 'ice' },
+      ],
+      sizes: {
+        small: { label: 'Small', volume: '250 ML', price: 29000 },
+        medium: { label: 'Medium', volume: '350 ML', price: 34000 },
+        large: { label: 'Large', volume: '450 ML', price: 40000 },
+      },
+      theme: {
+        topBg: '#b698ff',
+        topBg2: '#5a32a8',
+        sheetTop: 'rgba(26, 14, 46, 0.86)',
+        sheetMid: 'rgba(42, 22, 68, 0.72)',
+        sheetBot: 'rgba(18, 10, 34, 0.90)',
+        glowTop: 'rgba(176, 138, 255, 0.42)',
+        glowBot: 'rgba(112, 68, 222, 0.44)',
+        accent: '#c8b2ff',
+        cardTint: 'rgba(156, 122, 246, 0.18)',
+      },
+    },
+    {
+      id: 'creamy-cheesecake-latte',
+      skuPrefix: 'EVT-CCL',
+      name: 'CREAMY CHEESECAKE LATTE',
+      shortName: 'Cheesecake Latte',
+      category: 'coffee',
+      categoryLabel: 'Coffee',
+      badge: 'NEW DROP',
+      isNew: true,
+      eventId: 'berry-cheesecake-series',
+      originalPrice: 39000,
+      itemType: 'drink',
+      hasLevels: true,
+      hasMilk: true,
+      kcal: 245,
+      caffeine: 'High',
+      image: 'assets/creamy-cheesecake-latte.png',
+      shortDesc:
+        'Double-shot house espresso cascading over chilled oat milk, velvety mascarpone cream & graham dust,...',
+      fullDesc:
+        'For coffee lovers who adore dessert notes: freshly pulled Flores-Ethiopia double espresso poured over chilled milk and whipped salted mascarpone cheesecake cream, topped with toasted golden graham dust.',
+      tags: [
+        { label: 'NEW SERIES', note: 'Limited Cheesecake Berrylicious coffee highlight.' },
+        { label: 'ESPRESSO', note: 'Double-shot KOTA House Blend Arabica.' },
+        { label: 'MASCARPONE', note: 'Savory-sweet whipped cream cheese layer.' },
+        { label: 'VELVETY', note: 'Balanced roast depth with creamy finish.' },
+      ],
+      styles: [
+        { id: 'ice', label: 'Iced Latte', icon: 'ice' },
+        { id: 'hot', label: 'Hot Latte', icon: 'hot' },
+      ],
+      sizes: {
+        small: { label: 'Small', volume: '220 ML', price: 28000 },
+        medium: { label: 'Medium', volume: '300 ML', price: 32000 },
+        large: { label: 'Large', volume: '400 ML', price: 38000 },
+      },
+      theme: {
+        topBg: '#f0c488',
+        topBg2: '#8a5224',
+        sheetTop: 'rgba(34, 20, 12, 0.86)',
+        sheetMid: 'rgba(54, 34, 20, 0.72)',
+        sheetBot: 'rgba(20, 12, 8, 0.90)',
+        glowTop: 'rgba(246, 198, 126, 0.40)',
+        glowBot: 'rgba(156, 94, 46, 0.44)',
+        accent: '#ffd28e',
+        cardTint: 'rgba(232, 174, 102, 0.18)',
+      },
+    },
   ];
 
   const VOUCHERS = [
+    {
+      code: 'BERRY15',
+      title: '15% Off Cheesecake Berry Series',
+      desc: 'Special launch promo • Up to Rp20.000 off • No min. spend',
+      type: 'percent',
+      value: 15,
+      maxDiscount: 20000,
+      minSpend: 0,
+      badge: 'NEW EVENT',
+    },
     {
       code: 'MATCHA20',
       title: '20% Off Botanical Brew',
@@ -1216,6 +1372,158 @@
         badge: 'VIP REWARD',
       },
     },
+  ];
+
+  const EVENTS = [
+    {
+      id: 'berry-cheesecake-series',
+      badge: 'NEW LAUNCH',
+      kicker: 'LIMITED SEASONAL DROP',
+      title: 'Cheesecake Berrylicious Series',
+      subtitle: 'Creamy mascarpone cheesecake bertemu strawberry & wild blueberry — mulai dari Rp28rb!',
+      period: '27 Nov – 31 Des • Semua Outlet',
+      priceTag: 'Mulai Rp28rb',
+      cta: 'Lihat Seri Baru',
+      voucherCode: 'BERRY15',
+      heroImages: [
+        'assets/strawberry-cheesecake-frappe.png',
+        'assets/blueberry-cheesecake-frappe.png',
+        'assets/creamy-cheesecake-latte.png',
+      ],
+      itemIds: [
+        'strawberry-cheesecake-frappe',
+        'blueberry-cheesecake-frappe',
+        'creamy-cheesecake-latte',
+        'strawberry-matcha-cloud',
+      ],
+      gradient: 'linear-gradient(135deg, #4b0d2c 0%, #8e1e54 52%, #cf3b78 100%)',
+      accent: '#ffb5d2',
+      story:
+        'Seri dessert-in-a-cup terbaru dari KOTA Coffee! Perpaduan lembut krim mascarpone cheesecake, saus beri segar, dan taburan graham biscuit renyah — tersedia dalam varian Strawberry Frappe, Blueberry Frappe, hingga Creamy Cheesecake Espresso Latte.',
+    },
+    {
+      id: 'botanical-nitro-lab',
+      badge: 'SIGNATURE EVENT',
+      kicker: 'KYOTO MATCHA FESTIVAL',
+      title: 'Gratis Upsize & 20% Off Signature Nitro',
+      subtitle: 'Ceremonial Uji Matcha & Blue Spirulina dingin menyegarkan dengan kode MATCHA20.',
+      period: 'Senin – Minggu • Kuota Harian',
+      priceTag: 'Hemat 20%',
+      cta: 'Cek Promo Matcha',
+      voucherCode: 'MATCHA20',
+      heroImages: [
+        'assets/matcha-nitro.png',
+        'assets/blue-cloud-latte.png',
+        'assets/yuzu-matcha-fizz.png',
+      ],
+      itemIds: ['matcha-nitro', 'blue-cloud-latte', 'yuzu-matcha-fizz', 'hojicha-oat-cloud', 'spirulina-cake'],
+      gradient: 'linear-gradient(135deg, #103b22 0%, #1d6f3d 52%, #146a9c 100%)',
+      accent: '#c9fb46',
+      story:
+        'Nikmati kesegaran First-Harvest Kyoto Uji Matcha yang di-infuse nitrogen halus dan butterfly-pea botanical. Berlaku untuk Dine-In, Pick Up, dan Delivery di seluruh outlet KOTA Coffee.',
+    },
+    {
+      id: 'brunch-coffee-bundle',
+      badge: 'MORNING BUNDLE',
+      kicker: 'ALL-DAY BRUNCH PAIRING',
+      title: 'Bundle Brunch + Kopi Aren Hemat Rp20rb',
+      subtitle: 'Pesan Truffle Brioche, Croissant, atau Panini bersama kopi favoritmu pakai FREEPASTRY.',
+      period: 'Setiap Hari • 07:00 – 18:00 WIB',
+      priceTag: 'Diskon Rp20rb',
+      cta: 'Pilih Paket Brunch',
+      voucherCode: 'FREEPASTRY',
+      heroImages: [
+        'assets/truffle-egg-brioche.png',
+        'assets/aren-palm-latte.png',
+        'assets/butter-croissant.png',
+      ],
+      itemIds: ['truffle-egg-brioche', 'butter-croissant', 'smoked-beef-panini', 'aren-palm-latte', 'biscoff-choco-frappe'],
+      gradient: 'linear-gradient(135deg, #4a2a12 0%, #864d20 52%, #bd7a34 100%)',
+      accent: '#ffe09e',
+      story:
+        'Mulai harimu lebih bertenaga dengan roti panggang hangat buatan oven pagi kami dan espresso gula aren house blend. Otomatis hemat Rp20.000 saat dipasangkan dengan voucher FREEPASTRY.',
+    },
+  ];
+
+  /* Direct Vertical Payment Options (Inspired by Clean E-Wallet Checkout List) */
+  const DIRECT_PAY_OPTIONS = [
+    {
+      id: 'qris',
+      methodId: 'qris',
+      name: 'QRIS Instant',
+      sub: 'Scan pakai semua bank & e-wallet • Bebas biaya',
+      badge: 'FASTEST',
+      color: '#1f7a34',
+      iconText: 'QR',
+    },
+    {
+      id: 'ovo',
+      methodId: 'gopay',
+      subProvider: 'OVO',
+      name: 'OVO',
+      sub: 'Balance: Rp223.000 • Bayar langsung',
+      badge: '0% FEE',
+      color: '#4c3494',
+      iconText: 'OVO',
+    },
+    {
+      id: 'gopay',
+      methodId: 'gopay',
+      subProvider: 'GoPay',
+      name: 'GoPay / GoPayLater',
+      sub: 'Balance: Rp150.000 • Instan via Gojek',
+      badge: 'POPULAR',
+      color: '#00aed6',
+      iconText: 'GP',
+    },
+    {
+      id: 'dana',
+      methodId: 'gopay',
+      subProvider: 'DANA',
+      name: 'DANA',
+      sub: 'Balance: Rp95.000 • Cepat & aman',
+      badge: '',
+      color: '#118eea',
+      iconText: 'DN',
+    },
+    {
+      id: 'shopeepay',
+      methodId: 'gopay',
+      subProvider: 'ShopeePay',
+      name: 'ShopeePay',
+      sub: 'Cashback 20% maks. Rp12rb',
+      badge: 'CASHBACK',
+      color: '#ee4d2d',
+      iconText: 'SP',
+    },
+    {
+      id: 'va-bca',
+      methodId: 'va',
+      vaBank: 'BCA VA',
+      name: 'BCA Virtual Account',
+      sub: 'Verifikasi otomatis • Bisa Mandiri / BNI VA',
+      badge: 'AUTO',
+      color: '#005baa',
+      iconText: 'VA',
+    },
+    {
+      id: 'ggpay',
+      methodId: 'ggpay',
+      name: 'KOTA Member Pay',
+      sub: '2× Points + Tukar 200 pts (-Rp10rb)',
+      badge: '2× PTS',
+      color: '#1b6e2d',
+      iconText: 'KT',
+    },
+  ];
+
+  const SPECIAL_DEAL_IDS = [
+    'strawberry-cheesecake-frappe',
+    'blueberry-cheesecake-frappe',
+    'creamy-cheesecake-latte',
+    'matcha-nitro',
+    'aren-palm-latte',
+    'truffle-egg-brioche',
   ];
 
   const PROMO_BANNERS = [
@@ -1325,12 +1633,24 @@
     'glass-tumbler': { top: 'rgba(92, 228, 202, 0.40)', bot: 'rgba(34, 148, 168, 0.40)' },
     'uji-matcha-tin': { top: 'rgba(176, 244, 62, 0.40)', bot: 'rgba(58, 148, 64, 0.38)' },
     'espresso-beans-bag': { top: 'rgba(98, 208, 118, 0.38)', bot: 'rgba(148, 92, 48, 0.40)' },
+    'strawberry-cheesecake-frappe': { top: 'rgba(255, 138, 174, 0.42)', bot: 'rgba(222, 46, 98, 0.44)' },
+    'blueberry-cheesecake-frappe': { top: 'rgba(182, 148, 255, 0.42)', bot: 'rgba(104, 62, 214, 0.44)' },
+    'creamy-cheesecake-latte': { top: 'rgba(248, 206, 138, 0.40)', bot: 'rgba(148, 86, 38, 0.42)' },
+  };
+
+  const ORIGINAL_PRICE_OVERRIDES = {
+    'matcha-nitro': 48000,
+    'aren-palm-latte': 38000,
+    'truffle-egg-brioche': 62000,
   };
 
   MENU_ITEMS.forEach((item) => {
     const dt = CARD_DUAL_TONES[item.id];
     item.theme.cardTop = (dt && dt.top) || item.theme.glowTop;
     item.theme.cardBot = (dt && dt.bot) || item.theme.glowBot;
+    if (!item.originalPrice && ORIGINAL_PRICE_OVERRIDES[item.id]) {
+      item.originalPrice = ORIGINAL_PRICE_OVERRIDES[item.id];
+    }
   });
 
   function getItemById(id) {
@@ -1396,6 +1716,9 @@
     ADDONS,
     CATEGORIES,
     MENU_ITEMS,
+    EVENTS,
+    SPECIAL_DEAL_IDS,
+    DIRECT_PAY_OPTIONS,
     VOUCHERS,
     REWARDS_STORE,
     PROMO_BANNERS,

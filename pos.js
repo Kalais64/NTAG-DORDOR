@@ -623,7 +623,7 @@
         await POS.setItemStock(item.id, true);
       }
     }
-    showToast('All 23 menu items marked In Stock!');
+    showToast(`All ${DATA.MENU_ITEMS.length} menu items marked In Stock!`);
     renderAll();
   });
 

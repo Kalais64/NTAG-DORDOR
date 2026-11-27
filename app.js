@@ -22,9 +22,11 @@
      ======================================================================== */
 
   const state = {
-    currentView: 'menu', // 'menu' | 'promo' | 'bag' | 'orders' | 'me'
-    previousTab: 'menu',
+    currentView: 'home', // 'home' | 'menu' | 'bag' | 'orders' | 'me' | 'promo'
+    previousTab: 'home',
     detailOpen: false,
+    eventOpen: false,
+    activeEventId: 'berry-cheesecake-series',
     activeCategory: 'all',
     searchQuery: '',
     outletId: initialOutlet,
@@ -55,8 +57,9 @@
     appliedVoucher: null,
 
     payment: {
+      directPayId: 'qris',
       methodId: 'qris',
-      subProvider: 'GoPay',
+      subProvider: 'OVO',
       vaBank: 'BCA VA',
       redeemPoints: false,
       qrisSeconds: 300,
@@ -71,11 +74,13 @@
   const el = {
     phoneShell: document.getElementById('phoneShell'),
     screens: {
+      home: document.getElementById('screenHome'),
       menu: document.getElementById('screenMenu'),
       promo: document.getElementById('screenPromo'),
       bag: document.getElementById('screenBag'),
       orders: document.getElementById('screenOrders'),
       me: document.getElementById('screenMe'),
+      event: document.getElementById('screenEvent'),
       detail: document.getElementById('screenDetail'),
     },
     toolbarTabs: Array.from(document.querySelectorAll('.toolbar-tab')),
@@ -86,36 +91,71 @@
     dockBagBadge: document.getElementById('dockBagBadge'),
     dockOrdersDot: document.getElementById('dockOrdersDot'),
 
-    // Menu Home
+    // Home Storefront
     homeMemberName: document.getElementById('homeMemberName'),
     homeSyncLabel: document.getElementById('homeSyncLabel'),
+    homeEventBellBtn: document.getElementById('homeEventBellBtn'),
+    homeEventCarousel: document.getElementById('homeEventCarousel'),
+    homeEventDots: document.getElementById('homeEventDots'),
     homePointsChip: document.getElementById('homePointsChip'),
+    homeTierMini: document.getElementById('homeTierMini'),
     homePointsVal: document.getElementById('homePointsVal'),
     outletSelectBtn: document.getElementById('outletSelectBtn'),
     activeOutletName: document.getElementById('activeOutletName'),
     activeOutletMeta: document.getElementById('activeOutletMeta'),
+    homeOrderNowBtn: document.getElementById('homeOrderNowBtn'),
     modeOpts: Array.from(document.querySelectorAll('.mode-opt')),
     tableSelectBtn: document.getElementById('tableSelectBtn'),
     tableNumberLabel: document.getElementById('tableNumberLabel'),
     pickupSlotBtn: document.getElementById('pickupSlotBtn'),
     pickupSlotLabel: document.getElementById('pickupSlotLabel'),
+    homePromoShortcutBtn: document.getElementById('homePromoShortcutBtn'),
     deliveryAddressBar: document.getElementById('deliveryAddressBar'),
     deliveryAddressInput: document.getElementById('deliveryAddressInput'),
     deliveryFeePill: document.getElementById('deliveryFeePill'),
     homeActiveOrderBanner: document.getElementById('homeActiveOrderBanner'),
     homeActiveOrderTitle: document.getElementById('homeActiveOrderTitle'),
     homeActiveOrderSub: document.getElementById('homeActiveOrderSub'),
-    menuSearchInput: document.getElementById('menuSearchInput'),
-    searchClearBtn: document.getElementById('searchClearBtn'),
-    promoCarousel: document.getElementById('promoCarousel'),
+    homeStampCount: document.getElementById('homeStampCount'),
+    homeStampTrack: document.getElementById('homeStampTrack'),
+    homeSeeAllMenuBtn: document.getElementById('homeSeeAllMenuBtn'),
+    homeSpecialsRow: document.getElementById('homeSpecialsRow'),
+    homeSeeAllPromoBtn: document.getElementById('homeSeeAllPromoBtn'),
+    homeEventsGrid: document.getElementById('homeEventsGrid'),
     orderAgainBlock: document.getElementById('orderAgainBlock'),
     orderAgainRow: document.getElementById('orderAgainRow'),
+
+    // Dedicated Menu Catalog
+    menuOutletChip: document.getElementById('menuOutletChip'),
+    menuOutletChipText: document.getElementById('menuOutletChipText'),
+    menuSearchInput: document.getElementById('menuSearchInput'),
+    searchClearBtn: document.getElementById('searchClearBtn'),
     categoryPills: document.getElementById('categoryPills'),
     menuGridHeading: document.getElementById('menuGridHeading'),
     menuGridCount: document.getElementById('menuGridCount'),
     menuGrid: document.getElementById('menuGrid'),
 
+    // Event Launch Overlay Sheet
+    eventScrim: document.getElementById('eventScrim'),
+    eventFrameContainer: document.getElementById('eventFrameContainer'),
+    eventHandleBar: document.getElementById('eventHandleBar'),
+    eventScroll: document.getElementById('eventScroll'),
+    eventCloseBtn: document.getElementById('eventCloseBtn'),
+    eventHeroPoster: document.getElementById('eventHeroPoster'),
+    eventBadge: document.getElementById('eventBadge'),
+    eventPeriod: document.getElementById('eventPeriod'),
+    eventKicker: document.getElementById('eventKicker'),
+    eventTitle: document.getElementById('eventTitle'),
+    eventSubtitle: document.getElementById('eventSubtitle'),
+    eventHeroLineup: document.getElementById('eventHeroLineup'),
+    eventPriceTag: document.getElementById('eventPriceTag'),
+    eventClaimVoucherBtn: document.getElementById('eventClaimVoucherBtn'),
+    eventStory: document.getElementById('eventStory'),
+    eventItemsCount: document.getElementById('eventItemsCount'),
+    eventItemsGrid: document.getElementById('eventItemsGrid'),
+
     // Promo & Rewards
+    promoBackBtn: document.getElementById('promoBackBtn'),
     promoAppliedPill: document.getElementById('promoAppliedPill'),
     stampCounterLabel: document.getElementById('stampCounterLabel'),
     stampDotsRow: document.getElementById('stampDotsRow'),
@@ -126,9 +166,11 @@
     rewardsStoreList: document.getElementById('rewardsStoreList'),
     promoMerchList: document.getElementById('promoMerchList'),
 
-    // Bag
+    // Bag / Checkout
     bagHeaderCount: document.getElementById('bagHeaderCount'),
+    bagStripCount: document.getElementById('bagStripCount'),
     bagAddMoreBtn: document.getElementById('bagAddMoreBtn'),
+    bagModeKicker: document.getElementById('bagModeKicker'),
     bagModeSummary: document.getElementById('bagModeSummary'),
     bagOutletSummary: document.getElementById('bagOutletSummary'),
     bagChangeModeBtn: document.getElementById('bagChangeModeBtn'),
@@ -140,6 +182,7 @@
     bagVoucherTrigger: document.getElementById('bagVoucherTrigger'),
     bagVoucherTitle: document.getElementById('bagVoucherTitle'),
     bagVoucherSub: document.getElementById('bagVoucherSub'),
+    bagDirectPayList: document.getElementById('bagDirectPayList'),
     bagSubtotal: document.getElementById('bagSubtotal'),
     bagDeliveryRow: document.getElementById('bagDeliveryRow'),
     bagDeliveryVal: document.getElementById('bagDeliveryVal'),
@@ -151,6 +194,7 @@
     bagPayItemCount: document.getElementById('bagPayItemCount'),
     bagPayTotal: document.getElementById('bagPayTotal'),
     payNowBtn: document.getElementById('payNowBtn'),
+    payNowBtnText: document.getElementById('payNowBtnText'),
 
     // Orders & Tracker
     trackerDrinkThumbBtn: document.getElementById('trackerDrinkThumbBtn'),
@@ -175,6 +219,7 @@
     orderHistoryList: document.getElementById('orderHistoryList'),
 
     // Me
+    meRewardsPortalBtn: document.getElementById('meRewardsPortalBtn'),
     meMemberName: document.getElementById('meMemberName'),
     meMemberId: document.getElementById('meMemberId'),
     meTierBadge: document.getElementById('meTierBadge'),
@@ -362,7 +407,7 @@
      NAVIGATION
      ======================================================================== */
 
-  const TAB_ORDER = ['menu', 'promo', 'bag', 'orders', 'me'];
+  const TAB_ORDER = ['home', 'menu', 'bag', 'orders', 'me'];
   let leavingTimer = null;
 
   function triggerPop(node) {
@@ -383,6 +428,34 @@
       el.detailDesktopScrim.style.opacity = '';
       el.detailDesktopScrim.style.transition = '';
     }
+    if (el.eventScrim) {
+      el.eventScrim.style.opacity = '';
+      el.eventScrim.style.transition = '';
+    }
+  }
+
+  function openEventSheet(eventId) {
+    state.activeEventId = eventId || (DATA.EVENTS[0] && DATA.EVENTS[0].id);
+    renderEventSheet();
+    state.eventOpen = true;
+    resetUnderlyingScreenTransform();
+    el.screens.event.classList.add('is-active');
+    el.screens.event.setAttribute('aria-hidden', 'false');
+    el.phoneShell.classList.add('has-event-open');
+    if (el.eventFrameContainer) el.eventFrameContainer.style.transform = '';
+    if (el.eventScroll) el.eventScroll.scrollTop = 0;
+    syncMiniCartVisibility();
+  }
+
+  function closeEventSheet() {
+    if (!state.eventOpen) return;
+    state.eventOpen = false;
+    resetUnderlyingScreenTransform();
+    el.screens.event.classList.remove('is-active');
+    el.screens.event.setAttribute('aria-hidden', 'true');
+    el.phoneShell.classList.remove('has-event-open');
+    if (el.eventFrameContainer) el.eventFrameContainer.style.transform = '';
+    syncMiniCartVisibility();
   }
 
   function openDetailSheet() {
@@ -415,12 +488,13 @@
     }
     if (!el.screens[target]) return;
     if (state.detailOpen) closeDetailSheet();
+    if (state.eventOpen) closeEventSheet();
 
     const prev = state.currentView;
     if (prev && prev !== target && el.screens[prev]) {
       const prevIdx = TAB_ORDER.indexOf(prev);
       const nextIdx = TAB_ORDER.indexOf(target);
-      const dir = nextIdx >= prevIdx ? 1 : -1;
+      const dir = prevIdx === -1 || nextIdx === -1 ? 1 : nextIdx >= prevIdx ? 1 : -1;
       el.phoneShell.style.setProperty('--nav-dir', String(dir));
 
       clearTimeout(leavingTimer);
@@ -433,7 +507,7 @@
     state.previousTab = target;
 
     Object.entries(el.screens).forEach(([key, node]) => {
-      if (key === 'detail') return;
+      if (key === 'detail' || key === 'event') return;
       const active = key === target;
       node.classList.toggle('is-active', active);
       node.setAttribute('aria-hidden', String(!active));
@@ -442,23 +516,22 @@
     state.currentView = target;
     el.phoneShell.dataset.view = target;
 
+    const highlightTab = target === 'promo' ? 'home' : target;
     el.dockBtns.forEach((btn) => {
-      const active = btn.dataset.tab === target;
+      const active = btn.dataset.tab === highlightTab;
       btn.classList.toggle('is-active', active);
       if (active) btn.setAttribute('aria-current', 'page');
       else btn.removeAttribute('aria-current');
     });
 
     el.toolbarTabs.forEach((tab) => {
-      const active = tab.dataset.navView === target;
+      const active = tab.dataset.navView === highlightTab;
       tab.classList.toggle('is-active', active);
       tab.setAttribute('aria-selected', String(active));
     });
 
-    if (target === 'menu') {
-      renderOrderAgain();
-      renderMenuGrid(false);
-    }
+    if (target === 'home') renderHomeView();
+    if (target === 'menu') renderMenuGrid(false);
     if (target === 'bag') renderBag();
     if (target === 'orders') renderOrdersView();
     if (target === 'promo') renderPromoView();
@@ -612,6 +685,7 @@
     const member = POS.getMember();
     el.homeMemberName.textContent = member.name;
     el.homePointsVal.textContent = String(member.points);
+    if (el.homeTierMini) el.homeTierMini.textContent = (member.tier || 'Emerald').split(' ')[0];
   }
 
   function quickAddToBag(item, btnEl) {
@@ -752,31 +826,194 @@
     el.tableNumberLabel.textContent = `Table ${state.tableNumber}`;
     const slot = DATA.PICKUP_SLOTS[state.pickupSlotIndex] || DATA.PICKUP_SLOTS[0];
     el.pickupSlotLabel.textContent = slot.label;
+
+    if (el.menuOutletChipText) {
+      const shortOutlet = outlet.name.split(' ')[0];
+      const suffix = state.orderMode === 'dine-in' ? `T${state.tableNumber}` : state.orderMode === 'delivery' ? 'Delivery' : 'Pick Up';
+      el.menuOutletChipText.textContent = `${shortOutlet} • ${suffix}`;
+    }
   }
 
-  function renderPromoBanners() {
-    el.promoCarousel.innerHTML = '';
-    DATA.PROMO_BANNERS.forEach((b) => {
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'promo-banner-card';
-      btn.style.background = b.gradient;
-      btn.innerHTML = `
-        <div class="promo-banner-copy">
-          <span class="promo-kicker" style="color:${b.accent}">${escapeHtml(b.kicker)}</span>
-          <h3 class="promo-banner-title">${escapeHtml(b.title)}</h3>
-          <span class="promo-banner-cta">${escapeHtml(b.cta)} &rarr;</span>
-        </div>
-        <img src="${b.image}" alt="${escapeHtml(b.title)}" class="promo-banner-img" draggable="false" />
-      `;
-      btn.addEventListener('click', () => {
-        if (b.voucherCode) {
-          state.appliedVoucher = b.voucherCode;
-          showToast(`Voucher ${b.voucherCode} pre-selected!`);
-        }
-        openItemDetail(b.itemId);
+  function renderHomeView() {
+    const member = POS.getMember();
+
+    // 1. Hero Event Slider + Pagination Dots
+    if (el.homeEventCarousel && el.homeEventDots) {
+      el.homeEventCarousel.innerHTML = '';
+      el.homeEventDots.innerHTML = '';
+      DATA.EVENTS.forEach((ev, idx) => {
+        const slide = document.createElement('button');
+        slide.type = 'button';
+        slide.className = 'hero-event-slide';
+        slide.style.background = ev.gradient;
+        slide.innerHTML = `
+          <div class="hero-event-copy">
+            <span class="hero-event-pill">${escapeHtml(ev.badge)}</span>
+            <h2 class="hero-event-title">${escapeHtml(ev.title)}</h2>
+            <p class="hero-event-sub">${escapeHtml(ev.subtitle)}</p>
+            <div class="hero-event-foot">
+              <span class="hero-event-price">${escapeHtml(ev.priceTag)}</span>
+              <span class="hero-event-cta">${escapeHtml(ev.cta)} &rarr;</span>
+            </div>
+          </div>
+          <div class="hero-event-cups" aria-hidden="true">
+            ${(ev.heroImages || []).slice(0, 3).map((src) => `<img src="${src}" alt="" draggable="false" />`).join('')}
+          </div>
+        `;
+        slide.addEventListener('click', () => openEventSheet(ev.id));
+        el.homeEventCarousel.appendChild(slide);
+
+        const dot = document.createElement('button');
+        dot.type = 'button';
+        dot.className = `hero-dot ${idx === 0 ? 'is-active' : ''}`;
+        dot.setAttribute('aria-label', `Slide ${idx + 1}`);
+        dot.addEventListener('click', () => {
+          slide.scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
+        });
+        el.homeEventDots.appendChild(dot);
       });
-      el.promoCarousel.appendChild(btn);
+    }
+
+    // 2. Visual 5-Stamp Track on Home
+    if (el.homeStampTrack && el.homeStampCount) {
+      const stamps = Number(member.stamps) || 0;
+      const target = Number(member.stampsTarget) || 5;
+      el.homeStampCount.textContent = `${stamps} / ${target}`;
+      el.homeStampTrack.innerHTML = '';
+      for (let i = 1; i <= target; i++) {
+        const earned = i <= stamps;
+        const node = document.createElement('div');
+        node.className = `stamp-node ${earned ? 'is-earned' : ''}`;
+        node.innerHTML = `
+          <div class="stamp-circle">${earned ? '✓' : '+'}</div>
+          <span>Stamp ${i}</span>
+        `;
+        el.homeStampTrack.appendChild(node);
+      }
+      const rewardNode = document.createElement('div');
+      rewardNode.className = 'stamp-node is-reward';
+      rewardNode.innerHTML = `
+        <div class="stamp-circle"><img src="assets/matcha-nitro.png" alt="Free drink" /></div>
+        <span>Gratis</span>
+      `;
+      el.homeStampTrack.appendChild(rewardNode);
+    }
+
+    // 3. Spesial Hari Ini & New Launch Deals
+    if (el.homeSpecialsRow) {
+      el.homeSpecialsRow.innerHTML = '';
+      const specials = (DATA.SPECIAL_DEAL_IDS || []).map((id) => DATA.getItemById(id)).filter(Boolean);
+      specials.forEach((item) => {
+        const price = DATA.getBasePrice(item);
+        const available = POS.isItemAvailable(item.id);
+        const card = document.createElement('article');
+        card.className = `special-card ${available ? '' : 'is-soldout'}`;
+        card.innerHTML = `
+          <div class="special-card-media" style="--card-top:${item.theme.cardTop};--card-bot:${item.theme.cardBot}">
+            <span class="special-ribbon ${item.isNew ? '' : 'is-promo'}">${available ? (item.isNew ? 'NEW' : 'PROMO') : 'SOLD OUT'}</span>
+            <img src="${item.image}" alt="${escapeHtml(item.shortName)}" draggable="false" />
+          </div>
+          <div class="special-card-body">
+            <h3>${escapeHtml(item.shortName)}</h3>
+            <div class="special-price-row">
+              <div>
+                ${item.originalPrice ? `<span class="price-old">${DATA.formatRp(item.originalPrice)}</span>` : ''}
+                <span class="price-now">${DATA.formatRp(price)}</span>
+              </div>
+              <button type="button" class="special-plus-btn" ${available ? '' : 'disabled'} aria-label="Quick add ${escapeHtml(item.shortName)}">+</button>
+            </div>
+          </div>
+        `;
+        card.querySelector('.special-plus-btn').addEventListener('click', (e) => {
+          e.stopPropagation();
+          quickAddToBag(item, null);
+        });
+        card.addEventListener('click', () => openItemDetail(item.id));
+        el.homeSpecialsRow.appendChild(card);
+      });
+    }
+
+    // 4. Event & Seasonal Series Spotlight Tiles
+    if (el.homeEventsGrid) {
+      el.homeEventsGrid.innerHTML = '';
+      DATA.EVENTS.forEach((ev) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'home-event-tile';
+        btn.style.background = ev.gradient;
+        btn.innerHTML = `
+          <div class="home-event-tile-copy">
+            <span>${escapeHtml(ev.badge)} • ${escapeHtml(ev.priceTag)}</span>
+            <strong>${escapeHtml(ev.title)}</strong>
+            <small>${escapeHtml(ev.period)}</small>
+          </div>
+          <img src="${ev.heroImages[0]}" alt="${escapeHtml(ev.title)}" draggable="false" />
+        `;
+        btn.addEventListener('click', () => openEventSheet(ev.id));
+        el.homeEventsGrid.appendChild(btn);
+      });
+    }
+
+    renderOrderAgain();
+  }
+
+  function renderEventSheet() {
+    const ev = DATA.EVENTS.find((x) => x.id === state.activeEventId) || DATA.EVENTS[0];
+    if (!ev || !el.eventHeroPoster) return;
+
+    el.eventHeroPoster.style.background = ev.gradient;
+    el.eventBadge.textContent = ev.badge;
+    el.eventPeriod.textContent = ev.period;
+    el.eventKicker.textContent = ev.kicker;
+    el.eventTitle.textContent = ev.title;
+    el.eventSubtitle.textContent = ev.subtitle;
+    el.eventPriceTag.textContent = ev.priceTag;
+    el.eventStory.textContent = ev.story;
+    el.eventClaimVoucherBtn.textContent =
+      state.appliedVoucher === ev.voucherCode ? `Voucher ${ev.voucherCode} Aktif ✓` : `Klaim Voucher ${ev.voucherCode}`;
+    el.eventClaimVoucherBtn.dataset.voucher = ev.voucherCode;
+
+    el.eventHeroLineup.innerHTML = (ev.heroImages || [])
+      .slice(0, 3)
+      .map((src) => `<img src="${src}" alt="" draggable="false" />`)
+      .join('');
+
+    const items = (ev.itemIds || []).map((id) => DATA.getItemById(id)).filter(Boolean);
+    el.eventItemsCount.textContent = `${items.length} menu`;
+    el.eventItemsGrid.innerHTML = '';
+
+    items.forEach((item) => {
+      const price = DATA.getBasePrice(item);
+      const available = POS.isItemAvailable(item.id);
+      const card = document.createElement('article');
+      card.className = `menu-card ${available ? '' : 'is-soldout'}`;
+      card.setAttribute('role', 'listitem');
+      card.innerHTML = `
+        <div class="notched-frame-wrap">
+          <div class="notched-glass-surface" style="--card-top:${item.theme.cardTop};--card-bot:${item.theme.cardBot}">
+            <span class="card-badge-chip">${available ? escapeHtml(item.badge) : 'SOLD OUT'}</span>
+            <img src="${item.image}" alt="${escapeHtml(item.shortName)}" class="card-item-img" draggable="false" />
+            <button type="button" class="notched-add-btn" ${available ? '' : 'disabled'} aria-label="Quick add ${escapeHtml(item.shortName)}">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="menu-card-meta">
+          <h3 class="menu-card-name">${escapeHtml(item.shortName)}</h3>
+          <p class="menu-card-sub">${escapeHtml(item.tags.slice(0, 2).map((t) => t.label).join(' • '))}</p>
+          <div class="menu-price-line">
+            <p class="menu-card-price">${available ? DATA.formatRp(price) : 'Temporarily Out'}</p>
+            ${available && item.originalPrice ? `<span class="menu-card-price-old">${DATA.formatRp(item.originalPrice)}</span>` : ''}
+          </div>
+        </div>
+      `;
+      const addBtn = card.querySelector('.notched-add-btn');
+      addBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        quickAddToBag(item, addBtn);
+      });
+      card.addEventListener('click', () => openItemDetail(item.id));
+      el.eventItemsGrid.appendChild(card);
     });
   }
 
@@ -891,7 +1128,10 @@
         <div class="menu-card-meta">
           <h3 class="menu-card-name">${escapeHtml(item.shortName)}</h3>
           <p class="menu-card-sub">${escapeHtml(item.tags.slice(0, 2).map((t) => t.label).join(' • '))}</p>
-          <p class="menu-card-price">${available ? DATA.formatRp(price) : 'Temporarily Out'}</p>
+          <div class="menu-price-line">
+            <p class="menu-card-price">${available ? DATA.formatRp(price) : 'Temporarily Out'}</p>
+            ${available && item.originalPrice ? `<span class="menu-card-price-old">${DATA.formatRp(item.originalPrice)}</span>` : ''}
+          </div>
         </div>
       `;
 
@@ -1177,14 +1417,18 @@
     const outlet = DATA.getOutletById(state.outletId);
 
     el.bagHeaderCount.textContent = `(${metrics.count})`;
+    if (el.bagStripCount) el.bagStripCount.textContent = `${metrics.count} ${metrics.count === 1 ? 'item' : 'items'}`;
     if (state.orderMode === 'dine-in') {
-      el.bagModeSummary.textContent = `Dine-In • Table ${state.tableNumber}`;
+      if (el.bagModeKicker) el.bagModeKicker.textContent = 'Makan di Tempat (Dine-In)';
+      el.bagModeSummary.textContent = `Meja ${state.tableNumber} • Langsung ke Barista`;
     } else if (state.orderMode === 'pickup') {
+      if (el.bagModeKicker) el.bagModeKicker.textContent = 'Ambil Sendiri (Pick Up)';
       el.bagModeSummary.textContent = `Self Pick-Up • ${DATA.PICKUP_SLOTS[state.pickupSlotIndex].label}`;
     } else {
-      el.bagModeSummary.textContent = `Delivery • ${state.deliveryAddress || 'Enter address'}`;
+      if (el.bagModeKicker) el.bagModeKicker.textContent = 'Antar ke Alamat (Delivery)';
+      el.bagModeSummary.textContent = state.deliveryAddress || 'Masukkan alamat pengiriman';
     }
-    el.bagOutletSummary.textContent = `${outlet.name} • Direct to Barista POS`;
+    el.bagOutletSummary.textContent = `${outlet.name} • ${outlet.area}`;
 
     const activeOrder = POS.getActiveOrder();
     const canMerge =
@@ -1311,6 +1555,48 @@
     el.bagDiscountVal.textContent = `-${DATA.formatRp(metrics.discount)}`;
     el.bagPointsEarn.textContent = `+${metrics.pointsEarned} pts`;
     el.bagTotal.textContent = DATA.formatRp(metrics.total);
+
+    // Direct Vertical Payment Options List (Ref Images 4 & 5!)
+    if (el.bagDirectPayList && Array.isArray(DATA.DIRECT_PAY_OPTIONS)) {
+      const member = POS.getMember();
+      el.bagDirectPayList.innerHTML = '';
+      DATA.DIRECT_PAY_OPTIONS.forEach((opt) => {
+        const active = state.payment.directPayId === opt.id;
+        const subText =
+          opt.id === 'ggpay'
+            ? `Balance: ${DATA.formatRp(member.ggPayBalance)} • 2× Points`
+            : opt.sub;
+        const row = document.createElement('button');
+        row.type = 'button';
+        row.className = `direct-pay-row ${active ? 'is-active' : ''}`;
+        row.setAttribute('role', 'radio');
+        row.setAttribute('aria-checked', String(active));
+        row.innerHTML = `
+          <span class="dp-icon" style="background:${opt.color}">${escapeHtml(opt.iconText)}</span>
+          <span class="dp-copy">
+            <span class="dp-title-line">
+              <strong>${escapeHtml(opt.name)}</strong>
+              ${opt.badge ? `<span class="dp-badge">${escapeHtml(opt.badge)}</span>` : ''}
+            </span>
+            <small>${escapeHtml(subText)}</small>
+          </span>
+          <span class="dp-radio" aria-hidden="true"></span>
+        `;
+        row.addEventListener('click', () => {
+          state.payment.directPayId = opt.id;
+          state.payment.methodId = opt.methodId;
+          if (opt.subProvider) state.payment.subProvider = opt.subProvider;
+          if (opt.vaBank) state.payment.vaBank = opt.vaBank;
+          renderBag();
+        });
+        el.bagDirectPayList.appendChild(row);
+      });
+    }
+
+    const activePayOpt = (DATA.DIRECT_PAY_OPTIONS || []).find((x) => x.id === state.payment.directPayId);
+    if (el.payNowBtnText) {
+      el.payNowBtnText.textContent = activePayOpt ? `Bayar • ${activePayOpt.name.split(' ')[0]}` : 'Bayar Sekarang';
+    }
 
     el.bagPayItemCount.textContent = `${metrics.count} ${metrics.count === 1 ? 'item' : 'items'}`;
     el.bagPayTotal.textContent = DATA.formatRp(metrics.total);
@@ -2270,6 +2556,63 @@
       });
     });
 
+    // Home & Event Navigation Controls
+    if (el.homeEventBellBtn) {
+      el.homeEventBellBtn.addEventListener('click', () => openEventSheet('berry-cheesecake-series'));
+    }
+    if (el.homeOrderNowBtn) {
+      el.homeOrderNowBtn.addEventListener('click', () => switchView('menu'));
+    }
+    if (el.homeSeeAllMenuBtn) {
+      el.homeSeeAllMenuBtn.addEventListener('click', () => switchView('menu'));
+    }
+    if (el.homePromoShortcutBtn) {
+      el.homePromoShortcutBtn.addEventListener('click', () => switchView('promo'));
+    }
+    if (el.homeSeeAllPromoBtn) {
+      el.homeSeeAllPromoBtn.addEventListener('click', () => switchView('promo'));
+    }
+    if (el.promoBackBtn) {
+      el.promoBackBtn.addEventListener('click', () => switchView('home'));
+    }
+    if (el.meRewardsPortalBtn) {
+      el.meRewardsPortalBtn.addEventListener('click', () => switchView('promo'));
+    }
+    if (el.menuOutletChip) {
+      el.menuOutletChip.addEventListener('click', () => {
+        renderOutletModal();
+        openModal('outlet');
+      });
+    }
+    if (el.homeEventCarousel && el.homeEventDots) {
+      el.homeEventCarousel.addEventListener('scroll', () => {
+        const w = el.homeEventCarousel.clientWidth || 1;
+        const idx = Math.round(el.homeEventCarousel.scrollLeft / w);
+        el.homeEventDots.querySelectorAll('.hero-dot').forEach((d, i) => {
+          d.classList.toggle('is-active', i === idx);
+        });
+      }, { passive: true });
+    }
+
+    // Event Launch Sheet Controls
+    if (el.eventCloseBtn) el.eventCloseBtn.addEventListener('click', closeEventSheet);
+    if (el.eventScrim) el.eventScrim.addEventListener('click', closeEventSheet);
+    if (el.eventHandleBar) {
+      el.eventHandleBar.addEventListener('click', closeEventSheet);
+      attachSheetDrag(el.eventHandleBar, el.eventFrameContainer, closeEventSheet, false);
+    }
+    if (el.eventClaimVoucherBtn) {
+      el.eventClaimVoucherBtn.addEventListener('click', () => {
+        const code = el.eventClaimVoucherBtn.dataset.voucher;
+        if (!code) return;
+        state.appliedVoucher = code;
+        renderEventSheet();
+        renderPromoView();
+        renderBag();
+        showToast(`Voucher ${code} aktif di keranjang kamu!`);
+      });
+    }
+
     el.dialNowBtn.addEventListener('click', () => {
       closeModal('call');
       showToast('Calling KOTA Coffee & Botanical Bar...');
@@ -2283,6 +2626,7 @@
       if (e.key === 'Escape') {
         closeModal('all');
         if (state.detailOpen) closeDetailSheet();
+        else if (state.eventOpen) closeEventSheet();
       }
     });
 
@@ -2290,13 +2634,13 @@
     POS.subscribe((evt) => {
       if (evt.type === 'THEME_CHANGED' || evt.type === 'STORAGE_SYNC') syncThemeUI();
       syncGlobalBadges();
-      if (state.currentView === 'menu') {
-        renderOrderAgain();
-        renderMenuGrid();
-      }
+      if (state.currentView === 'home') renderHomeView();
+      if (state.currentView === 'menu') renderMenuGrid(false);
+      if (state.currentView === 'bag') renderBag();
       if (state.currentView === 'orders') renderOrdersView();
       if (state.currentView === 'promo') renderPromoView();
       if (state.currentView === 'me') renderMeView();
+      if (state.eventOpen) renderEventSheet();
       if (evt.type === 'STOCK_UPDATED') {
         const item = DATA.getItemById(evt.itemId);
         showToast(`${item.shortName} is now ${evt.available ? 'back In Stock!' : 'Sold Out'}`);
@@ -2310,11 +2654,11 @@
   function init() {
     syncThemeUI();
     renderOutletAndModeUI();
-    renderPromoBanners();
-    renderOrderAgain();
+    renderHomeView();
     renderCategoryPills();
     renderMenuGrid();
     renderPromoView();
+    renderBag();
     renderOrdersView();
     renderMeView();
     syncGlobalBadges();
@@ -2322,8 +2666,9 @@
 
     POS.ready.then(() => {
       syncGlobalBadges();
-      renderOrderAgain();
+      renderHomeView();
       renderMenuGrid();
+      renderBag();
       renderOrdersView();
       renderMeView();
       renderPromoView();
